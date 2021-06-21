@@ -1,0 +1,91 @@
+6/20/21
+Next to-do: change filepaths in the document accordingly
+    - 2 choices to do this:
+            - write function for getting the relative filepath and plugging it in (preferably in Python)
+            - write in the filenames, then manually change them as the file structure changes
+
+    - for now, we can just manually change the filenames so that they work with the new paths. If this turns out to be an issue going forward, we can just write something quick in python to take care of this
+
+Let's think out what we want to do...
+    - We want the .m function, RunFEM.m to run with the input parameter file
+    - Can start this by working in MATLAB to get it to run in the current file location
+        - RunFEM takes only the input parameter file, which has the filenames, so it seems obvious that editing paths in this document would allow everything to run smoothly
+
+    - changing the default input parameter file...
+
+I previously tried to stop the times from printing in the transientBCHeatedBlock_square.m file. This seems to have caused some issues because now when I try to run the file, it won't run. Troubleshooting below:  
+    - Going back in to uncomment the line
+    - uncommenting
+    - now that I think about it, I'm pretty sure MATLAB only prints the stuff if you don't put a semicolon on the end. 
+        - adding semicolon...
+
+    - and it works
+
+    - next problem: filename concat not working
+        - forgot to send the name as a second argument
+        - okay now it runs
+
+    - Okay now it runs. Have to get it to stop printing out that graph
+
+    Getting the graph to stop printing...
+        - commenting out the plot lione (28) in RunFEM.m
+        - And it works!
+
+    
+Okay, now I've got the times to stop printing, and the graph stopped from being output. 
+
+Now it's time to go on to getting the function to run from the cmd line in the python-matlab engine.
+
+    - Running from the command line:
+        - not working
+        - using 2 arguments
+        - okay now the cmd line is working
+
+=====================================================================================
+=====================================================================================
+
+6/21/2021
+
+git status is now showing all parent folders as untracked files when I run git status. Now I have to figure this out before moving on, since I don't want to add all of these to the repo, since they are unrelated.
+
+To-do:
+    - *DONE* figure out git problem (ignore, or not add untracked files or directories)
+    - change file mapping JSON to account for the fact that this is not on my computer. Everything should be a relative path, or nothing at all.
+        *DONE*delete my computer's filepath from the JSON
+    - *DONE*write python file, so that we can run it easily from the command line
+    - Add the 1-D version of the problem that Tyler sent me to the Github
+    - edit the github files so that everything can run properly on any machine
+    - Figure out how to get the function file to talk to the main script.
+
+Figuring out git problem...
+it was because I was still in the other directory, testing to make sure the files worked. Going back into the directory...
+
+- leaving the JSON file mapping problem for a bit and focusing on getting the python to work.
+
+Getting Python file to run from the command line...
+Picking up where I left off last week, there should be a test file with the special name "cmd_line_test" that I ran last week from the command line.
+- Now I remember where I got stuck yesterday - on the problem where there are "too many output arguments" This is why I was trying to get the code to run in MATLAB yesterday, and why I was trying to get it to the point where there is no output. Back to the MATLAB file to see if there is any output when we run it.
+    - Running the FEM with the run name "output_check1"
+    - checking output file...
+    - There it is, and there are no outputs associated with it.
+    
+- So MATLAB is to the point where there are no outputs, the function simply saves a file. There is still the problem with having the call the 2d transientBCHeatedBlock_square function, but we can leave this for now and see if it leads to any complications. For now we have to go back to the python cli and see if we are still encountering the same difficulties there
+    - running the function in python through the python engine for matlab...
+        - This didn't seem to fix our problem. I have to figure out what to do with the engine to get it to run
+        - I may have just stumbled on it! - might have to do nargout=0, this seems to ring a bell
+            - this works! saved as cmd_line_test3
+
+Finally, the next step: putting all of this inside of a python script that will run automatically.
+
+- Putting it into a python script...
+    - this should be straightforward, I'm going to start out with just putting my lines into the command prompt into a line of code.
+
+    -I've now got a function defined in a python script, I now need to remember/figure out how to run that function from the command line.
+    - I wrote a second function that takes a simple input to run fro the file as a test
+    - working on importing a function in python in the command prompt...
+    - Okay I got it to work, the problem was that I was importing the matlab engine inside of the function.
+
+- Adding new python stuff to the repository
+    - I've made all of these changes in the local file, where I know everything works smoothly. I have not gotten the github to run cohesively yet. The final step to getting to do this is adding the new files to the repo  
+        - run_model.py has been added to the repository
+
