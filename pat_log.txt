@@ -1,3 +1,4 @@
+===================================================================================
 6/20/21
 Next to-do: change filepaths in the document accordingly
     - 2 choices to do this:
@@ -53,9 +54,9 @@ To-do:
     - change file mapping JSON to account for the fact that this is not on my computer. Everything should be a relative path, or nothing at all.
         *DONE*delete my computer's filepath from the JSON
     - *DONE*write python file, so that we can run it easily from the command line
-    - Add the 1-D version of the problem that Tyler sent me to the Github
+    - *DONE*Add the 1-D version of the problem that Tyler sent me to the Github
     - edit the github files so that everything can run properly on any machine
-    - Figure out how to get the function file to talk to the main script.
+    - Figure out how to get the function file to talk to the main script in MATLAB
 
 Figuring out git problem...
 it was because I was still in the other directory, testing to make sure the files worked. Going back into the directory...
