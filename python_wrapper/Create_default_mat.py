@@ -11,8 +11,8 @@ from scipy import io
 #===============================================================================
 #Initial data refinement
 #===============================================================================
-sop_lineouts_data='s88773_sop_lineouts.xlsx' #.xlsx file with the sop lineout data
-reflectivity_data='Reflectivity_s88773.xlsx' #.xlsx file containing the reflectivity data to use
+sop_lineouts_data='../Data/s88773_sop_lineouts_TP.xlsx' #.xlsx file with the sop lineout data
+reflectivity_data='../Data/Reflectivity_s88773.xlsx' #.xlsx file containing the reflectivity data to use
 throughput=1.0 #throughput correction based on slit width and shot number
 aeta= 25.5#1/delta_t of SOP data
 a0= 481000.0# based on ND filter
@@ -55,6 +55,6 @@ default_values={
 }
 
 #Finally, save the dictionary as a .mat file
-io.savemat('../inputs/default_input_matrix.mat',mdict=default_values)
+io.savemat('inputs/default_input_matrix.mat',mdict=default_values)
 
 

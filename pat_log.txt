@@ -90,3 +90,59 @@ Finally, the next step: putting all of this inside of a python script that will 
     - I've made all of these changes in the local file, where I know everything works smoothly. I have not gotten the github to run cohesively yet. The final step to getting to do this is adding the new files to the repo  
         - run_model.py has been added to the repository
 
+- Now for the task of getting the code to work ...
+    - I'll start with just trying to get the code/functions to work in the MATLAB file
+
+=================================================================================
+=================================================================================
+
+6/22/2021
+
+Today I need to pick up where I left off and work on getting the code to where it can function on any machine.
+
+Getting the code to work...
+    - 
+
+    -----
+    ----
+    ---
+    --
+    -
+    	I'm writing my work here because I didn't work yesterday since I spent all of my time on the engineering job and so I am making up for it today. Needless to say, not a good look so I'll write it here then paste it into my log for today.
+-----------
+===========================
+Future tasks:
+	- get python code in working structure of classes and functions
+	
+---------------------------
+Picking up where I left off yesterday...
+
+trying to get the code to function on any machine
+	- okay, let's go see how to run the fucntion currently, it should be in the folder WicksLabWork
+	- have to make sure I'm in the right repo, because earlier commands are coming back from a different repo
+	- nvm, I'm good, I just have to be inside of the Thermal_Laser_Compression_Model folder
+	- checking the inputs required
+		- same as the matlab function, but we have to call the function from this file
+
+	- writing a quick script to prove that this does indeed work
+		-troubleshooting the script...
+			- trying from the cmd line
+			ahh import error
+		- there's something wrong with how I've coded these functions, I think I might have to import the matlab file at the top of the file where I define the functions
+
+	- Before I could get the function to run from the command prompt, but it is really important to make sure that I can run the function in Python
+
+Whatever, I just threw the function in, I can figure everything out later
+
+Okay now I should be good to move the files over to the Thermal_Laser_Compression_Model, and then start working from there to get everything working cohesively in github
+
+- Getting the code to work
+	- transferring the new files from WicksLabWork
+		- prove_working.py is the only real file to move for now.
+	- check filepaths in the default mat file to see that they are correct for the current file setup
+	- have been troubleshooting for a bit now, I think the next step is to go into MATLAB and try to solve it from that end of things
+-
+--
+---
+----
+-----

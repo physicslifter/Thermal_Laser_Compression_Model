@@ -192,7 +192,7 @@ getClosestNode = @(p,x,y) min((p(1,:) - x).^2 + (p(2,:) - y).^2);
 %Save variables in .mat file
 mydate=date;
 mytime=string(clock);
-filename=strcat('FEM_output/',run_name,date,mytime(4),mytime(5),mytime(6),'.mat');
+filename=strcat('FEM_output/',run_name,'.mat');
 save(filename)
 end
 

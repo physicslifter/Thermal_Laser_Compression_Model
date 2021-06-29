@@ -1,5 +1,12 @@
+#=================================================
+#Testing the fem_run function
+#=================================================
 #Import the matlab engine for python
 import matlab.engine
+
+#Point to input data, and the sample run name
+#input_data_file='inputs/default_input_matrix.mat'
+#sample_run_name='sample_script_in_python-default_output_matrix'
 
 #Write function for running the model
 def fem_run(input_matrix,run_name):
@@ -14,10 +21,6 @@ def fem_run(input_matrix,run_name):
     #show user the run is complete
     print('run complete')
 
-#Point to input data, and the sample run name
-input_data_file='inputs/default_input_matrix.mat'
-sample_run_name='sample_script_in_python-default_output_matrix'
-
 #Run the model
-fem_run(input_data_file,sample_run_name)
+#fem_run(input_data_file,sample_run_name)
 
