@@ -34,6 +34,8 @@ dm=4200.0
 cm=800.0
 t0m=2000.0
 
+#Transient Heated Block info
+peak_temp=28000
 #==================================================
 
 #Now write a dictionary for the default values
@@ -51,7 +53,8 @@ default_values={
     'km':km,
     'dm':dm,
     'cm':cm,
-    't0m':t0m
+    't0m':t0m,
+    'peak_temp':peak_temp
 }
 
 #Finally, save the dictionary as a .mat file

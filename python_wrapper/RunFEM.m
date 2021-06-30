@@ -5,7 +5,7 @@ function [] = RunFEM(input_parameter_file,run_name)
 % This version uses refelctivity information. This code should be run
 % before heat equation code.
 
-load(input_parameter_file,'sop_lineouts_data','reflectivity_data','xw','aeta','a0','t0a','d','c','t0','w','km','dm','cm','t0m')
+load(input_parameter_file,'sop_lineouts_data','reflectivity_data','xw','aeta','a0','t0a','d','c','t0','w','km','dm','cm','t0m','peak_temp')
 
 %SOP data%
 start=150;
@@ -160,6 +160,10 @@ getClosestNode = @(p,x,y) min((p(1,:) - x).^2 + (p(2,:) - y).^2);
 [~,nid2m] = getClosestNode( msh.Nodes, smgo2, (3*w*10^-6)/2 );
 [~,nid3m] = getClosestNode( msh.Nodes, smgo3, (5*w*10^-6)/2 );
 
+%Naming some important variables
+T11=T1(nid1,:);
+T12=T1(nid2,:);
+T13=T1(nid3,:);
 
 %******    Plotting    ******
 
@@ -193,6 +197,6 @@ getClosestNode = @(p,x,y) min((p(1,:) - x).^2 + (p(2,:) - y).^2);
 mydate=date;
 mytime=string(clock);
 filename=strcat('FEM_output/',run_name,'.mat');
-save(filename)
+save(filename,'tlist','T11','T12','T13','t_data','temp1_corrected', 'temp2_corrected','temp3_corrected')
 end
 
