@@ -23,7 +23,7 @@ elseif(state.time <= 1000)
   load('inputs/default_input_matrix.mat','peak_temp')
   
   %Define peak to be the peak_temp value that is included in the .mat file
-  peak=28000;
+  peak=peak_temp;
   t=state.time %print time to see live progress
   if t < 4e-8 && t > 1.8e-8
       leftTemp = peak;
