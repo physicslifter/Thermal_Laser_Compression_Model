@@ -9,7 +9,7 @@ Python 3.8 is required. Currently, this model uses the python engine for matlab 
 ## Tutorial
 once you have installed dependencies and have a current version of the repository:
 1. Open command line
-2. navigate to python_wrapper subfolder
+2. navigate to python_wrapper subfolder, and open python in the terminal
 3. to run the model:
 ~~~
     from scipy import io
