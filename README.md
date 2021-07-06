@@ -11,7 +11,7 @@ once you have installed dependencies and have a current version of the repositor
 1. Open command line
 2. navigate to python_wrapper subfolder
 3. to run the model:
-'''
+~~~
     from scipy import io
     from matlab import engine
     import runFEM2 as f
@@ -28,4 +28,4 @@ once you have installed dependencies and have a current version of the repositor
     f.plot_results(mydata)
     plt.show()
     
-'''
+~~~
