@@ -24,7 +24,7 @@ elseif(state.time <= 1000)
   
   %Define peak to be the peak_temp value that is included in the .mat file
   peak=peak_temp;
-  t=state.time %print time to see live progress
+  t=state.time; %print time to see live progress
   if t < 4e-8 && t > 1.8e-8
       leftTemp = peak;
   else

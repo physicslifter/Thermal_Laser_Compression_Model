@@ -1,6 +1,7 @@
 #IMPORTS
 from scipy import io
 import matlab
+from matplotlib import pyplot as plt
 
 #=============================================================
 #FUNCTIONS
@@ -77,8 +78,8 @@ def run_model(input_parameters):
 def plot_results(model_output):
     #corrected temps
     a1=model_output['temp1_corrected']
-    a2=model_output['temp1_corrected']
-    a3=model_output['temp1_corrected']
+    a2=model_output['temp2_corrected']
+    a3=model_output['temp3_corrected']
 
     ta=model_output['t_data']
 
