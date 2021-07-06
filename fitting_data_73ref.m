@@ -7,21 +7,28 @@ clear
 %SOP data%
 start=150;
 stop=890;
-opts = detectImportOptions('s88773_sop_lineouts.xlsx');
-m = readtable('s88773_sop_lineouts.xlsx',opts);
+
+%Pat: altered the code here to read to the proper filepaths for the git
+%repository. (The files are in the "Data" subfolder)
+opts = detectImportOptions('Data/s88773_sop_lineouts_TP.xlsx');
+m = readtable('Data/s88773_sop_lineouts_TP.xlsx',opts);
 
 t_data=m.Time_ns_(start:stop)*10^-9;
-temp1_data=m.x1_07Um(start:stop);
-temp2_data=m.x2_3Um(start:stop);
-temp3_data=m.x3_23Um(start:stop);
+
+%Pat: changed from Um to um in the variable names, in order to get the
+%filenames to mesh
+temp1_data=m.x1_07um(start:stop);
+temp2_data=m.x2_3um(start:stop);
+temp3_data=m.x3_23um(start:stop);
+
 xw = 1; %throughput correction based on slit width and shot number
 aeta=25.5; %1/delta_t of SOP data, was 46
 a0=481000;% Based on ND filter
 t0a=1.909;% Based on ND filter
 
 %Reflectivity data
-optsr = detectImportOptions('Reflectivity_s88773.xlsx');
-mr = readtable('Reflectivity_s88773.xlsx',optsr);
+optsr = detectImportOptions('Data/Reflectivity_s88773.xlsx');
+mr = readtable('Data/Reflectivity_s88773.xlsx',optsr);
 t_ref = mr.Time_ns_*10^-9;
 
 ref2=mr.Reflectivity_1;

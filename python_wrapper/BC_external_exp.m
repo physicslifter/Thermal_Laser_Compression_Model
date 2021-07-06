@@ -1,12 +1,11 @@
-
-function leftTemp = transientBCHeatedBlock_square(~,state)
+function leftTemp = BC_external_exp(~,state)
 %boundaryFileHeatedBlock Temperature boundary conditions for heated block example
 % Temperature boundary condition is defined on the left edge of the block
 % in the heated block example.
 %
 % loc   - application region struct passed in for information purposes
 % state - solution state struct passed in for information purposes
-
+​
 % Copyright 2014-2016 The MathWorks, Inc.
 % The temperature returned depends on the solution time.
 if(isnan(state.time))
@@ -17,20 +16,15 @@ if(isnan(state.time))
 elseif(state.time <= 1000)
   %****This is where I want to modify the existing function****
   
-  %This is where we define our boundary conditions or "initial input". 
-  %right now, its a square wave so peak temp is only free parameter
-  %load in the peak_temp value
-  load('inputs/default_input_matrix.mat','peak_temp')
-  
-  %Define peak to be the peak_temp value that is included in the .mat file
-  peak=28000;
-  t=state.time %print time to see live progress
-  if t < 4e-8 && t > 1.8e-8
-      leftTemp = peak;
-  else
-      leftTemp=0;
-  end    
-
+  %'State' is originally the only input it takes and then it extracts time.
+  %I want to be able to use p and polyval to easily import my fitted
+  %polynomials into here instead of copy and pasting what you see below.
+  t=state.time
+  peak=35000; %(~35000)
+  a=3.6e7; % "diffusivity" (4.0e7)
+  b=1.7e-8; %time shift (1.8e-8)
+  leftTemp=peak*(1+2*(-exp(-pi^2*a*(t-b)/0.61^2)+exp(-4*pi^2*a*(t-b)/0.61^2)-exp(-9*pi^2*a*(t-b)/0.61^2)));
+​
 else
   leftTemp = 0;
 end

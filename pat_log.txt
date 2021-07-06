@@ -42,10 +42,6 @@ Now it's time to go on to getting the function to run from the cmd line in the p
         - using 2 arguments
         - okay now the cmd line is working
 
-=====================================================================================
-=====================================================================================
-
-6/21/2021
 
 git status is now showing all parent folders as untracked files when I run git status. Now I have to figure this out before moving on, since I don't want to add all of these to the repo, since they are unrelated.
 
@@ -93,10 +89,6 @@ Finally, the next step: putting all of this inside of a python script that will 
 - Now for the task of getting the code to work ...
     - I'll start with just trying to get the code/functions to work in the MATLAB file
 
-=================================================================================
-=================================================================================
-
-6/22/2021
 
 Today I need to pick up where I left off and work on getting the code to where it can function on any machine.
 
@@ -108,8 +100,7 @@ Getting the code to work...
     ---
     --
     -
-    	I'm writing my work here because I didn't work yesterday since I spent all of my time on the engineering job and so I am making up for it today. Needless to say, not a good look so I'll write it here then paste it into my log for today.
------------
+
 ===========================
 Future tasks:
 	- get python code in working structure of classes and functions
@@ -146,3 +137,161 @@ Okay now I should be good to move the files over to the Thermal_Laser_Compressio
 ---
 ----
 -----
+
+=================================================================================
+=========================================================================
+
+Troubleshooting the code in Matlab...
+
+    - running function in WicksLabWork folder...
+        - okay it works here, but not in the other folder
+    - okay let's go through and find all of the points where there is some external code referenced (next step is to go look at the setup of the file structure)
+    - Figured it out! the problem was that there was no variable t, and now I see it is because I had commented it out. I must have copied over the file while I was troubleshooting the problem that I was having with the fuunction with the transient heated block. 
+        - I uncommented the line, and added the new solution, which is a semicolon at the end of the line. I forgot Matlabs syntax, and that to remove the colon at the end of the line is to print the output haha
+            - output saved as test 11
+
+
+Proving you can run the repository functionally...
+    - when I go to the repo, open python, and try to just import the function like: from prove_working import fem_run, it actually runs the file prove_working.py   
+        - I tried this because yesterday when trying to import the function from thje function file, it wouldn't work, and also trying to run the prove_working.py file did not work'
+
+    - Now I'm trying commenting out everything other than the actual function itself and seeing if this still works
+        - it imports fine...
+        - my test run (output saved as pat1) worked just fine
+    - While I wait for the py code to run, let's go check matlab to see how the 1-D function differs from the 2d (if at all)
+        - most effecient way seems to be to just try to run the function with 1d and see what happens. will try in matlab
+            - have to copy it into the subfolder first
+            - failure because some other function is mentioned
+            - leave for now, I have more worthwhile things to work on
+
+
+Okay next up...
+    - we need to be able to write an input matrix in python. Something that takes input variables, then writes a matlab matrix, then calls that matlab matrix in the fem_run function.
+        - go to the writing a default matrix file in python and 
+    - On flip side, we also have to figure out how to assess our data
+        - check notes from last time to see how Tyler wants to assess
+        - have to change the naming technique in matlab to be more general
+            - just saves as the run name now
+        - now we have to run the model, then go grab the matrix from the model and assess the data
+            - for this, we need to do read in the .mat matrix that it saves as, as a python matrix, or a numpy array, pandas, dataset, etc.
+                ideally, our python function would do this
+
+        have the data, now we have to figure out which variable in the file is actually the output data
+
+===================================================
+===================================================
+Notes on 6/28/2021
+--
+To-Do's:
+    - get python code to the point where I can write in variables to an input file
+    - write Matlab function to create a function with some specified parameters, then call an instance of that function before the lines where the transientBCheatedblock function is called
+    - sync files to github
+    - set up Zoom meeting with Tyler for today
+    - set up recurring meetings for us on Mondays at 10am
+--------------------------------------------
+Notes:
+    - creating the macro transientBCheatedblock function...
+        - let's think about what we really need here... what do we really need to make the Matlab code execute exactly as it does now, while still being able to manipulate variable(s) between the function file and the MATLAB script
+            - first off, it has to be stored in a separate file, but one that is in the same folder.
+                - we could do this by creating the file, putting it in the current directory, then later calling it when we call the transientBCHeatedBlock function in our code. Finally, we would have to delete the file from the directory, so that there are not endless files stored in the folder
+            - So, the steps to go throughh in the file in order are:
+                1. create a function for the boundary conditions with the specified parameter(s)
+                2. write the created function to its own file
+                [CURRENTLY IN CODE]3. Call the function/file in the code
+                4. Delete the created function file from the directory
+            - Before we can actually do the previous, we need to:
+                1. include the variable in the python file to create the default input matrix
+                2. Call the variable in the matlab file when reading in the .mat matrix file
+
+        - Changing the python script to include peak_temp as an additional paramter...
+        - running the script to generate a new .mat input variable matrix
+        - Now I have to edit the function in Matlab so that it also takes the peak_temp variable
+        - Now it's time for writing the function in MATLAB...
+            - first looking @ how to write a function in MATLAB
+            - I don't think it will work, but I will try to start by just writing a function that creates another function and then saves it
+
+        - New idea for how to get it to work:
+            1. save .mat file with the peak_temp value
+            2. Call a python script that:
+                1. Reads the .mat to get the peak_temp value 
+                2. writes a function to a file, with specified peak_temp parameter
+                3. in Run_FEM, we can call the function, which is saved in accordance with the peak_temp value
+                    - if we always save the function in the same place, and only rewrite it when we have a new peak temp, we dont have to worry about writing a function, we need only to write a script
+            - Looking at how to write a .mat file in python...
+            - Okay, the .mat file has been written, now it's time to write a new boundary condition function, where peak_temp automatically reads to the file
+                - just demonstrated that the variable can be written in python, then moved into matlab
+
+            - Now I've updated the function in matlab, we now need a python function that does the following:
+                1. writes user inputs to matlab file
+                    - wow, hold on, we can just read the variable from the original variable file, the default input matrix
+                        - rewriting matlab file again...
+                        - and checking to make sure it works...
+                            - Good & Good!
+
+                    - small problem in MATLAB - it's still printing the plots, we don't really need to fix those though at the moment
+                2.We want to be able to do some function like:
+                FEM(parameter_dict), which will then return a nx3 numpy array with n # of time points, and time, real temp & model temp, along with an np array of the parameters, or we can just throw the two into a larger array that is divided up into 2 subarrays
+
+                    - let's just do FEM(parameter numpy array), so that all inputs and outputs of the function are a numpy array
+                        - just wrote an np-to-mat function to use at the beginning of the code, so that we send in info as an numpy array
+                - writing down desired flow in notebook...
+                - FEM output is saved in .mat files, so now we need a way to read .mat files into python, and manipulate them to get what we want as numpy arrays
+
+        Have to go back and define the input parameters in it's own file...
+
+=============================================================================================
+=============================================================================================
+
+Tasks for today:
+    - finish the code framework in Python for iterating the model with differing parameters
+    - figure out what's wrong with the matlab file (returning a flat temperature profile giving the 20K data)
+
+--
+Notes:
+    - Working on getting the model to work properly 
+        - staret with Tyler's code file that he sent me and see if that code outputs the desired results
+        - going into the code...
+
+- okay stop with the code, I'm not sure what I need to do to get it working, and it seems obvious that the most practical way to continue is to focus on getting the wrapper complete so that we can iterate through parameter space
+
+Working on the wrapper...
+    - let's refresh ourselves on where we are...
+        - Let's go see if I was running the original file that Tyler sent me, or if it is the edited one that I am working with 
+            - okay well it appears that the file will not complete running because it is trying to plot against the array t_data, though this variable does not exist.
+                - looking for t_data in the other code file
+
+    - have to pick up where I left off...
+        - I think I remember looking for the t_data variable, and then it turns out that this was from the transientBCheatedblock file
+        - let's go back and run the file that's in the main folder of the git repository first
+            - after running, we can assess what works and what doesn't, and then try to work from there 
+        - Running the file  
+            - problem with the .xlsx file that the matlab code points to    
+                - incorrect path
+            - fixed the path problem, now trying again...
+                - still getting the error with the filepath
+                    - how to troubleshoot this?
+                - ahh, still a different name for the filepath
+                    - fixed again, trying again
+                    
+            - new problem: errors with reading in the data from the excel files 
+                - probably something to do with the column headers
+                    - troubleshooting...
+                    - could I just write a python function for this?
+                        - maybe it:
+                            - takes filepath as input
+                            - goes to the file and opens the excel file
+                            - gets the filenames, and changes them to a convention that works well in matlab
+
+                    - python function probably too much work for now, I will see where else I can troubleshoot this in order to get it to work
+                        - seems like I can just play around with the variable names in matlab until I can get this to work
+                            - changing the capital U to lowercase (Um ==> um) does the transientBCheatedblock
+                                - changing for all 3...
+
+                        - running again...
+                            - And it works!! It doesn't just return static values like the function was doing.
+
+                    TIme to take a second and add all of the changes to the repo
+
+
+
+

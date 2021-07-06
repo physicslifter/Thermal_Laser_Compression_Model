@@ -147,6 +147,7 @@ thermalBC(thermalmodelT,'Edge',12,'Temperature',@transientBCHeatedBlock_square);
 thermalBC(thermalmodelT,'Edge',13,'Temperature',@transientBCHeatedBlock_square);
 thermalBC(thermalmodelT,'Edge',14,'Temperature',@transientBCHeatedBlock_square);
 
+
 R1 = solve(thermalmodelT,tlist);
 T1 = R1.Temperature;
 
