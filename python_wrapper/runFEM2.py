@@ -8,7 +8,7 @@ from matplotlib import pyplot as plt
 #=============================================================
 
 #function for writing the input parameters (mainly copied from Create_default_mat.py)
-def write_input_parameters(peak_temp):
+def write_input_parameters(peak_temp, a, b, start_time):
     #Default values...
     sop_lineouts_data='../Data/s88773_sop_lineouts_TP.xlsx' #.xlsx file with the sop lineout data
     reflectivity_data='../Data/Reflectivity_s88773.xlsx' #.xlsx file containing the reflectivity data to use
@@ -16,6 +16,7 @@ def write_input_parameters(peak_temp):
     aeta= 25.5#1/delta_t of SOP data
     a0= 481000.0# based on ND filter
     t0a= 1.909# based on ND filter
+
     #sample
     density=12500.0 #density kg/m^3 previous at 11000
     heat_capacity=500.0 #heat capacity J/kg K
@@ -27,6 +28,8 @@ def write_input_parameters(peak_temp):
     dm=4200.0
     cm=800.0
     t0m=2000.0
+
+#======================
 
     #Writing to a dictionary
     default_values={
@@ -44,7 +47,10 @@ def write_input_parameters(peak_temp):
         'dm':dm,
         'cm':cm,
         't0m':t0m,
-        'peak_temp':peak_temp
+        'peak_temp':peak_temp,
+        'a':a,
+        'b':b,
+        'start_time':start_time
     }
 
     #save the matrix in the default location
@@ -58,10 +64,10 @@ def write_input_parameters(peak_temp):
 
 #read back the data
 
-def run_model(input_parameters):
+def run_model(peak_temp, a, b, start_time):
 
     #write the input parameters
-    write_input_parameters(input_parameters)
+    write_input_parameters(peak_temp, a, b, start_time)
 
     #Set up and run the matlab engine
     eng=matlab.engine.start_matlab()

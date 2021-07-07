@@ -3,9 +3,9 @@
 %~2 um (corresponds to the ~2 and ~3 um steps)
 
 %****     2um     *****
-
+load('inputs/default_input_matrix.mat','a','b')
 %***** Parameters *******
-k = @(~,state) 30+0.028*state.u; %W/mK - 
+k = @(~,state) b+a*state.u; %W/mK - 
 % (previous fit): 0.045*state.u + 3000./sqrt(abs(state.u)), (de koker fit):
 % 30+0.0288t, (good linear fit): 120+0.02t
 d=12500; %kg/m^3 - determined from Smith et al. 2018 isentrope (previous at 11000)

@@ -34,8 +34,13 @@ dm=4200.0
 cm=800.0
 t0m=2000.0
 
-#Transient Heated Block info
+#Transient Heated Block variables
 peak_temp=28000
+start_time=4.0*10.0**(-8.0)
+
+#other variables
+a=0.028 #a (in k=a*x+b)
+b=30 #b (in k=a*x+b)
 #==================================================
 
 #Now write a dictionary for the default values
@@ -54,7 +59,10 @@ default_values={
     'dm':dm,
     'cm':cm,
     't0m':t0m,
-    'peak_temp':peak_temp
+    'peak_temp':peak_temp,
+    'start_time':start_time,
+    'a':a,
+    'b':b
 }
 
 #Finally, save the dictionary as a .mat file

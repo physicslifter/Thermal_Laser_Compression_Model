@@ -13,7 +13,7 @@ clear
 
 input_parameter_file='inputs/input_matrix.mat';
 
-load(input_parameter_file,'sop_lineouts_data','reflectivity_data','xw','aeta','a0','t0a','d','c','t0','w','km','dm','cm','t0m','peak_temp')
+load(input_parameter_file,'sop_lineouts_data','reflectivity_data','xw','aeta','a0','t0a','d','c','t0','w','km','dm','cm','t0m','peak_temp','a','b')
 
 %SOP data%
 start=150;
@@ -63,7 +63,7 @@ init_fit = polyval(p,t_data);
 %===============================================
 
 
-k = @(~,state) 30+0.035*state.u; %W/mK linear temperature dependent model for thermal conductivity
+k = @(~,state) b+a*state.u; %W/mK linear temperature dependent model for thermal conductivity
 % (previous fit): 0.045*state.u + 3000./sqrt(abs(state.u)), (de koker fit):
 % 30+0.0288t, (good linear fit): 120+0.02t
 %d=12500; %density kg/m^3 previous at 11000
