@@ -24,7 +24,7 @@ b=30.0
 
 #=========================================================
 #Running the function
-mydata=f.run_model(peak_temp,start_time, a, b)
+mydata=f.run_model(peak_temp,a, b, start_time)
 
 #printing the results
 f.plot_results(mydata)
