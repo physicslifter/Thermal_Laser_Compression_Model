@@ -1,3 +1,10 @@
+%Pat - based off of Tyler's code: heat_equation_data_1D_exp.m
+%The above code can be found in the main folder, compare for differences
+
+%=================================================================================
+%Putting in the code for reading in the file data
+%from fitting_data_73ref.m
+
 %Main script for analyzing shot s88773
 %two different mesh setups with iron and MgO blocks in contact at ~1 um and
 %~2 um (corresponds to the ~2 and ~3 um steps)
@@ -155,5 +162,3 @@ ylim([0 3e4]);
 % ylabel 'Temperature (K)'
 % %xticklabels({'15','20','25','30','35','40','45','50','55'})
 % ylim([0 3e4]);
-
-
