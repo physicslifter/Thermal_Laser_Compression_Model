@@ -1,4 +1,3 @@
-
 function leftTemp = transientBCHeatedBlock_square(~,state)
 %boundaryFileHeatedBlock Temperature boundary conditions for heated block example
 % Temperature boundary condition is defined on the left edge of the block

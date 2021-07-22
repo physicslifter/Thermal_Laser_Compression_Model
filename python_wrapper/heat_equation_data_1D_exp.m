@@ -3,7 +3,12 @@
 %~2 um (corresponds to the ~2 and ~3 um steps)
 
 %****     2um     *****
+%load input parameters
 load('inputs/input_matrix.mat','a','b')
+
+%load input data
+load('fitting_data.mat','a0','aeta','init_fit','m','mr','opts','optsr','p','ref2','ref2_fit','ref2_fourier','start','stop','t0a','t_data','t_ref','temp1_corrected','temp1_data','temp2_corrected','temp2_data','temp3_corrected','temp3_data','xw')
+
 %***** Parameters *******
 k = @(~,state) b+a*state.u; %W/mK - 
 % (previous fit): 0.045*state.u + 3000./sqrt(abs(state.u)), (de koker fit):

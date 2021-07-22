@@ -291,6 +291,294 @@ Working on the wrapper...
                             - And it works!! It doesn't just return static values like the function was doing.
 
                     TIme to take a second and add all of the changes to the repo
+                    - had to exit out of the file to commit all of the changes in the repo (since it includes changes to the log)
+
+                    - okay so the matlab file workssssssssss
+
+        - file returning the correct output, so now we have 2 choices for where to go from here 
+            1. build new function from scratch, checking at each step to ensure that the inputs will function properly
+            2. compare function to the properly working code
+
+            - before I decide what to do, I want to run the script file in the python folder    
+                - running the file...
+                    - not present in the python_wrapper file
+                    - where to go from here? ......................
+
+            - let's try to compare the two first
+                - from the meeting with tyler last week, I don't think that the issue was in the trnasientBCheatedsquare function, so I'll start by just looking at the runFEM function
+                - appears to be the same through the first file (fitting_data_73ref)
+                - onto the script that outputs the FEM fit (heat_equation_2d_square.m)
+                    - fitting file ends w the lines:
+                        figure
+                        plot(t_data,temp1_corrected,'o',t_data,init_fit,'-')
+                        legend('data','fit')
+
+                        - these lines are commented out in the RunFEM file
+                         variables d,c,t0 &w, etc are defined next, time to check if these are all defined in the input file
+                            - yes all there
+                    - fuck it, let's run the function, and see what the output is
+                    - times are printing as they are supposed to
+                    Not working
+                        time to try building this from scratch
+                        we will have another file, run_FEM2
+                    
+    BUILDING run_FEM2()
+        - goal
+            - build model that simply loads an input file, with a static name
+                - fits in with broader scheme and plan for what to do in python
+                    - what to do in python:
+                        - create function that:
+                            - takes parameters as input
+                            - writes the parameters to the default .mat file
+                            - runs the FEM function
+                            - return data 
+            -
+        Step 1 - adding in the fitting_data file to the top of the fem_run script
+            - built the runFEM2 file, now time to put the reading in at the top (fitting_data_73ref.m)
+            - have to change filepath, since we're now in the python_wrapper folder
+            - running the file...
+                - notes on output:
+                    - it works and returns what it should.
+            
+            - DONE
+
+        Step 2 - checking if transientBCHeatedBlock_square still works, when using the default input matrix as input
+            - changed peak=28000 to peak=peak_temp
+            - running the file...
+                - notes on the run...
+                    forgot to clear variables...
+                    cleared now running again...
+                    notes:
+                        - good to go!
+
+            DONE
+
+        Step 3 - changing script file so that it reads input parameters from the default .mat file
+            - look at file and same time, and comment out inputs    
+            - look for values that Tyler gave me that are the important parameters for the model
+                - can't find where I wrote that, just read in everything
+                - running with the .mat file read at the toop, and anything that could be a variable cancelled out  
+                    - error: need to write file name/path to a variable input_parameter_file
+                    running file...
+                        - notes on run...
+                            - And it works!
+
+            DONE
+        
+        Step 4 - save it to a default output file
+            pasted in the code and saved it to "run_output.mat" in the fgem_OUTPUT folder
+            - running the code...
+                - problem with saving - have to write the variables 
+                - fixed now running again...
+                    it ran, time to check to make sure it worked well
+                        - values:
+                            works
+                        runs and saves well!
+
+            DONE
+
+        Now for writing the python script that goes around this...
+            Steps for the run in python:
+                1. write to input file
+                2. run the runFEM2 file
+                3. read in output .mat 
+                4. return the output data
+
+            - writing to input file
+            - good to go
+
+            - installing matplotlib, so that we can check out the data
+            
+            got stuff working from the command line, time to put a plot together
+
+=====================================================================
+
+- getting the code to run with all of the variables that we were talking about yesterday
+    - variables to add:
+        - start_time 
+        - a (in k=a*x+b)
+        - b (in k=a*x+b)
+    - first task: add the variables to the python file
+        - done
+        - done 
+        - done 
+    - second task: add variables to the matlab file
+        - finished
+    - third task: add variables to the python file (run)
+
+Next task - get the python wrapper working for the 1D model to see how fast we can run updates.
+    - let's look at the 1d model and compare to the 2d model to see what we have to do
+     - I think I edited the file a bit thinking it was the 2d file, getting the original...
+     - okay I think I need to write the equivalent of the transientBCHeatedBlock function, this time for 1d
+        - time to go into this function to see if there are any key elements that would have to change for the change from a 1d to 2d scenario
+        - reading the 2d equation, I don't see any reason why we can't just run the same function with the 1d version. trying this now...
+            - I think I'm pointing to the wrong input matrix file...
+                - in opening the python function, we can see that we should poiint to "input_matrix.mat"
+                    - And it works
+            - now trying to run the file again...
+                -keep getting errors, I think I have to read in the data first
+            - reading in the data makes it work better, now getting different errors
+                - stupid thing where it shows a blank line is an "invalid character" idk why it does this in MATLAB sometimes
+                - 1D works! And boy is it fast!,
+    - boom boom boom okay now I have to write the variables into the MATLAB equation, and write a runFEM1.py function for the 1D FEM model
+        - also we have to change the filenames to matrices for the one dimensional model
+            - write all in to do cmd_line_test
+
+    1-D python wrapper to-do list:
+        1. merge reading in the file with the new function 
+        2. add create_default_mat file for the 1d case
+            - have to write list of variables that we need to write to
+        3. edit 1D MATLAB function to write to unique save file names, and to read from a unique input file name
+        4. write python function file for the 1-D case: runFEM1.py
+
+    - Merging data reading with new function
+        - completed as file runFEM1.m
+
+    -  script for creating a default .mat file in python
+        -wrote script, testing now
+        - opkay the test worked, on to the next step
+
+    - rewriting the matlab script and associated function to read in the variables from the file, and to function properly as they do without reading in the variable file
+        - in the main script...
+            - just the inputs for k, I forgot we can leave the file paths out of it for now
+            - rewritten, now time to test
+                - good to go, it runs
+        - in the boundary condition function...
+            - peak_temp
+            - diffusivity
+            - time_shift
+
+        - all the inputds were rewitten, now time to do thje output file
+            forgot to save to uniqe filename, redoing...
+
+
+
+    Next step is to write the python functions for running the equation
+        - this should be pretty easy enough with copying over the 2D version of the code
+            -DONE 
+
+        - and automating a dcript to prove this works
+            -DONE
+    
+Now for the optimization part...
+
+First: the code takes 4 minutes still to run. While running the code, it seems obvious that this is due to having to read in the new variables every time, because it was so much faster before having to read in the variables, and the times print at a much slower rate, indicating that a significant portion of the slowdown is due to something in the boundary condition function
+    - could try: writing and saving the boundary condition file in python at the beginning of the loop, before running the main runFEM file
+        - look up: how to edit a matlab file in python
+            - still might work, but the tutorial I found only provided a way to manually edit the code, we need to automate this
+
+        - new strategy options: 
+            1. use python to write a new file every time before running
+            2. use matlab to write a (function-writing function)
+            
+        Strategy 1 - using python to write to a new file every time 
+            - looking up how to edit a matlab file in python
+                - can edit a read in file in python easily using .readlines() after opening the file
+                    - but can we read in a .m file?
+                        - yup, it works
+                - okay reading in seems to work well, now how about editing?
+                    - manipulating...
+                        - I think I can edit, left off here, so will have to restart here
+                        - pausing quickly to upload current version to repo...
+                            - good to go
+                    - okay back to the manipulating, can I edit and manipulate a .m file in python, then save it and run it?
+                    - huh, I can't seem to be able to get it to work as I did before, (from the command line), I wonder what are the reasons for this
+                          - trying to get the file editing to work from the cmd line
+                            - still working on this, I'm not totally sure that this will work
+                            - need backup plan in case this doesn't work (function-writing function)
+
+                            - following tutorial from the web for how to convert .txt to .csv 
+                                idea here is that once this is possible, I should be able to convert .txt to .m. Then edit as .txt, save as .m, then run as .mat
+
+                                pausing to check slack
+
+                                gtg, noe back to the code tutorial
+
+                        - writing some test code in the .txt file
+                            - need some code that will print something so that we know it's working
+                    
+
+                        - the csv works, and saves as a .csv file
+                            - but it uses a pandas method to_csv
+                                - time to see if there is another way to do this...
+                                - online there's that one article that shows we can just do this programatically from the command line
+                                    - now the problem becomes how to run command line functions/commands from python
+                                        - apparently this is possible via the os module, linke here: https://datatofish.com/command-prompt-python/
+
+                                        cmd /k for running a command and keeping the cmd window open
+                                        cmd /c run a command and close the window upon execution
+
+                                        - okay now I can successfully run command lines from python. 
+                                            - time to go back to the website talking about changing .txt files to .m files & see what I have to do
+
+                                            going back to the website...
+                                                - according to the site, I can run the command: "!ren *.txt *.m" from the windows command line, and this should convert all .txt files to .m files (that can run). From the matlab forum: https://www.mathworks.com/matlabcentral/answers/320137-how-to-change-txt-format-automatically-into-m-format
+
+                                                
+                                            - okay back to running command line functions/commands from inside of python
+                                                - okay it seems I have he hang of it
+                                                - check directory to make sure we're in the right place to change the files
+                                                - everything looks good, let's try running the command
+                                                    - returns error: '!ren' is not recognized as an internal or external command,
+
+                                                - it seems that the problem is throwing because the operation is not installed on the system
+                                                    - it works if we do ren instead of !ren
+                                                    - now trying running the file in python
+
+                                                    Boom! Good to go! sample1.txt has been converted to a .m file and now runs!
+
+            - okay I now know how to convert a .txt file to a .m file and in a way such that it will run
+            - task 1 - writing a python script that generates a .txt file with the same format as we have in the matlab boundary condition file
+                - first off- can we switch back to .txt (if so, it's not necessary to write to a new file each time)
+                    - yes, okay we can flip right back & change to a .txt file
+                - next task: figuring out how to edit the .txt file
+                    - copy in 1d boudary condition file
+                    - now let's see if we can write a script that opens it and changes the values of the parameters, then changes it back to a .m
+
+                    - have written the lines that work in command prompt. time to write a script that does this for me
+
+
+
+            - task 2 - writing a python function that:
+                1. changes boundary condition file to a .txt file
+                    - time to make a m_to_txt.py file
+                    - got  it got it got it
+                2. edits the necessary lines in the .txt file which correspond with the variables
+                3. saves the changes to the .txt file
+                4. converts back to .m file
+                    a;reay have this in the form of txt_to_m.py
+
+                - have written as a script, now time to simply adapt this to a function
+
+                And now we have a function that takes the desired inputs, and rewrites the file
+
+    building function for putting it all together: runFEM_1D_V3
+        - should be the same as the other 1D function, except it uses the update method as well for the BC file (the .mat file is still necessary for changes to the overall matlab code)
+
+        - time to put the function file BC.py into the main folder 
+
+        - okay it's all good, time to:
+            1. run in matlab to make sure it works
+                - okay after much adjusting, I can get this to work
+            2. change file using python function
+            3. run again in matlab 
+
+    - Okay I got the function to work. Now I have figured out how to do the chi^2 analysis inside the python shell. Now I have to get it working in a script file. It's not so hard, the line looks like this:
+    chi_sq=np.sum(np.divide(np.square(ynew-y1),y1))
+
+
+
+
+
+
+                        
+
+
+
+                    
+
+            
+
 
 
 

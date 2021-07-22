@@ -59,7 +59,5 @@ init_fit = polyval(p,t_data);
 %plot(t_data,temp1_corrected,'o',t_data,init_fit,'-')
 %legend('data','fit')
 
-%save as .mat
-save('fitting_data.mat','a0','aeta','init_fit','m','mr','opts','optsr','p','ref2','ref2_fit','ref2_fourier','start','stop','t0a','t_data','t_ref','temp1_corrected','temp1_data','temp2_corrected','temp2_data','temp3_corrected','temp3_data','xw')
-
+save('fitting_mdata','tlist','T11','T12','T13','t_data','temp1_corrected', 'temp2_corrected','temp3_corrected')
 
