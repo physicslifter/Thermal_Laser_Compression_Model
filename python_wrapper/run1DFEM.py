@@ -56,7 +56,7 @@ def run_model(peak_temp, a, b, time_shift, diffusivity, BC_filename, out_filenam
     mydata=io.loadmat('FEM_output/1D_run_output.mat')
 
     #save as numpy file .npy
-    np.save(out_filename,allow_pickle=True)
+    #np.save(out_filename,allow_pickle=True)
 
     #now return the output
     return mydata

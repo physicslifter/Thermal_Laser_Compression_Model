@@ -566,6 +566,139 @@ First: the code takes 4 minutes still to run. While running the code, it seems o
     - Okay I got the function to work. Now I have figured out how to do the chi^2 analysis inside the python shell. Now I have to get it working in a script file. It's not so hard, the line looks like this:
     chi_sq=np.sum(np.divide(np.square(ynew-y1),y1))
 
+    - okay now I have to put the chi^2 part into a script file
+    - I should probably prototype it first from the command line
+
+    - working from the command line for a prototype...
+        - okay I need to see how to open the save file
+            - time to go into the python function and see how the file is saved and how the data is accessed
+
+            a simple one line of code: mydata=io.loadmat('FEM_output/1D_run_output.mat')
+
+            the function saves to the out_filename, so we will probably need to assess this there
+
+            But of course I need to do the interpolation operation as well. 
+                - I forgot how to do this
+                    - figuring out interpolation
+                    - okay I got it from the command line. Time to go take a break, and I can put this into a script after lunch
+
+            Okay I want to put the chi^2 function in the file useful_functions.py so that I can call it easily
+                - okay chi_sq_interp is defined so that given an array, it will simply return the chi^2 value
+
+                ahh I forgot where I was
+
+                Pretty sure the last thing I did was prove the chi^2 function is working properly, so let's try to figure out a next step from there
+
+                oh yes now I remember, I saved chi^2 in the useful_functions.py file
+                
+                so the next step is to wrap up the analysis by putting in a function that returns the chi^2 value for the temperatures at each barrier
+
+
+- Time to go in and look at the new code that Tyler just sent that generalizes the model to fit different experimental setups
+    - okay looking at it, I think I understand everything
+    - now there's a question of how to do the chi^2 since we are now analyzing all 3 runs at once
+        -msg'd tyler about this, I think I will just return all of the chi^2, then sum them to get a single chi^2 value if necessary.
+
+    - first off - I have to redo the python wrapper to run the new file(s)
+
+
+- Redoing the Python wrapper...
+    Okay first thing is to look at the combined matlab file: what variables do we need in the file?
+        - it doesn't appear like we need all that much that is different from the original file
+        - should just be a & b from the linear k equation, then whatever is needed for the BC file
+            - to do:
+                Make new function file: 1d_fem_v3
+                    should be the same as the current 1d function file, except that it calls to different places, and that it outputs the chi^2 function
+
+                    Okay I can't figure out which file was used previously. I want to find the one that I built before so that I can copy over the save part to the new .m file
+
+Restarting the notes for this section, I have the following to do:
+To-do:
+    - rewrite 1d function in the new python file
+    - edit the matlab file(s) so that the necessary variables can be manipulated accordingly
+    - test the 1d function to ensure that it runs as intended
+    - add in the chi squared calculation so that the python function simply takes the parameters as inputs, and returns chi^2 as the outputs
+
+    I should be able to use minimize(method="BFGS") to get this done
+
+    First order of business: getting python function so that it runs from the command line:
+        - editing the matlab file so that it opens and saves variables accordingly.
+            - have to figure out the name of the input parameter file that I want to use
+            - okay so now there are some issues with getting the filepaths figured out
+            - saved filepaths, I don't know how this is going to work, since the FEM is run prior to reading in the data
+                error from the saving T11, T12, etc., deleting lines and running again...
+
+                - good to go
+        
+        so the matlab file runs as intended, on to the next step...
+
+    Now we need to make sure we can go in and open and check out the data in the save matrix in python
+        good to go
+
+    Okay so the matlab script runs, and we can go in and open up the output. Time to think about the process to use from here
+        - have to use python to assess least squares on the variables
+            - Beginning idea: function that takes the path to a .mat file as input, and returns the chi^2 values associated with the file
+                - time to go to the chi^2 function to remind myself of how I wrote this
+                - It should be pretty straightforward to do the chi^2 based off of the function
+                - had to sidetrack because there are all sorts of new variables to write in the .m file. Writing as T11,T12, T13, T21, ..., T33
+                    - a single line will look like (for the 73 data at the first temp, with arguments given ad variable names in the save matrix):
+                        chi_sq_interp('tlist','T11','t_data_73','temp1_73')
+
+                    - trying to run the above line in the python shell...
+                        - after a lot of fuckery, it's finally working
+
+                - got the command to write, now it's time for writing this into a python script
+                    - check that - functions, and I can put this into useful_functions.py
+
+                    got it, and had to break from work for meeting with prof wicks and the rest of our monday meeting group
+
+    Now we that we have a function that takes the input and returns the data & chi^2, let's figure out a way to optimize it
+        The optimizer works! With the nelder-mea simplex algorithm, but smooths out the lines so that they fit with the data
+
+        I've got everything running well, but of course, it is optimizing for flat lines that fit more the tail end of the data. I want to cut off all data before the peak
+
+        Got a lot done today.
+
+            showed how to optimize the model. While this appears to work, there is no obvious convergence, and the model has a tendency to flatten out. Currently, I think this is because of the "flat" date that occurs at the beginning of each of the 9 data curves
+
+    Now for where to go from hereL
+        the main problem seems to be that I can't get it to converge on a value. 
+            I can't decipher what the issue is. I will try to optimize a single curve: the first face from the run s88773
+
+            Next steps to try for getting the optimization to run well:
+                - include the start/stop times for the data to crop out the background data
+
+            
+            Test - isolating the chi^2 for the first face of the first dataset again resulted in a "flattening out" of the curve
+                - implies that it is either the data at the beginning throwing off the fit, or there are too many parameters for the model to fit, or the fitting method is not sufficiently robust, or we need more iterations for a good fit
+
+                new plan - writing the discarding part into the python file
+
+            Okay I could wither put it in a python file, or I could just copy into another file, and edit the .m there
+
+            I think I will go for the latter at first, then see where I get from there
+                - okay firs tstep is to copy the file
+                - need to get it to the point where I can play around with the parameters to see what works
+
+            Okay I've got it working, now for the optimization
+                - still no convergence, even when I'm isolating a single curve
+                - first try: redo while printing chi^2 values
+                - next step: edit in the matlab file
+
+            Potential next steps:
+                - trying square wave in the boundary condition file
+                - fitting all chi^2 with
+
+
+            - Test - get chi^2 on dataset, then get optimizer to converge
+
+
+
+
+
+
+
+
 
 
 
