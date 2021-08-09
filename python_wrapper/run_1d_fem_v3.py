@@ -17,13 +17,14 @@ def chi_sq_interp(x0,y0,x1, y1):
     #y1: dependent variable data for results
 
     #Step 1 - interpolate the model output to match the dataset we have
-    f=interpolate.interp1d(x0,y0, bounds_error=False)
+    f=interpolate.interp1d(x0,y0, bounds_error=False, fill_value='extrapolate')
     interpolated_data=f(x1)
 
     avg=np.average(y1)
+    variance=(np.sum(np.square(y1-avg)))/(len(y1))
 
     #Now for the chi^2 assessment
-    chi_sq=np.sum( np.divide(np.square(y0-y1) , np.square(y1-avg)))/(len(y1))
+    chi_sq=np.sum( np.divide(np.square(interpolated_data-y1) , variance))/(len(y1))
 
     return chi_sq
 
@@ -32,6 +33,20 @@ def chi_sq_interp_peak(x0,y0,x1, y1):
     
     #step 1 - find the peak
     peak_val=np.where(y1 == np.amax(y1))[0].item()
+
+    #Chop off the experimental data at the peak
+    new_x1=x1[0:peak_val]
+    new_y1=y1[0:peak_val]
+
+    #Now return the chi^2
+    #Since the chi^2 has a built in interpolation, we can leave the model ranges untouched, and their data will automatically match the domain of the new experimental data
+    return chi_sq_interp(x0,y0,new_x1,new_y1)
+
+def custom_chi_sq_interp_peak(x0,y0,x1, y1,my_peak):
+    #This function should return the same as chi_sq_interp, except it only evaluates the chi^2 before the peak
+    
+    #step 1 - find the peak
+    peak_val=my_peak
 
     #Chop off the experimental data at the peak
     new_x1=x1[0:peak_val]
@@ -101,6 +116,8 @@ def peak_chi_sq_from_output_mat(filepath):
     #Start by reading in the data
     d=io.loadmat(filepath)
 
+    
+
     #write to variables so chi^sq_interp will accept the arguments
     #variables are named as follows:
     #[input name to chi_sq_interp (x0,y0,x1 or y1)]_[face # (1, 2, or 3)]_[run #: 73, 76 or 80]
@@ -149,6 +166,9 @@ def peak_chi_sq_from_output_mat(filepath):
 
     #finally, return the values as an array
     return [cs731,cs732,cs733,cs761,cs762,cs763,cs801,cs802,cs803]
+
+#def chi_sq_combined_mean(x0,y0,x1,y1):
+
 
 #function for writing the input parameters (mainly copied from Create_default_mat.py)
 def write_input_parameters(peak_temp, a, b, time_shift, diffusivity, filename):
@@ -286,6 +306,12 @@ def simple_peak_run(parameter_array):
     # parameter_array[4]=diffusivity
 
     #run the model & return single chi^2 value
-    chi_2=run_peak_model(parameter_array[0],parameter_array[1],parameter_array[2],parameter_array[3],parameter_array[4])[1]
-    print(np.sum(chi_2[0]))
-    return np.sum(chi_2[0])
+    run=run_peak_model(parameter_array[0],parameter_array[1],parameter_array[2],parameter_array[3],parameter_array[4])
+    chi_2=run[1]
+    print(np.average(chi_2[6:8]))
+    #save the value to the optimization data file
+    with open('optimization_data.txt', 'a+') as file_object:
+        file_object.write('\n')#newlinw
+        file_object.write(str(np.average(chi_2[6:8]))+', '+str(parameter_array))
+
+    return np.average(chi_2[6:8])

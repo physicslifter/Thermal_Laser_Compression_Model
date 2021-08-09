@@ -25,9 +25,9 @@ elseif(state.time <= 1000)
   t=state.time;
   %original values commented out, new values rewritten as avars below
   
-  peak=16321.61345054665; 
+  peak=24000.0; 
   a=36000000.0; 
-  b=1.8000000000000002e-09; 
+  b=1.8000000000000002e-08; 
   
   leftTemp=peak*(1+2*(-exp(-pi^2*a*(t-b)/0.61^2)+exp(-4*pi^2*a*(t-b)/0.61^2)-exp(-9*pi^2*a*(t-b)/0.61^2)));
 else

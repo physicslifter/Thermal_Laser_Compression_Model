@@ -28,7 +28,7 @@ dlif=4700; %kg/m^3
 clif=1600; %J/kg K (800)
 t0lif=1000; %K - old value 1000
 
-tlist = [20:0.5:40]*10^-9;
+tlist = [20:0.5:50]*10^-9;
 
 
 %**** Creating geometry ****
@@ -262,9 +262,15 @@ opts = detectImportOptions('s88773_sop_lineouts_TP.xlsx','Sheet','June2021');
 m = readtable('s88773_sop_lineouts_TP.xlsx',opts,'Sheet','June2021');
 blank_t_data_73=m.Time*10^-9;
 t_data_73=m.Time(start:stop)*10^-9;
-temp1_data73=m.step1_corrected(start1_73:stop1_73);
-temp2_data73=m.step2_corrected(start2_73:stop2_73);
-temp3_data73=m.step3_corrected(start3_73:stop3_73);
+
+temp1_data73=m.step1_corrected(start:stop);
+temp2_data73=m.step2_corrected(start:stop);
+temp3_data73=m.step3_corrected(start:stop);
+
+% temp1_data73=m.step1_corrected(start1_73:stop1_73);
+% temp2_data73=m.step2_corrected(start2_73:stop2_73);
+% temp3_data73=m.step3_corrected(start3_73:stop3_73);
+
 xw = 1; %throughput correction based on slit width and shot number
 aeta=25.5; %1/delta_t of SOP data, was 46
 a0=481000;% Based on ND filter of 0 (481000) (395900)
@@ -323,9 +329,8 @@ temp3_80=real(11605*t0a./(log(1+((1-reference)*a0./(aeta*temp3_data80)))));
 figure
 ax1=axes('Position',[0.13,0.11,0.85,0.69]);
 nexttile
-plot(blank_t_data_73(start1_73:stop1_73),temp1_73,'o',tlist(1:10),T1(nid1_73,1:10),'-','Linewidth',2)
-%plot(blank_t_data_73(start1_73:stop1_73),temp1_73,'o',blank_t_data_73(start2_73:stop2_73),temp2_73,'o',blank_t_data_73(start3_73:stop3_73),temp3_73,'o',...
-%    tlist,T1(nid1_73,:),'-',tlist,T1(nid2_73,:),'-',tlist,T1(nid3_73,:),'-','Linewidth',2)
+plot(t_data_73,temp1_73,'o',t_data_73,temp2_73,'o',t_data_73,temp3_73,'o',...
+    tlist,T1(nid1_73,:),'-',tlist,T1(nid2_73,:),'-',tlist,T1(nid3_73,:),'-','Linewidth',2)
 legend('Data 1 um','Data 2 um','Data 3 um','Fe 1um','Fe 2um', 'Fe 3um')
 grid on
 title '1D Model With Exp Input: s88773';
@@ -334,43 +339,29 @@ ylabel 'Temperature (K)'
 %xticklabels({'15','20','25','30','35','40','45','50','55'})
 ylim([0 3e4]);
 
-% figure
-% ax1=axes('Position',[0.13,0.11,0.85,0.69]);
-% plot(t_data_76,temp1_76,'o',t_data_76,temp2_76,'o',t_data_76,temp3_76,'o',...
-%     tlist,T1(nid1_76,:),'-',tlist,T1(nid2_76,:),'-',tlist,T1(nid3_76,:),'-','Linewidth',2)
-% legend('Data 1 um','Data 2 um','Data 3 um','Fe 1um','Fe 2um', 'Fe 3um')
-% grid on
-% title '1D Model With Exp Input: s88776';
-% xlabel 'Time (nanoseconds)'
-% ylabel 'Temperature (K)'
-% %xticklabels({'15','20','25','30','35','40','45','50','55'})
-% ylim([0 3e4]);
-% 
-% figure
-% ax1=axes('Position',[0.13,0.11,0.85,0.69]);
-% plot(t_data_80,temp1_80,'o',t_data_80,temp2_80,'o',t_data_80,temp3_80,'o',...
-%     tlist,T1(nid1_80,:),'-',tlist,T1(nid2_80,:),'-',tlist,T1(nid3_80,:),'-','Linewidth',2)
-% legend('Data 1 um','Data 2 um','Data 3 um','Fe 1um','Fe 2um', 'Fe 3um')
-% grid on
-% title '1D Model With Exp Input: s88780';
-% xlabel 'Time (nanoseconds)'
-% ylabel 'Temperature (K)'
-% %xticklabels({'15','20','25','30','35','40','45','50','55'})
-% ylim([0 3e4]);
+figure
+ax1=axes('Position',[0.13,0.11,0.85,0.69]);
+plot(t_data_76,temp1_76,'o',t_data_76,temp2_76,'o',t_data_76,temp3_76,'o',...
+    tlist,T1(nid1_76,:),'-',tlist,T1(nid2_76,:),'-',tlist,T1(nid3_76,:),'-','Linewidth',2)
+legend('Data 1 um','Data 2 um','Data 3 um','Fe 1um','Fe 2um', 'Fe 3um')
+grid on
+title '1D Model With Exp Input: s88776';
+xlabel 'Time (nanoseconds)'
+ylabel 'Temperature (K)'
+%xticklabels({'15','20','25','30','35','40','45','50','55'})
+ylim([0 3e4]);
 
-% figure
-% pdeplot(thermalmodelT,'XYData',T1(:,end),'Contour','on','ColorMap','hot');
-% figure
-% ax1=axes('Position',[0.13,0.11,0.85,0.69]);
-% plot(t_data,temp1_corrected,'o',t_data,temp2_corrected,'o',t_data,temp3_corrected,'o',...
-%     tlist,T1(nid1m,:),'-',tlist,T1(nid2m,:),'-',tlist,T1(nid3m,:),'-','Linewidth',2)
-% legend('Data 1 um','Data 2 um','Data 3 um','MgO interface 1um','MgO interface 2um', 'MgO interface 3um')
-% grid on
-% title '2D Model: MgO side of interface';
-% xlabel 'Time (nanoseconds)'
-% ylabel 'Temperature (K)'
-% %xticklabels({'15','20','25','30','35','40','45','50','55'})
-% ylim([0 3e4]);
+figure
+ax1=axes('Position',[0.13,0.11,0.85,0.69]);
+plot(t_data_80,temp1_80,'o',t_data_80,temp2_80,'o',t_data_80,temp3_80,'o',...
+    tlist,T1(nid1_80,:),'-',tlist,T1(nid2_80,:),'-',tlist,T1(nid3_80,:),'-','Linewidth',2)
+legend('Data 1 um','Data 2 um','Data 3 um','Fe 1um','Fe 2um', 'Fe 3um')
+grid on
+title '1D Model With Exp Input: s88780';
+xlabel 'Time (nanoseconds)'
+ylabel 'Temperature (K)'
+%xticklabels({'15','20','25','30','35','40','45','50','55'})
+ylim([0 3e4]);
 
 T11=T1(nid1_73,:);
 T12=T1(nid2_73,:);
