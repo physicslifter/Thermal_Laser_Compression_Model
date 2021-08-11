@@ -62,14 +62,3 @@ def chi_2(params):
     return chi_2
 
 
-#first, let's define some sample data
-x1=np.arange(1,10,0.01)
-y1=np.sin(x1)
-
-#define spacing for model independent variable data
-x0=np.arange(1,10)
-
-#define some initial parameters
-params0=[1,7,3,5.2]
-
-#Now get the initial fit
