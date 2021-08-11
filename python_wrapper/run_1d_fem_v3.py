@@ -239,7 +239,7 @@ def run_peak_model(peak_temp, a, b, time_shift, diffusivity):
     eng=matlab.engine.start_matlab()
 
     #run the file with no output arguments
-    eng.heat_equation_data_1D_combo1(nargout=0)
+    eng.heat_equation_data_1D_combo2(nargout=0)
 
     #once the file runs, go get the output
     mydata=io.loadmat('FEM_output/1D_combo_run_output.mat')
@@ -308,10 +308,10 @@ def simple_peak_run(parameter_array):
     #run the model & return single chi^2 value
     run=run_peak_model(parameter_array[0],parameter_array[1],parameter_array[2],parameter_array[3],parameter_array[4])
     chi_2=run[1]
-    print(np.average(chi_2[6:8]))
+    print(np.average(chi_2[6:9]))
     #save the value to the optimization data file
     with open('optimization_data.txt', 'a+') as file_object:
         file_object.write('\n')#newlinw
-        file_object.write(str(np.average(chi_2[6:8]))+', '+str(parameter_array))
+        file_object.write(str(np.average(chi_2[6:9]))+', '+str(parameter_array))
 
-    return np.average(chi_2[6:8])
+    return np.average(chi_2[6:9])
