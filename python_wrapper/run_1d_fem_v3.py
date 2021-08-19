@@ -28,6 +28,14 @@ def chi_sq_interp(x0,y0,x1, y1):
 
     return chi_sq
 
+def least_squares_interp(x0,y0,x1,y1):
+    f=interpolate.interp1d(x0,y0, bounds_error=False, fill_value='extrapolate')
+    interpolated_data=f(x1)
+
+    least_squares=np.sum(np.square(y1-interpolated_data))
+
+    return least_squares
+
 def chi_sq_interp_peak(x0,y0,x1, y1):
     #This function should return the same as chi_sq_interp, except it only evaluates the chi^2 before the peak
     
@@ -41,21 +49,6 @@ def chi_sq_interp_peak(x0,y0,x1, y1):
     #Now return the chi^2
     #Since the chi^2 has a built in interpolation, we can leave the model ranges untouched, and their data will automatically match the domain of the new experimental data
     return chi_sq_interp(x0,y0,new_x1,new_y1)
-
-def custom_chi_sq_interp_peak(x0,y0,x1, y1,my_peak):
-    #This function should return the same as chi_sq_interp, except it only evaluates the chi^2 before the peak
-    
-    #step 1 - find the peak
-    peak_val=my_peak
-
-    #Chop off the experimental data at the peak
-    new_x1=x1[0:peak_val]
-    new_y1=y1[0:peak_val]
-
-    #Now return the chi^2
-    #Since the chi^2 has a built in interpolation, we can leave the model ranges untouched, and their data will automatically match the domain of the new experimental data
-    return chi_sq_interp(x0,y0,new_x1,new_y1)
-
 
 def get_chi_sq_from_output_mat(filepath):
 
@@ -167,8 +160,97 @@ def peak_chi_sq_from_output_mat(filepath):
     #finally, return the values as an array
     return [cs731,cs732,cs733,cs761,cs762,cs763,cs801,cs802,cs803]
 
-#def chi_sq_combined_mean(x0,y0,x1,y1):
+#function for the least_squares fitting test from early August 2021
+def s88780test_get_least_sq_from_output_mat(filepath):
 
+    #Start by reading in the data
+    d=io.loadmat(filepath)
+
+    #We only care about the data from s88780 for this one
+    #This varies from the above functions because we need to read in all of the time data
+    x0=d['tlist'][0] #tlist data for all runs @ all faces
+
+    #run s88780
+    x1_1_80=d['t_data1_80'] #time data
+    x1_2_80=d['t_data2_80'] #time data
+    x1_3_80=d['t_data3_80'] #time data
+    y0_1_80=d['T31'][0] #face 1 model output
+    y0_2_80=d['T32'][0] # face 2 model output
+    y0_3_80=d['T33'][0] # face 3 model output
+    y1_1_80=d['temp1_80'] # face 1 experimental data
+    y1_2_80=d['temp2_80'] # face 2 experimental data
+    y1_3_80=d['temp3_80'] # face 3 experimental data
+
+    #Get chi^2 values for each run
+    cs801=least_squares_interp(x0,y0_1_80,x1_1_80,y1_1_80) # s88773 face 1
+    cs802=least_squares_interp(x0,y0_2_80,x1_2_80,y1_2_80) # s88773 face 2
+    cs803=least_squares_interp(x0,y0_3_80,x1_3_80,y1_3_80) # s88773 face 3
+
+    #finally, return the values as an array
+    return [cs801,cs802,cs803]
+
+#function for getting the least_squares value from the output matrix
+def get_least_sq_from_output_mat(filepath):
+
+    #Start by reading in the data
+    d=io.loadmat(filepath)
+
+    #We only care about the data from s88780 for this one
+    #This varies from the above functions because we need to read in all of the time data
+    x0=d['tlist'][0] #tlist data for all runs @ all faces
+
+    #run s88773
+    x1_1_73=d['t_data1_73'] #time data
+    x1_2_73=d['t_data2_73'] #time data
+    x1_3_73=d['t_data3_73'] #time data
+    y0_1_73=d['T11'][0] #face 1 model output
+    y0_2_73=d['T12'][0] # face 2 model output
+    y0_3_73=d['T13'][0] # face 3 model output
+    y1_1_73=d['temp1_73'] # face 1 experimental data
+    y1_2_73=d['temp2_73'] # face 2 experimental data
+    y1_3_73=d['temp3_73'] # face 3 experimental data
+
+    #run s88776
+    x1_1_76=d['t_data1_76'] #time data
+    x1_2_76=d['t_data2_76'] #time data
+    x1_3_76=d['t_data3_76'] #time data
+    y0_1_76=d['T21'][0] #face 1 model output
+    y0_2_76=d['T22'][0] # face 2 model output
+    y0_3_76=d['T23'][0] # face 3 model output
+    y1_1_76=d['temp1_76'] # face 1 experimental data
+    y1_2_76=d['temp2_76'] # face 2 experimental data
+    y1_3_76=d['temp3_76'] # face 3 experimental data
+
+    #run s88780
+    x1_1_80=d['t_data1_80'] #time data
+    x1_2_80=d['t_data2_80'] #time data
+    x1_3_80=d['t_data3_80'] #time data
+    y0_1_80=d['T31'][0] #face 1 model output
+    y0_2_80=d['T32'][0] # face 2 model output
+    y0_3_80=d['T33'][0] # face 3 model output
+    y1_1_80=d['temp1_80'] # face 1 experimental data
+    y1_2_80=d['temp2_80'] # face 2 experimental data
+    y1_3_80=d['temp3_80'] # face 3 experimental data
+
+    #Get chi^2 values for each run
+
+    #73
+    cs731=least_squares_interp(x0,y0_1_73,x1_1_73,y1_1_73) # s88773 face 1
+    cs732=least_squares_interp(x0,y0_2_73,x1_2_73,y1_2_73) # s88773 face 2
+    cs733=least_squares_interp(x0,y0_3_73,x1_3_73,y1_3_73) # s88773 face 3
+
+    #76
+    cs761=least_squares_interp(x0,y0_1_76,x1_1_76,y1_1_76) # s88776 face 1
+    cs762=least_squares_interp(x0,y0_2_76,x1_2_76,y1_2_76) # s88776 face 2
+    cs763=least_squares_interp(x0,y0_3_76,x1_3_76,y1_3_76) # s88776 face 3
+
+    #80
+    cs801=least_squares_interp(x0,y0_1_80,x1_1_80,y1_1_80) # s88780 face 1
+    cs802=least_squares_interp(x0,y0_2_80,x1_2_80,y1_2_80) # s88780 face 2
+    cs803=least_squares_interp(x0,y0_3_80,x1_3_80,y1_3_80) # s88780 face 3
+
+    #finally, return the values as an array
+    return [cs731,cs732,cs733,cs761,cs762,cs763,cs801,cs802,cs803]
 
 #function for writing the input parameters (mainly copied from Create_default_mat.py)
 def write_input_parameters(peak_temp, a, b, time_shift, diffusivity, filename):
@@ -214,7 +296,7 @@ def run_model(peak_temp, a, b, time_shift, diffusivity):
     eng=matlab.engine.start_matlab()
 
     #run the file with no output arguments
-    eng.heat_equation_data_1D_combo(nargout=0)
+    eng.heat_equation_data_1D_combo3(nargout=0)
 
     #once the file runs, go get the output
     mydata=io.loadmat('FEM_output/1D_combo_run_output.mat')
@@ -223,7 +305,8 @@ def run_model(peak_temp, a, b, time_shift, diffusivity):
     #np.save(out_filename,allow_pickle=True)
 
     #And finally, get the chi^2 value
-    chi_2=get_chi_sq_from_output_mat('FEM_output/1D_combo_run_output.mat')
+    #chi_2=get_chi_sq_from_output_mat('FEM_output/1D_combo_run_output.mat')
+    chi_2=get_least_sq_from_output_mat('FEM_output/1D_combo_run_output.mat')
 
     #now return the output
     return [mydata, chi_2]
@@ -306,12 +389,12 @@ def simple_peak_run(parameter_array):
     # parameter_array[4]=diffusivity
 
     #run the model & return single chi^2 value
-    run=run_peak_model(parameter_array[0],parameter_array[1],parameter_array[2],parameter_array[3],parameter_array[4])
+    run=run_model(parameter_array[0],parameter_array[1],parameter_array[2],parameter_array[3],parameter_array[4])
     chi_2=run[1]
-    print(np.average(chi_2[6:9]))
+    print(np.sum(chi_2[0:3]))
     #save the value to the optimization data file
     with open('optimization_data.txt', 'a+') as file_object:
         file_object.write('\n')#newlinw
-        file_object.write(str(np.average(chi_2[6:9]))+', '+str(parameter_array))
+        file_object.write(str(np.sum(chi_2[0:3]))+', '+str(parameter_array[0])+', '+str(parameter_array[1])+', '+str(parameter_array[2])+', '+str(parameter_array[3])+', '+str(parameter_array[4]))
 
-    return np.average(chi_2[6:9])
+    return np.sum(chi_2[0:3])

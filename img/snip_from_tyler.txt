@@ -1,0 +1,20 @@
+47.21367647837652 2.4e+04 2.8e-02 3.0e+01 1.8e-08 3.6e+07
+54.595912374991556 2.52e+04 2.80e-02 3.00e+01 1.80e-08 3.60e+07
+49.48662764879994 2.40e+04 2.94e-02 3.00e+01 1.80e-08 3.60e+07
+
+start=150;
+stop1=190;
+stop2=370;
+stop3=500;
+stop_final=750;
+opts = detectImportOptions('s88780_SOP_TP.xlsx');
+m = readtable('s88780_SOP_TP.xlsx',opts);
+t_data1_80=m.time(start:stop1)*10^-9;
+t_data2_80=m.time(start:stop2)*10^-9;
+t_data3_80=m.time(start:stop3)*10^-9;
+# t_data1end_80=m.time(stop1:stop_final)*10^-9;
+# t_data2end_80=m.time(stop2:stop_final)*10^-9;
+# t_data2end_80=m.time(stop3:stop_final)*10^-9;
+temp1_data80=m.step1_corrected(start:stop1);
+temp2_data80=m.step2_corrected(start:stop2);
+temp3_data80=m.step3_corrected(start:stop3);

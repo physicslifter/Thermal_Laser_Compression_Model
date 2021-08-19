@@ -1,4 +1,4 @@
-===================================================================================
+last===================================================================================
 6/20/21
 Next to-do: change filepaths in the document accordingly
     - 2 choices to do this:
@@ -691,6 +691,75 @@ To-do:
 
 
             - Test - get chi^2 on dataset, then get optimizer to converge
+
+Okay, now the question is where to go from here
+    Can just start with the chi^2 problem and go from there
+        okay first up: let's look up if chi^2 is a reasonable way to assess the fit for this situation
+
+        Oh yes, I also forgot yesterday to specify the bounds that Tyler gave me from the other day. I think I will do this first, then begin with looking into chi^2
+            - okay got the optimization going with the CG algorithm, which just does a numerical gradient
+
+    - back to the chi^2 problem - Is there a standard way to get chi^2 between 2 differently spaced sets of data (or data arrays of differing length)?
+    - next up is figuring out how I put in the bounds to the optimization problem
+
+August 2, 2021
+Working on running the model more...
+    Okay, to begin, I'm running an optimization using Nelder-Mead, and the initial parameters from the matlab file
+        - idea here is to see if we can actually improve on the initial fit
+        - if this doesn't work, the next step is to use the square wave boundary condition file
+        - saving the run data in Optimization_runs subdirectory
+
+        - converged at 15 again, let's go see what the fit looks like
+            - check against the initial parameters and see if the fit is better visually
+            okay it was fitting the Li and Mg windows, it turns out we just want to look at the Fe runs first
+            - ahhh I see some of the parameters have flipped negative, this makes no sense to me, but matlab appears to be optimizing towards flat lines
+
+        - The flattening out effect is still occurring when I fit the 3rd data run. Time to go back to the first data run and see if the flattening out occurs here
+
+        - Need to change the file so that it saves/prints the parameter values as well
+
+    TO RECAP:
+        fit flattens out when fitting all at once
+        fit flattens out when trying to optimize the two Fe windows
+        fit flattens out when optimizing s88780
+        fit works well when optimizing s88773
+
+    - Let's test the 3rd point quickly by running the s88780 data
+        - wow tlist only goes up to 4ns, could this be the problem?
+            CHECK OUT LATER
+
+    - okay, so the fit works well for s88773, it flattens out for s88780, what does it do for s88776?
+        - s88776 appears to work well, saved as run6 for today
+        - now trying while I allow the time to go longer for the sim data
+            - it seems we get basically the same results
+
+    - Trying s88780 with the extended line lengths on the model output
+        - it worked at first (run 7) and appeared to be converging towards a good fit with very low chi^2 (~chi^2 = 2). What I changed here is the time shift from 1.8 ns to 18ns
+            - first troubleshooting attempt: extend the minimum a little bit
+                obviously yields a bad fit. Let's run it identical to how I did the earlier run, and let's see if the optimization returns the same thing
+            - second troubleshooting attempt
+                - trying to replicate the original 
+                    - replication worked, and now I got an output graph for the run
+
+            - it seems obvious these problems are from the time shift, and I have a hunch it's trying to match that one outlying datapoint. I have to:
+                A) figure out how to mask outlying datapoint in scipy
+                B) mask data point in the data set
+                C) cut off data
+                ...
+                & then see if it will fit
+
+
+        I've found that the differential evolution method is possible in the scipy optimization package. This is what I should use for the next attempt at optimization
+
+To-do for the rest of the day:
+    streamline process
+        - create new python function that:
+            1. reads out data to excel file, where plots are automatically updated
+            2. saves plots from matlab file
+            3. puts all files from the run into a nice folder
+
+
+
 
 
 

@@ -249,53 +249,48 @@ getClosestNode = @(p,x,y) min((p(1,:) - x).^2 + (p(2,:) - y).^2);
 %******    Plotting    ******
 
 %SOP data for s88773%
-start=50;
-stop=950;
-start1_73=150;
-start2_73=195;
-start3_73=220;
-stop1_73=300;
-stop2_73=950;
-stop3_73=950;
-
+start=179;
+stop1=265;
+stop2=415;
+stop3=706;
+stop_final=750;
 opts = detectImportOptions('s88773_sop_lineouts_TP.xlsx','Sheet','June2021');
 m = readtable('s88773_sop_lineouts_TP.xlsx',opts,'Sheet','June2021');
-blank_t_data_73=m.Time*10^-9;
-t_data_73=m.Time(start:stop)*10^-9;
-
-temp1_data73=m.step1_corrected(start:stop);
-temp2_data73=m.step2_corrected(start:stop);
-temp3_data73=m.step3_corrected(start:stop);
-
-% temp1_data73=m.step1_corrected(start1_73:stop1_73);
-% temp2_data73=m.step2_corrected(start2_73:stop2_73);
-% temp3_data73=m.step3_corrected(start3_73:stop3_73);
-
+t_data1_73=m.Time(start:stop1)*10^-9;
+t_data2_73=m.Time(start:stop2)*10^-9;
+t_data3_73=m.Time(start:stop3)*10^-9;
+t_data1end_73=m.Time(stop1:stop_final)*10^-9;
+t_data2end_73=m.Time(stop2:stop_final)*10^-9;
+t_data2end_73=m.Time(stop3:stop_final)*10^-9;
+temp1_data73=m.step1_corrected(start:stop1);
+temp2_data73=m.step2_corrected(start:stop2);
+temp3_data73=m.step3_corrected(start:stop3);
 xw = 1; %throughput correction based on slit width and shot number
 aeta=25.5; %1/delta_t of SOP data, was 46
-a0=481000;% Based on ND filter of 0 (481000) (395900)
-t0a=1.909;% Based on ND filter of 0 (1.909) (1.91)
+a0=481000;% Based on ND filter of 0 (481000) 
+t0a=1.909;% Based on ND filter of 0 (1.909) 
 
 %SOP data for s88776
-start=50;
-stop=750;
-start1_76=50;
-start2_76=50;
-start3_76=50;
-stop1_76=950;
-stop2_76=950;
-stop3_76=950;
+start=79;
+stop1=172;
+stop2=418;
+stop3=468;
+stop_final=750;
 opts = detectImportOptions('s88776_SOP_TP.xlsx');
 m = readtable('s88776_SOP_TP.xlsx',opts);
-blank_t_data_76=m.time*10^-9;
-t_data_76=m.time(start:stop)*10^-9;
-temp1_data76=m.step1_corrected(start:stop);
-temp2_data76=m.step2_corrected(start:stop);
-temp3_data76=m.step3_corrected(start:stop);
+t_data1_76=m.time(start:stop1)*10^-9;
+t_data2_76=m.time(start:stop2)*10^-9;
+t_data3_76=m.time(start:stop3)*10^-9;
+t_data1end_76=m.time(stop1:stop_final)*10^-9;
+t_data2end_76=m.time(stop2:stop_final)*10^-9;
+t_data2end_76=m.time(stop3:stop_final)*10^-9;
+temp1_data76=m.step1_corrected(start:stop1);
+temp2_data76=m.step2_corrected(start:stop2);
+temp3_data76=m.step3_corrected(start:stop3);
 xw = 1; %throughput correction based on slit width and shot number
 aeta=25.5; %1/delta_t of SOP data, was 46
-a0_76=395900;% Based on ND filter of 0.1 (481000) (395900)
-t0a_76=1.91;% Based on ND filter of 0.1 (1.909) (1.91)
+a0_76=481000;% Based on ND filter of 0 (481000) (395900)
+t0a_76=1.909;% Based on ND filter of 0 (1.909) (1.91)
 
 %SOP data for s88780
 start=150;
@@ -317,7 +312,7 @@ temp3_data80=m.step3_corrected(start:stop3);
 xw = 1; %throughput correction based on slit width and shot number
 aeta=25.5; %1/delta_t of SOP data, was 46
 a0=481000;% Based on ND filter of 0 (481000) (395900)
-t0a=1.909;% Based on ND filter of 0 (1.909) (1.91)
+t0a=1.909;% Based on ND filter of 0 (1.909) 
 
 reference = 0.55; %calculatd based on reflectivity data of ambient iron assuming perfect window transparency
 
@@ -336,7 +331,7 @@ temp3_80=real(11605*t0a./(log(1+((1-reference)*a0./(aeta*temp3_data80)))));
 figure
 ax1=axes('Position',[0.13,0.11,0.85,0.69]);
 nexttile
-plot(t_data_73,temp1_73,'o',t_data_73,temp2_73,'o',t_data_73,temp3_73,'o',...
+plot(t_data1_73,temp1_73,'o',t_data2_73,temp2_73,'o',t_data3_73,temp3_73,'o',...
     tlist,T1(nid1_73,:),'-',tlist,T1(nid2_73,:),'-',tlist,T1(nid3_73,:),'-','Linewidth',2)
 legend('Data 1 um','Data 2 um','Data 3 um','Fe 1um','Fe 2um', 'Fe 3um')
 grid on
@@ -348,7 +343,7 @@ ylim([0 3e4]);
 
 figure
 ax1=axes('Position',[0.13,0.11,0.85,0.69]);
-plot(t_data_76,temp1_76,'o',t_data_76,temp2_76,'o',t_data_76,temp3_76,'o',...
+plot(t_data1_76,temp1_76,'o',t_data2_76,temp2_76,'o',t_data3_76,temp3_76,'o',...
     tlist,T1(nid1_76,:),'-',tlist,T1(nid2_76,:),'-',tlist,T1(nid3_76,:),'-','Linewidth',2)
 legend('Data 1 um','Data 2 um','Data 3 um','Fe 1um','Fe 2um', 'Fe 3um')
 grid on
@@ -380,4 +375,4 @@ T31=T1(nid1_80,:);
 T32=T1(nid2_80,:);
 T33=T1(nid3_80,:);
 
-save('FEM_output/1d_combo_run_output.mat','tlist','T11','T12','T13','T21','T22','T23','T31','T32','T33','t_data_73','temp1_73','temp2_73','temp3_73','t_data_76','temp1_76','temp2_76','temp3_76','t_data1_80','t_data2_80','t_data3_80','temp1_80','temp2_80','temp3_80')
+save('FEM_output/1d_combo_run_output.mat','tlist','T11','T12','T13','T21','T22','T23','T31','T32','T33','t_data1_73','t_data2_73','t_data3_73','temp1_73','temp2_73','temp3_73','t_data1_76','t_data2_76','t_data3_76','temp1_76','temp2_76','temp3_76','t_data1_80','t_data2_80','t_data3_80','temp1_80','temp2_80','temp3_80')
