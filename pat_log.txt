@@ -758,9 +758,42 @@ To-do for the rest of the day:
             2. saves plots from matlab file
             3. puts all files from the run into a nice folder
 
+==============================================================================================
+September 3, 2021
 
+Starting again the writing in daily format...
+ Okay, so this AM, I need to work on creating a GUI for when the simulation run is going down  
 
+ - can start this task by reading in data that I already have from previous runs from an excel file that I have saved. Then I can build up the GUI from there, simulating a live data run
 
+- I will do this all in a new folder called "GUI_testing"
+
+- Step 1 - write a script that reads in the excel data with some pause to make it realistic
+    - I think that DASH will be good for the visualization, I will have to look more into this. For now, onto writing the script...
+
+    - Reading in excel data...
+        - can use pandas. Need to install this and xlrd
+        - installed xlrd, installing pandas now..
+        - okay now time to make it work from the command prompt
+        - I will start with run 6 on August 2nd
+            - ahh now I see this run is no good, since we only have the data for iteration and chi^2. I have to use a newer optimization run where I return all of the data, not only the chi^2
+                - time to go see which one(s) work
+                    - run 2 from August 18 works
+NOTE - I need to redo the excel files so that they automatically set up initially with some template that is unchanging
+
+        -  okay now going from where I was previously with the run 2 from Aug 18
+        - nice it works, now I have to make a new script file where I will put all of this reading in, read_data.py
+        - time to figure out how to write data into the optimization_data file
+
+        - time to go check to see how I did it before (when printing the values to the cell)
+
+==================================================================
+September 7, 2021
+
+Today I am continuing work on the GUI. I think I can build it with matplotlib and am working from this tutorial here: 
+https://pythonprogramming.net/python-matplotlib-live-updating-graphs/
+
+- okay I wrote a function that I think should work, but I' fairly certain I need to put it all into the same script file, a singular script file
 
 
 
