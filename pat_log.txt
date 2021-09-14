@@ -795,26 +795,44 @@ https://pythonprogramming.net/python-matplotlib-live-updating-graphs/
 
 - okay I wrote a function that I think should work, but I' fairly certain I need to put it all into the same script file, a singular script file
 
+- to get this to work I need to write another script that updates the plots, calling the functions in my GUI function file...
+
+
+- The GUI works!! No that is really cool!
+
+September 9, 2021
+
+Okay now today I've decided to start building the finite element model inside of python. We have had far too many issues with the model. So far, I've only run it on my computer, and we cannot get it running on the lab computer, because Niklas says that I cannot be made an administrator on this computer. There are several installation things I need as an admin, and at this point, it would just be simpler to run it all in Python so that I can just write code and not have to worry about anything else. Onward!
+
+Okay I'm starting by reading the SfePy documentation, available here: http://sfepy.org/doc/
 
 
 
+Okay now the point is to get sfepy going so that I can create the new model
 
+==========================================================
+September 13, 2021
+=====================================-=-=-=-=-=-=-========
+- From here I need to create the sfepy setup
+- I need to learn how to do sfepy the setup
+- The first and most obvious step is to create the mesh
+    - I need to create the mesh in the same way that the mesh was created in the matlab file (since we're solving the same problems)
+        - time to go look inside of the matlab file, and find:
+            1. the geometric dimensions of the mesh
+            2. the differential equations governing the mesh
+            ...
+            Finding the geometric dimensions of the mesh...
+                Mesh created on line 91 of matlab file: 'heat_equation_2d_square.m':
+                    "msh = generateMesh(thermalmodelT,'Hmax',0.05e-6);"
 
-
-
-
-
-
-
-                        
-
-
-
+                    - need to find out about the mesh function in matlab...
                     
+                    - need to track down the origins of thermalmodel1T to figure out what this does, and how it is made
+                        - line 59: "thermalmodelT = createpde('thermal','transient');"
 
-            
-
-
-
-
-
+                            - for this, I need to find out about the createpde function in matlab
+                                - this function just serves to create the model, what really matters is the equations that govern the model
+                                - onto figuring out the ThermalModel
+                                    - from matlab site: https://www.mathworks.com/help/pde/ug/pde.thermalmodel.html
+                                        - Now I'm reading about the differential equations required for a thermal model, specifically a thermal transient temperature model, like the one that we are trying to make for this project. I included some of the resources that I am trying to use below
+                                            - after a lot of looking on wikipedia & elsewhere, I think I can use this site: https://en.wikidark.org/wiki/Thermal_diffusivity
