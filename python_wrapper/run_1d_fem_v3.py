@@ -345,7 +345,7 @@ def run_model(peak_temp, a, b, time_shift, diffusivity):
     return [mydata, chi_2]
 
 #function for running the model with the square wave
-def run_sqwv_model(peak_temp)
+def run_sqwv_model(peak_temp):
     BC_filename='BC_external_exp2'
 
     #write the input parameters for the run file
