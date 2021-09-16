@@ -285,9 +285,68 @@ def write_input_parameters(peak_temp, a, b, time_shift, diffusivity, filename):
     #And finally, change the file back to .m
     os.system('cmd /c "ren '+filename+'.txt '+filename+'.m"')
 
+def write_sqwv_input_parameters(peak_temp, a, b, time_shift, filename):
+    
+    my_values={
+        'a':a,
+        'b':b,
+    }
+
+    #And saving the dictionary as a .mat file...
+    #Finally, save the dictionary as a .mat file
+    io.savemat('inputs/1D_combined_input_matrix.mat',mdict=my_values)
+
+    #Now for rewriting the BC file...
+
+    #Changing the name of the file to .txt so we can edit
+    os.system('cmd /c "ren '+filename+'.m '+filename+'.txt"')
+
+    f=open(filename+'.txt') #open file
+    s=f.readlines() #read file contents into a list
+    f.close() #close the file
+
+    #change lines accordingly
+    s[20]='  '+'peak='+str(peak_temp)+'; \n'#peak_temp
+
+    s[21]='  '+'start_time='+str(time_shift)+'; \n'#time_shift
+
+    #Now write the new lines to the .txt BC file
+    with open(filename+'.txt','w') as filehandle:
+        filehandle.writelines("%s" % line for line in s)
+
+    #And finally, change the file back to .m
+    os.system('cmd /c "ren '+filename+'.txt '+filename+'.m"')
+
+
 def run_model(peak_temp, a, b, time_shift, diffusivity):
 
     BC_filename='BC_external_exp'
+
+    #write the input parameters for the run file
+    write_input_parameters(peak_temp, a, b, time_shift, diffusivity, BC_filename)
+
+    #Set up and run the matlab engine
+    eng=matlab.engine.start_matlab()
+
+    #run the file with no output arguments
+    eng.heat_equation_data_1D_combo3(nargout=0)
+
+    #once the file runs, go get the output
+    mydata=io.loadmat('FEM_output/1D_combo_run_output.mat')
+
+    #save as numpy file .npy
+    #np.save(out_filename,allow_pickle=True)
+
+    #And finally, get the chi^2 value
+    #chi_2=get_chi_sq_from_output_mat('FEM_output/1D_combo_run_output.mat')
+    chi_2=get_least_sq_from_output_mat('FEM_output/1D_combo_run_output.mat')
+
+    #now return the output
+    return [mydata, chi_2]
+
+#function for running the model with the square wave
+def run_sqwv_model(peak_temp)
+    BC_filename='BC_external_exp2'
 
     #write the input parameters for the run file
     write_input_parameters(peak_temp, a, b, time_shift, diffusivity, BC_filename)
