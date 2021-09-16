@@ -393,8 +393,9 @@ def simple_peak_run(parameter_array):
     chi_2=run[1]
     print(np.sum(chi_2[0:3]))
     #save the value to the optimization data file
-    with open('optimization_data.txt', 'a+') as file_object:
-        file_object.write('\n')#newlinw
-        file_object.write(str(np.sum(chi_2[0:3]))+', '+str(parameter_array[0])+', '+str(parameter_array[1])+', '+str(parameter_array[2])+', '+str(parameter_array[3])+', '+str(parameter_array[4]))
+    with open('optimization_data.csv', 'a+') as file_object:
+        num_iterations=sum(1 for line in open('optimization_data.csv'))-1
+        file_object.write('\n')#newline
+        file_object.write(str(num_iterations)+', '+str(np.sum(chi_2[0:3]))+', '+str(parameter_array[0])+', '+str(parameter_array[1])+', '+str(parameter_array[2])+', '+str(parameter_array[3])+', '+str(parameter_array[4]))
 
     return np.sum(chi_2[0:3])
