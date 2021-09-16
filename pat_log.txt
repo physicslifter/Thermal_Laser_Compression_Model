@@ -836,3 +836,50 @@ September 13, 2021
                                     - from matlab site: https://www.mathworks.com/help/pde/ug/pde.thermalmodel.html
                                         - Now I'm reading about the differential equations required for a thermal model, specifically a thermal transient temperature model, like the one that we are trying to make for this project. I included some of the resources that I am trying to use below
                                             - after a lot of looking on wikipedia & elsewhere, I think I can use this site: https://en.wikidark.org/wiki/Thermal_diffusivity
+
+====================================================================
+September 14, 2021
+====================================================================
+- Okay I need to pick up where I left off yesterday, but first and most importantly, I need to sync and update the repository to where it currently is
+    - cool, got that done - now back to where I was yesterday
+
+                    - Okay now I understand the thermal partial differential equations (or at least I believe I do)....
+                    - now I have to figure out how to set this up in sfepy... but not until I get a coffee first
+
+                    I've got coffee, now it's time to go set up the mesh. I'll try to get this completed by the time that I meet with Tyler
+
+                    - okay so I am watching a tutorial on how to create a mesh using the vmsh app (which is required for using sfepy)
+
+                    ====================================================================
+                    - MAKING THE MESH...
+                        - before I can do anything, we need to get the dimensions in the problem set up
+                        - ahh yes back the generate mesh function in matlab...
+                            How do I find the dimensions in code???
+                            
+- Once again, I failed to save my most recent notes in code, have to remmeber to do this before signing out for the day
+- Now I'm going to go in and make it so that I am sending in the square wave
+
+- GETTING THE SQUARE WAVE TO work
+    - LOOKING AT RUN_1D_FEM_v3
+        - I will have to create a new function for reading in the square wave in this file
+            - creating the function...
+            - need new matlab file
+                - created new matlab file
+                - created new boundary condition file
+                - running the file with the square wave file works well
+                    - have to edit BC file so that the start time can be manipulated
+            - need new function for changing parameters
+                - wrote the function for changing parameters, now it's time to test it before moving fwd
+                    - can't test on lab computer, need to test on laptop, since the matlab-python engine isn't working
+                    - need to sync the repos on the two diff computers
+                        - finally got it synced, after dealing w several errors
+                    - now time to test the new function
+                        - Boom! okay it works on my laptop
+        - also need to add new functions for run_peak_model, & simple_peak_run
+
+        - time to go back to the run_sqwv_model function to edit properly
+            -synced up the new repo, now time to edit
+            - should be good, it is now saved as simple_sqwv_run(parameter_array)
+
+- MESH
+

@@ -345,17 +345,17 @@ def run_model(peak_temp, a, b, time_shift, diffusivity):
     return [mydata, chi_2]
 
 #function for running the model with the square wave
-def run_sqwv_model(peak_temp):
+def run_sqwv_model(peak_temp, a, b, time_shift):
     BC_filename='BC_external_exp2'
 
     #write the input parameters for the run file
-    write_input_parameters(peak_temp, a, b, time_shift, diffusivity, BC_filename)
+    write_sqwv_input_parameters(peak_temp, a, b, time_shift, BC_filename)
 
     #Set up and run the matlab engine
     eng=matlab.engine.start_matlab()
 
     #run the file with no output arguments
-    eng.heat_equation_data_1D_combo3(nargout=0)
+    eng.heat_equation_data_1D_combo4(nargout=0)
 
     #once the file runs, go get the output
     mydata=io.loadmat('FEM_output/1D_combo_run_output.mat')
@@ -376,6 +376,31 @@ def run_peak_model(peak_temp, a, b, time_shift, diffusivity):
 
     #write the input parameters for the run file
     write_input_parameters(peak_temp, a, b, time_shift, diffusivity, BC_filename)
+
+    #Set up and run the matlab engine
+    eng=matlab.engine.start_matlab()
+
+    #run the file with no output arguments
+    eng.heat_equation_data_1D_combo3(nargout=0)
+
+    #once the file runs, go get the output
+    mydata=io.loadmat('FEM_output/1D_combo_run_output.mat')
+
+    #save as numpy file .npy
+    #np.save(out_filename,allow_pickle=True)
+
+    #And finally, get the chi^2 value
+    chi_2=peak_chi_sq_from_output_mat('FEM_output/1D_combo_run_output.mat')
+
+    #now return the output
+    return [mydata, chi_2]
+
+def run_sqwv_peak_model(peak_temp, a, b, time_shift, diffusivity):
+
+    BC_filename='BC_external_exp2'
+
+    #write the input parameters for the run file
+    write_sqwv_input_parameters(peak_temp, a, b, time_shift, BC_filename)
 
     #Set up and run the matlab engine
     eng=matlab.engine.start_matlab()
@@ -449,6 +474,27 @@ def simple_peak_run(parameter_array):
 
     #run the model & return single chi^2 value
     run=run_model(parameter_array[0],parameter_array[1],parameter_array[2],parameter_array[3],parameter_array[4])
+    chi_2=run[1]
+    print(np.sum(chi_2[0:3]))
+    #save the value to the optimization data file
+    with open('optimization_data.csv', 'a+') as file_object:
+        num_iterations=sum(1 for line in open('optimization_data.csv'))-1
+        file_object.write('\n')#newline
+        file_object.write(str(num_iterations)+', '+str(np.sum(chi_2[0:3]))+', '+str(parameter_array[0])+', '+str(parameter_array[1])+', '+str(parameter_array[2])+', '+str(parameter_array[3])+', '+str(parameter_array[4]))
+
+    return np.sum(chi_2[0:3])
+
+def simple_sqwv_run(parameter_array):
+
+    #Takes a single parameter array as input
+    #The parameter array is defined as below
+    # parameter_array[0]=peak_temp
+    # parameter_array[1]=a
+    # parameter_array[2]=b
+    # parameter_array[3]=time_shift
+
+    #run the model & return single chi^2 value
+    run=run_sqwv_model(parameter_array[0],parameter_array[1],parameter_array[2],parameter_array[3])
     chi_2=run[1]
     print(np.sum(chi_2[0:3]))
     #save the value to the optimization data file
