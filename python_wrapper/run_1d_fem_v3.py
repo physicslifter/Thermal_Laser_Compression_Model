@@ -189,6 +189,56 @@ def s88780test_get_least_sq_from_output_mat(filepath):
     #finally, return the values as an array
     return [cs801,cs802,cs803]
 
+def new_get_least_sq_from_output_mat(filepath):
+
+    #Start by reading in the data
+    d=io.loadmat(filepath)
+
+    #We only care about the data from s88780 for this one
+    #This varies from the above functions because we need to read in all of the time data
+    x0=d['tlist'][0] #tlist data for all runs @ all faces
+
+    #run s88773
+    x1_1_73=d['t_data1_73'] #time data
+    x1_2_73=d['t_data2_73'] #time data
+    x1_3_73=d['t_data3_73'] #time data
+    y0_1_73=d['T11'][0] #face 1 model output
+    y0_2_73=d['T12'][0] # face 2 model output
+    y0_3_73=d['T13'][0] # face 3 model output
+    y1_1_73=d['temp1_73'] # face 1 experimental data
+    y1_2_73=d['temp2_73'] # face 2 experimental data
+    y1_3_73=d['temp3_73'] # face 3 experimental data
+
+    #run s88776
+    x1_1_76=d['t_data1_76'] #time data
+    x1_2_76=d['t_data2_76'] #time data
+    x1_3_76=d['t_data3_76'] #time data
+    y0_1_76=d['T21'][0] #face 1 model output
+    y0_2_76=d['T22'][0] # face 2 model output
+    y0_3_76=d['T23'][0] # face 3 model output
+    y1_1_76=d['temp1_76'] # face 1 experimental data
+    y1_2_80=d['temp2_76'] # face 2 experimental data
+    y1_3_80=d['temp3_76'] # face 3 experimental data
+
+    #run s88780
+    x1_1_80=d['t_data1_80'] #time data
+    x1_2_80=d['t_data2_80'] #time data
+    x1_3_80=d['t_data3_80'] #time data
+    y0_1_80=d['T31'][0] #face 1 model output
+    y0_2_80=d['T32'][0] # face 2 model output
+    y0_3_80=d['T33'][0] # face 3 model output
+    y1_1_80=d['temp1_80'] # face 1 experimental data
+    y1_2_80=d['temp2_80'] # face 2 experimental data
+    y1_3_80=d['temp3_80'] # face 3 experimental data
+
+    #Get chi^2 values for each run
+    cs801=least_squares_interp(x0,y0_1_80,x1_1_80,y1_1_80) # s88780 face 1
+    cs802=least_squares_interp(x0,y0_2_80,x1_2_80,y1_2_80) # s8878- face 2
+    cs803=least_squares_interp(x0,y0_3_80,x1_3_80,y1_3_80) # s88780 face 3
+
+    #finally, return the values as an array
+    return [cs801,cs802,cs803]
+
 #function for getting the least_squares value from the output matrix
 def get_least_sq_from_output_mat(filepath):
 
