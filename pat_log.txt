@@ -882,4 +882,51 @@ September 14, 2021
             - should be good, it is now saved as simple_sqwv_run(parameter_array)
 
 - MESH
+    - finally got it qorking & saved the initial version as Mesh_1_quasi-dims
+==================================================================
+September 15, 2021
+===================================================================
+Biiig mistake, I forgot to save all of my stuff before signing out yesterday. Of course, this is a problem, so I HAVE to REMEMBER to save my notes before logging out.
+
+Today's goals:
+- Build model in sfepy
+- make slide for Hyades subgroup meeting
+- make mesh for slide in Hyades subgroup meeting
+- copy over the GUI file so that I can read the results of the optimization in real time
+- optimize the python-matlab model
+- Build FEM mesh
+--
+
+BUILDING SFEPY MODEL
+    - obviously, the first step to this is creating the mesh
+        - I will put notes for the mesh down where I am creating it for the HYADES meeting today, and then I will continue afterwards up here
+
+MAKING SLIDE FOR HYADES subgroup
+- June said I'm exempt for this, since I have class 1030-12. I will have to add this to the to-dos for tomorrow
+
+MESH FOR SLIDE
+- see notes for above task
+
+MOVING GUI
+
+OPTIMIZING MATLAB-PYTHON MODEL
+
+BUILDING MESH
+- even though I dont have to present today, I still have to make the mesh for the project, so I'll store the related notes here.
+- working from Youtube video...
+- okay now Ive successfully got the mesh built, it's time to read the sfepy documentation and figure out what the next step is
+
+=============================================================
+September 17, 2021
+=============================================================
+Today's to-do's:
+1. get sfepy model built
+2. run more optimizations using isolation/troubleshoot method
+3. sync the changes from my computer to this repository
+
+------
+
+BUILDING SFEPY MODEL
+- yesterday, I completed a generic mesh, today the first items on my agenda are:
+    - create unique mesh for the dimensions of each experimental setup
 
