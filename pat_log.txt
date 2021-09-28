@@ -930,3 +930,38 @@ BUILDING SFEPY MODEL
 - yesterday, I completed a generic mesh, today the first items on my agenda are:
     - create unique mesh for the dimensions of each experimental setup
 
+===========================================
+September 27, 2021
+
+Resuming work on Monday 9/27 after not working last Thursday & Friday from being sidetrack
+
+Discussed w Tyler several goals this AM over slack. Those goals along with others deemed to be important are written below
+
+Goals for today:
+    - make sure tlist starts before the square wave
+    - try out the powell method (instead of Nelder-Mead)
+    -  try new starting points that Tyler sent me over slack
+    - figure out if the plotting from run s88780 is affecting the goodness of fit in the optimization
+    
+Tasks:
+
+1. Checking tlist ...
+    - tlist was starting at 200ns, now I brought it down to start at 150ns, should probably do 100ns
+        - decided to go w 100ns
+        - changes are made in the most recent version of the file run
+            - heat_equation_1d_combo5
+
+    - now that I have edited it, I have to go run an optimization and see if this makes the optimizer fit well
+        - storing it as the first optimization for today (run1)
+        - now time to clear everything
+        - okay, looks good. Now time for the optimization run
+        - running the optimization
+
+    To-do's for optimization
+        - monitor as it runs
+        - quit if it doesn't seem to be converging after a substantial period of time
+        - write up run report in excel workbook
+
+===============================================
+September 28, 2021
+===============================================
