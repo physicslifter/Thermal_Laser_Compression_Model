@@ -548,7 +548,8 @@ def simple_sqwv_run(parameter_array):
     chi_2=run[1]
     print(np.sum(chi_2[0:3]))
     #save the value to the optimization data file
-    sls=chi_2[0]+chi_2[1]+chi_2[3]+chi_2[6]+chi_2[7]+chi_2[8]
+    #sls=chi_2[0]+chi_2[1]+chi_2[6]+chi_2[7]
+    sls=np.sum(chi_2)
     with open('optimization_data.csv', 'a+') as file_object:
         num_iterations=sum(1 for line in open('optimization_data.csv'))-1
         file_object.write('\n')#newline
