@@ -965,3 +965,32 @@ Tasks:
 ===============================================
 September 28, 2021
 ===============================================
+- starting off by saving all changes to the github...
+- now restarting my computer because it is going slowdown
+- to-do's for today:
+    - redo yesterday's fits with the original timestep
+    - finally build the infrastructure for sfepy
+
+BUILDING SFEPY MODEL
+
+CONTINUING WITH OPTIMIZATION RUNS 
+- have to go in and see what how i did the timestep before editing it yesterday. I think looking at one of the earlier versions of the main .m file should sufficiently do it
+    - looking at heat_equation_data_1D_combo4 
+    - okay, I changed it back to where it was. 
+    - run1 is going to be me doing the nelder-mead optimization now with the original tlist values
+    - time to run it and do the other tasks
+    - next run, I'll try changing the start time a little bit more
+
+
+- have to add information to the excel workbook and add to the readme.md file info from/about the last run
+    - wait til I start the new optimization
+
+NOTE - The optimizer is capable of analyzing/evaluating the function several times per iteration. Not sure how this works, but in run3 from yesterday, the optimizaer converged and showed that there were ~300-something iterations, and 500-something function evaluations
+
+==========================================
+September 29, 2021
+==========================================
+- starting  today with the same run that I cut off early yesterday during the meeting with Tyler
+- I'm going to quit this optimization run in order to try to fix the problem with the start_time. I think I have to comment out the second line.
+- maybe the next thing to try is to try plotting the data from before where it is at the flat background curve
+
