@@ -994,3 +994,8 @@ September 29, 2021
 - I'm going to quit this optimization run in order to try to fix the problem with the start_time. I think I have to comment out the second line.
 - maybe the next thing to try is to try plotting the data from before where it is at the flat background curve
 
+========================================
+October 1, 2021
+===============================================
+finishing trying out the dfifferent ptimization techniques from yesterday. Today the goal is to get something built and running in SfePy
+- 
