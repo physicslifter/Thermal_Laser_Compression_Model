@@ -405,7 +405,7 @@ def run_sqwv_model(peak_temp, a, b, time_shift):
     eng=matlab.engine.start_matlab()
 
     #run the file with no output arguments
-    eng.heat_equation_data_1D_combo4(nargout=0)
+    eng.heat_equation_data_1D_combo5(nargout=0)
 
     #once the file runs, go get the output
     mydata=io.loadmat('FEM_output/1D_combo_run_output.mat')
@@ -445,7 +445,7 @@ def run_peak_model(peak_temp, a, b, time_shift, diffusivity):
     #now return the output
     return [mydata, chi_2]
 
-def run_sqwv_peak_model(peak_temp, a, b, time_shift, diffusivity):
+def run_sqwv_peak_model(peak_temp, a, b, time_shift):
 
     BC_filename='BC_external_exp2'
 
@@ -548,9 +548,11 @@ def simple_sqwv_run(parameter_array):
     chi_2=run[1]
     print(np.sum(chi_2[0:3]))
     #save the value to the optimization data file
+    #sls=chi_2[0]+chi_2[1]+chi_2[6]+chi_2[7]
+    sls=np.sum(chi_2)
     with open('optimization_data.csv', 'a+') as file_object:
         num_iterations=sum(1 for line in open('optimization_data.csv'))-1
         file_object.write('\n')#newline
-        file_object.write(str(num_iterations)+', '+str(np.sum(chi_2[0:3]))+', '+str(parameter_array[0])+', '+str(parameter_array[1])+', '+str(parameter_array[2])+', '+str(parameter_array[3]))
+        file_object.write(str(num_iterations)+', '+str(sls)+', '+str(parameter_array[0])+', '+str(parameter_array[1])+', '+str(parameter_array[2])+', '+str(parameter_array[3]))
 
-    return np.sum(chi_2[0:3])
+    return sls

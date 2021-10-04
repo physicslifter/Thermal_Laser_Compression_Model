@@ -1,4 +1,4 @@
-%Main script for analyzing multiple shots simultaneously.
+
 %s88773 MgO, s88776 LiF, s88780 MgO short
 
 
@@ -6,8 +6,6 @@
 input_parameter_file="inputs/1d_combined_input_matrix.mat";
 load(input_parameter_file,'a','b');
 
-a=0.08965607219288385;
-b=94.22030739485768;
 %***** Parameters *******
 k = @(~,state) b+a*state.u; %W/mK - 
 % (previous fit): 0.045*state.u + 3000./sqrt(abs(state.u)), (de koker fit):
@@ -30,7 +28,7 @@ dlif=4700; %kg/m^3
 clif=1600; %J/kg K (800)
 t0lif=1000; %K - old value 1000
 
-tlist = [20:0.5:50]*10^-9;
+tlist = [10:0.5:35]*10^-9;
 
 
 %**** Creating geometry ****
@@ -251,66 +249,72 @@ getClosestNode = @(p,x,y) min((p(1,:) - x).^2 + (p(2,:) - y).^2);
 %******    Plotting    ******
 
 %SOP data for s88773%
-start=179;
+start1=179;
+start2=259;
+start3=310;
 stop1=265;
 stop2=415;
 stop3=706;
 stop_final=750;
 opts = detectImportOptions('s88773_sop_lineouts_TP.xlsx','Sheet','June2021');
 m = readtable('s88773_sop_lineouts_TP.xlsx',opts,'Sheet','June2021');
-t_data1_73=m.Time(start:stop1)*10^-9;
-t_data2_73=m.Time(start:stop2)*10^-9;
-t_data3_73=m.Time(start:stop3)*10^-9;
+t_data1_73=m.Time(start1:stop1)*10^-9;
+t_data2_73=m.Time(start2:stop2)*10^-9;
+t_data3_73=m.Time(start3:stop3)*10^-9;
 t_data1end_73=m.Time(stop1:stop_final)*10^-9;
 t_data2end_73=m.Time(stop2:stop_final)*10^-9;
 t_data2end_73=m.Time(stop3:stop_final)*10^-9;
-temp1_data73=m.step1_corrected(start:stop1);
-temp2_data73=m.step2_corrected(start:stop2);
-temp3_data73=m.step3_corrected(start:stop3);
+temp1_data73=m.step1_corrected(start1:stop1);
+temp2_data73=m.step2_corrected(start2:stop2);
+temp3_data73=m.step3_corrected(start3:stop3);
 xw = 1; %throughput correction based on slit width and shot number
 aeta=25.5; %1/delta_t of SOP data, was 46
 a0=481000;% Based on ND filter of 0 (481000) 
 t0a=1.909;% Based on ND filter of 0 (1.909) 
 
 %SOP data for s88776
-start=79;
+start1=88;
+start2=93;
+start3=246
 stop1=172;
 stop2=418;
 stop3=468;
 stop_final=750;
 opts = detectImportOptions('s88776_SOP_TP.xlsx');
 m = readtable('s88776_SOP_TP.xlsx',opts);
-t_data1_76=m.time(start:stop1)*10^-9;
-t_data2_76=m.time(start:stop2)*10^-9;
-t_data3_76=m.time(start:stop3)*10^-9;
+t_data1_76=m.time(start1:stop1)*10^-9;
+t_data2_76=m.time(start2:stop2)*10^-9;
+t_data3_76=m.time(start3:stop3)*10^-9;
 t_data1end_76=m.time(stop1:stop_final)*10^-9;
 t_data2end_76=m.time(stop2:stop_final)*10^-9;
 t_data2end_76=m.time(stop3:stop_final)*10^-9;
-temp1_data76=m.step1_corrected(start:stop1);
-temp2_data76=m.step2_corrected(start:stop2);
-temp3_data76=m.step3_corrected(start:stop3);
+temp1_data76=m.step1_corrected(start1:stop1);
+temp2_data76=m.step2_corrected(start2:stop2);
+temp3_data76=m.step3_corrected(start3:stop3);
 xw = 1; %throughput correction based on slit width and shot number
 aeta=25.5; %1/delta_t of SOP data, was 46
 a0_76=481000;% Based on ND filter of 0 (481000) (395900)
 t0a_76=1.909;% Based on ND filter of 0 (1.909) (1.91)
 
 %SOP data for s88780
-start=150;
+start1=158;
+start2=262;
+start3=377;
 stop1=190;
 stop2=370;
 stop3=500;
 stop_final=750;
 opts = detectImportOptions('s88780_SOP_TP.xlsx');
 m = readtable('s88780_SOP_TP.xlsx',opts);
-t_data1_80=m.time(start:stop1)*10^-9;
-t_data2_80=m.time(start:stop2)*10^-9;
-t_data3_80=m.time(start:stop3)*10^-9;
+t_data1_80=m.time(start1:stop1)*10^-9;
+t_data2_80=m.time(start2:stop2)*10^-9;
+t_data3_80=m.time(start3:stop3)*10^-9;
 t_data1end_80=m.time(stop1:stop_final)*10^-9;
 t_data2end_80=m.time(stop2:stop_final)*10^-9;
 t_data2end_80=m.time(stop3:stop_final)*10^-9;
-temp1_data80=m.step1_corrected(start:stop1);
-temp2_data80=m.step2_corrected(start:stop2);
-temp3_data80=m.step3_corrected(start:stop3);
+temp1_data80=m.step1_corrected(start1:stop1);
+temp2_data80=m.step2_corrected(start2:stop2);
+temp3_data80=m.step3_corrected(start3:stop3);
 xw = 1; %throughput correction based on slit width and shot number
 aeta=25.5; %1/delta_t of SOP data, was 46
 a0=481000;% Based on ND filter of 0 (481000) (395900)

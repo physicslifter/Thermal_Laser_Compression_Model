@@ -972,3 +972,67 @@ fixed the code
 
 run 4:
     - fitting the same as run 3, but allowing it to run
+===========================================
+September 27, 2021
+
+Resuming work on Monday 9/27 after not working last Thursday & Friday from being sidetrack
+
+Discussed w Tyler several goals this AM over slack. Those goals along with others deemed to be important are written below
+
+Goals for today:
+    - make sure tlist starts before the square wave
+    - try out the powell method (instead of Nelder-Mead)
+    -  try new starting points that Tyler sent me over slack
+    - figure out if the plotting from run s88780 is affecting the goodness of fit in the optimization
+    
+Tasks:
+
+1. Checking tlist ...
+    - tlist was starting at 200ns, now I brought it down to start at 150ns, should probably do 100ns
+        - decided to go w 100ns
+        - changes are made in the most recent version of the file run
+            - heat_equation_1d_combo5
+
+    - now that I have edited it, I have to go run an optimization and see if this makes the optimizer fit well
+        - storing it as the first optimization for today (run1)
+        - now time to clear everything
+        - okay, looks good. Now time for the optimization run
+        - running the optimization
+
+    To-do's for optimization
+        - monitor as it runs
+        - quit if it doesn't seem to be converging after a substantial period of time
+        - write up run report in excel workbook
+
+===============================================
+September 28, 2021
+===============================================
+- starting off by saving all changes to the github...
+- now restarting my computer because it is going slowdown
+- to-do's for today:
+    - redo yesterday's fits with the original timestep
+    - finally build the infrastructure for sfepy
+
+BUILDING SFEPY MODEL
+
+CONTINUING WITH OPTIMIZATION RUNS 
+- have to go in and see what how i did the timestep before editing it yesterday. I think looking at one of the earlier versions of the main .m file should sufficiently do it
+    - looking at heat_equation_data_1D_combo4 
+    - okay, I changed it back to where it was. 
+    - run1 is going to be me doing the nelder-mead optimization now with the original tlist values
+    - time to run it and do the other tasks
+    - next run, I'll try changing the start time a little bit more
+
+
+- have to add information to the excel workbook and add to the readme.md file info from/about the last run
+    - wait til I start the new optimization
+
+NOTE - The optimizer is capable of analyzing/evaluating the function several times per iteration. Not sure how this works, but in run3 from yesterday, the optimizaer converged and showed that there were ~300-something iterations, and 500-something function evaluations
+
+==========================================
+September 29, 2021
+==========================================
+- starting  today with the same run that I cut off early yesterday during the meeting with Tyler
+- I'm going to quit this optimization run in order to try to fix the problem with the start_time. I think I have to comment out the second line.
+- maybe the next thing to try is to try plotting the data from before where it is at the flat background curve
+

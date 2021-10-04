@@ -18,19 +18,18 @@ elseif(state.time <= 1000)
   
   %This is where we define our boundary conditions or "initial input". 
   %right now, its a square wave so peak temp is only free parameter
-
-  peak=14588.798384730555; 
-  start_time=-1.9392435157744397e-08; 
-
+  peak=36001.0000044894; 
+  start_time=-0.16337273718165068; 
+  %start_time=2.0e-08; 
   
   t=state.time; %print time to see live progress
   if t < 4e-8 && t > start_time
       leftTemp = peak;
   else
-      leftTemp=0;
+      leftTemp=2000;
   end    
 
 else
-  leftTemp = 0;
+  leftTemp = 2000;
 end
 end
