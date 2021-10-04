@@ -302,6 +302,85 @@ def get_least_sq_from_output_mat(filepath):
     #finally, return the values as an array
     return [cs731,cs732,cs733,cs761,cs762,cs763,cs801,cs802,cs803]
 
+#function for getting the least_squares value from the output matrix
+def get_least_sq_from_output_mat_run4(filepath):
+
+    #Start by reading in the data
+    d=io.loadmat(filepath)
+
+    #We only care about the data from s88780 for this one
+    #This varies from the above functions because we need to read in all of the time data
+    x0=d['tlist'][0] #tlist data for all runs @ all faces
+
+    #run s88773
+    x1_1_73=d['t_data1_73'] #time data
+    x1_2_73=d['t_data2_73'] #time data
+    x1_3_73=d['t_data3_73'] #time data
+    y0_1_73=d['T11'][0] #face 1 model output
+    y0_2_73=d['T12'][0] # face 2 model output
+    y0_3_73=d['T13'][0] # face 3 model output
+    y1_1_73=d['temp1_73'] # face 1 experimental data
+    y1_2_73=d['temp2_73'] # face 2 experimental data
+    y1_3_73=d['temp3_73'] # face 3 experimental data
+
+    #run s88776
+    x1_1_76=d['t_data1_76'] #time data
+    x1_2_76=d['t_data2_76'] #time data
+    x1_3_76=d['t_data3_76'] #time data
+    y0_1_76=d['T21'][0] #face 1 model output
+    y0_2_76=d['T22'][0] # face 2 model output
+    y0_3_76=d['T23'][0] # face 3 model output
+    y1_1_76=d['temp1_76'] # face 1 experimental data
+    y1_2_76=d['temp2_76'] # face 2 experimental data
+    y1_3_76=d['temp3_76'] # face 3 experimental data
+
+    #run s88780
+    x1_1_80=d['t_data1_80'] #time data
+    x1_2_80=d['t_data2_80'] #time data
+    x1_3_80=d['t_data3_80'] #time data
+    y0_1_80=d['T31'][0] #face 1 model output
+    y0_2_80=d['T32'][0] # face 2 model output
+    y0_3_80=d['T33'][0] # face 3 model output
+    y1_1_80=d['temp1_80'] # face 1 experimental data
+    y1_2_80=d['temp2_80'] # face 2 experimental data
+    y1_3_80=d['temp3_80'] # face 3 experimental data
+
+    #run s86483
+    x1_1_83=d['t_data1_83'] #time data
+    x1_2_83=d['t_data2_83'] #time data
+    x1_3_83=d['t_data3_83'] #time data
+    y0_1_83=d['T41'][0] #face 1 model output
+    y0_2_83=d['T42'][0] # face 2 model output
+    y0_3_83=d['T43'][0] # face 3 model output
+    y1_1_83=d['temp1_83'] # face 1 experimental data
+    y1_2_83=d['temp2_83'] # face 2 experimental data
+    y1_3_83=d['temp3_83'] # face 3 experimental data
+
+    #Get chi^2 values for each run
+
+    #73
+    cs731=least_squares_interp(x0,y0_1_73,x1_1_73,y1_1_73) # s88773 face 1
+    cs732=least_squares_interp(x0,y0_2_73,x1_2_73,y1_2_73) # s88773 face 2
+    cs733=least_squares_interp(x0,y0_3_73,x1_3_73,y1_3_73) # s88773 face 3
+
+    #76
+    cs761=least_squares_interp(x0,y0_1_76,x1_1_76,y1_1_76) # s88776 face 1
+    cs762=least_squares_interp(x0,y0_2_76,x1_2_76,y1_2_76) # s88776 face 2
+    cs763=least_squares_interp(x0,y0_3_76,x1_3_76,y1_3_76) # s88776 face 3
+
+    #80
+    cs801=least_squares_interp(x0,y0_1_80,x1_1_80,y1_1_80) # s88780 face 1
+    cs802=least_squares_interp(x0,y0_2_80,x1_2_80,y1_2_80) # s88780 face 2
+    cs803=least_squares_interp(x0,y0_3_80,x1_3_80,y1_3_80) # s88780 face 3
+
+    #83
+    cs831=least_squares_interp(x0,y0_1_83,x1_1_83,y1_1_83) # s88780 face 1
+    cs832=least_squares_interp(x0,y0_2_83,x1_2_83,y1_2_83) # s88780 face 2
+    cs833=least_squares_interp(x0,y0_3_83,x1_3_83,y1_3_83) # s88780 face 3
+
+    #finally, return the values as an array
+    return [cs731,cs732,cs733,cs761,cs762,cs763,cs801,cs802,cs803,cs831,cs832,cs833]
+
 #function for writing the input parameters (mainly copied from Create_default_mat.py)
 def write_input_parameters(peak_temp, a, b, time_shift, diffusivity, filename):
     
@@ -470,6 +549,35 @@ def run_sqwv_peak_model(peak_temp, a, b, time_shift):
     #now return the output
     return [mydata, chi_2]
 
+def run4(peak_temp, a, b, time_shift):
+    BC_filename='BC_external_exp2'
+
+    #write the input parameters for the run file
+    write_sqwv_input_parameters(peak_temp, a, b, time_shift, BC_filename)
+
+    #Set up and run the matlab engine
+    eng=matlab.engine.start_matlab()
+
+    #run the file with no output arguments
+    eng.heat_equation_data_1D_combo7(nargout=0)
+
+    #once the file runs, go get the output
+    mydata=io.loadmat('FEM_output/1D_combo_run_output4.mat')
+
+    #save as numpy file .npy
+    #np.save(out_filename,allow_pickle=True)
+
+    #And finally, get the chi^2 value
+    #chi_2=get_chi_sq_from_output_mat('FEM_output/1D_combo_run_output.mat')
+    chi_2=get_least_sq_from_output_mat('FEM_output/1D_combo_run_output4.mat')
+
+    #now return the output
+    return [mydata, chi_2]
+
+#==================================================================
+# Results plotting
+#=================================================================
+
 def plot_results(model_output):
     #corrected temps
     a1=model_output['temp1_corrected']
@@ -498,6 +606,10 @@ def plot_results(model_output):
 
     #assign an appropriate title to the plot
     plt.title('Model output')
+
+#===========================================================
+#Simple Runs
+#===========================================================
 
 def simple_run(parameter_array):
 
@@ -556,3 +668,26 @@ def simple_sqwv_run(parameter_array):
         file_object.write(str(num_iterations)+', '+str(sls)+', '+str(parameter_array[0])+', '+str(parameter_array[1])+', '+str(parameter_array[2])+', '+str(parameter_array[3]))
 
     return sls
+
+def simple_four_run(parameter_array):
+
+    #Takes a single parameter array as input
+    #The parameter array is defined as below
+    # parameter_array[0]=peak_temp
+    # parameter_array[1]=a
+    # parameter_array[2]=b
+    # parameter_array[3]=time_shift
+
+    #run the model & return single chi^2 value
+    run=run4(parameter_array[0],parameter_array[1],parameter_array[2],parameter_array[3])
+    chi_2=run[1]
+    print(np.sum(chi_2))
+    #save the value to the optimization data file
+    #sls=chi_2[0]+chi_2[1]+chi_2[6]+chi_2[7]
+    sls=np.sum(chi_2)
+    with open('optimization_data.csv', 'a+') as file_object:
+        num_iterations=sum(1 for line in open('optimization_data.csv'))-1
+        file_object.write('\n')#newline
+        file_object.write(str(num_iterations)+', '+str(sls)+', '+str(parameter_array[0])+', '+str(parameter_array[1])+', '+str(parameter_array[2])+', '+str(parameter_array[3]))
+
+    return sls 
