@@ -929,7 +929,49 @@ Today's to-do's:
 BUILDING SFEPY MODEL
 - yesterday, I completed a generic mesh, today the first items on my agenda are:
     - create unique mesh for the dimensions of each experimental setup
+        - have to look in the matlab file & see how the geometry is attained/defined there
+        - geometric dimensions are dependent on the ratio defined to account for the compression of the material, which is in turn dependent on the density. These values are defined below, in addition to the geometric dimensions. These values are necessary for both the Fe sample, and the MgO window
+        - Definitions:
+            density=12500
+            ratio=
 
+SYNCING CHANGES TO repo
+- have to sync changes from my laptop this AM to the lab computer
+    - merge error with 2 files:
+        - BC_extenal_exp2.m 
+        - fem_output/1dcomborun.mat 
+
+    - firs tthing to try
+        - copying files from the online github repo to thhis computer   
+            - this worked before for this issue, I think it should work now
+            - file 1
+                - Done
+            file 2
+                - Done
+        - good to, it works
+    
+
+
+RUNNING optimizations
+- run 1:
+    - changed the matlab file so that it did nothing with start_time, but the model_run function in python still took start_time (or whatever I call it as one of the inputs)
+        - this had no effect on the optimization, as it appeared to be the same optimization as before
+
+IMPORTANT NOTE: I found out that I still had the code to read back chi^2 0:3, which means that it is only optimizing for s88773
+fixed the code
+    - code not totally fixed, it still isn't fitting the final data line for s88780
+        - I'm letting it run for a bit on my laptop just to see what happens. The final lines for each run aren't too great anyways, so let's see what happens
+- run 2:
+    - run that left out the final data line
+
+- run 3:
+    - fitting the first step from the three data runs
+    - SLS started out really high before dropping significantly, then remaining roughly flat. This was odd, but it might have kept looking to find a minima
+    - exited early, because I thought that I was fitting the wrong data lines. 
+        - The lines were correct, so run 4 will be the same as this run
+
+run 4:
+    - fitting the same as run 3, but allowing it to run
 ===========================================
 September 27, 2021
 
