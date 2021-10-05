@@ -27,7 +27,7 @@ dlif=4700; %kg/m^3
 clif=1600; %J/kg K (800)
 t0lif=2000; %K - old value 1000
 
-tlist = [20:0.2:40]*10^-9;
+tlist = [10:0.2:40]*10^-9;
 
 
 %**** Creating geometry ****
