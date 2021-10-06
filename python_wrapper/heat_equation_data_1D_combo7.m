@@ -356,7 +356,7 @@ t0a=1.909;% Based on ND filter of 0 (1.909)
 %SOP data for s88776
 start1=88;
 start2=93;
-start3=246
+start3=246;
 stop1=172;
 stop2=418;
 stop3=468;
