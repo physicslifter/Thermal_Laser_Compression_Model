@@ -1,0 +1,6 @@
+%Hello, this is a sample
+%this is a second line...
+
+%Putting in some Matlab code
+my_var=3
+my_var_2=my_var*17
