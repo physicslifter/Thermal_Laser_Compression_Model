@@ -346,9 +346,9 @@ def get_least_sq_from_output_mat_run4(filepath):
     y1_3_80=d['temp3_80'] # face 3 experimental data
 
     #run s86483
-    x1_1_83=d['t_data_83'] #time data
-    x1_2_83=d['t_data_83'] #time data
-    x1_3_83=d['t_data_83'] #time data
+    x1_1_83=d['t_data1_83'] #time data
+    x1_2_83=d['t_data2_83'] #time data
+    x1_3_83=d['t_data3_83'] #time data
     y0_1_83=d['T41'][0] #face 1 model output
     y0_2_83=d['T42'][0] # face 2 model output
     y0_3_83=d['T43'][0] # face 3 model output
