@@ -7,6 +7,6 @@ fitting: simple_four_run, using only the outputs from the 83 run
 Description:
 
 Initial fit:  
- ![Initial fit] (run1_initial.png)  
+ ![Initial fit] (https://github.com/physicslifter/Thermal_Laser_Compression_Model/blob/main/python_wrapper/optimization_runs/Oct11_2021/run1_initial.png)  
   
 Final fit:   
