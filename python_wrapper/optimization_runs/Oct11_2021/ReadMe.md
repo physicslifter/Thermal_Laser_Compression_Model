@@ -6,6 +6,6 @@ Initial parameters:
 fitting: simple_four_run, using only the outputs from the 83 run
 Description:
 
-Initial fit:
+Initial fit:  
  ![Initial fit] (run1_initial.png)
 Final fit: 
