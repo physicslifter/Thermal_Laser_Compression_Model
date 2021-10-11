@@ -1093,3 +1093,25 @@ October 7, 2021
 - other than that, it seems like it is going pretty well and that I will be welcome at the experiemnet as is
 - finished syncing the github repo on the lab computer with the status of the github repo on the online version
 - now I have to go in nd make sure that the run is saved
+
+==================================================
+October 11, 2021
+==================================================
+- Goals for today:
+    - chop data for the last run
+    - fit chopped data
+    - stremline optimization according to my goals
+
+Streamlining goals:
+    - fit into single function where the user sends:
+        1. initial parameters
+        2. the number of the run
+
+    - what this function performs:
+        1. write data into an excel file once run is complete
+        2. saves excel folder in the runs for the day
+        3. print and save beginning plots for the run in the day's optimization folder
+        4. save final plots for each of the parameters
+        5. add the initial plots, the final plots, and the parameter plots to the ReadMe.md file
+        
+Time to break with some pullups and dips. Have to save these notes to the repo
