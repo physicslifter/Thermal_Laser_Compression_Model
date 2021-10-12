@@ -683,7 +683,7 @@ def simple_four_run(parameter_array):
     chi_2=run[1]
     #print(np.sum(chi_2))
     #save the value to the optimization data file
-    sls=chi_2[9]+chi_2[10]#+chi_2[11] #+chi_2[3]+chi_2[4]+chi_2[6]+chi_2[7]+chi_2[9]+chi_2[10]
+    sls=chi_2[0]+chi_2[1]+chi_2[3] +chi_2[4]+chi_2[6]+chi_2[7]+chi_2[7]+chi_2[9]+chi_2[10]
     #sls=np.sum(chi_2)
     print(sls)
     with open('optimization_data.csv', 'a+') as file_object:
