@@ -12,10 +12,10 @@ Since I got the chopped data to converge for the new run (83), I am now trying f
   ![Initial fit, run 1](run1_initial.PNG)  
 
 ### Final Fit:  
-  ![Final fit, run 1](run1_final.png)  
+  ![Final fit, run 1](run1_final.PNG)  
   
 ### Parameters:
-  ![Parameters, run 1](run1_parameters.png)
+  ![Parameters, run 1](run1_parameters.PNG)
 
 
 ## Run 2
@@ -29,10 +29,10 @@ Fitting all runs starting from totally random parameters (as opposed to the "goo
       params1=[12000.0,0.38,48,1.2*10**-8] 
   
 ### Initial fit:  
-  ![Initial fit, run 2](run2_initial.png)  
+  ![Initial fit, run 2](run2_initial.PNG)  
 
 ### Final Fit:  
-  ![Final fit, run 2](run2_final.png)  
+  ![Final fit, run 2](run2_final.PNG)  
   
 ### Parameters:
-  ![Parameters, run 2](run2_parameters.png)
+  ![Parameters, run 2](run2_parameters.PNG)
