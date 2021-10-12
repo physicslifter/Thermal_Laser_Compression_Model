@@ -9,7 +9,7 @@ Since I got the chopped data to converge for the new run (83), I am now trying f
      params0=[36000.0,0.017,30,2.0*10**-8]  
   
 ### Initial fit:  
-  ![Initial fit, run 1](run1_initial.png)  
+  ![Initial fit, run 1](run1_initial.PNG)  
 
 ### Final Fit:  
   ![Final fit, run 1](run1_final.png)  
