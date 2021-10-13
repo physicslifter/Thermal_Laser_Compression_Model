@@ -46,4 +46,22 @@
 ### Parameters:
   ![Parameters, run 3](run3_params.png)
 
-  ![Parameters, run 2](run2_params.png)
+  ![Parameters, run 3](run3_params.png)
+
+## Run 4
+
+### Notes:
+  
+### Parameters  
+    - initial parameters:  params0=[30000,0.025,30.0,2.0*10**-8]
+
+### Initial fit:  
+  ![Initial fit, run 4](run4_initial.png)  
+
+### Final Fit:  
+  ![Final fit, run 4](run4_final.png)  
+  
+### Parameters:
+  ![Parameters, run 4](run4_params.png)
+
+  ![Parameters, run 4](run4_params.png)

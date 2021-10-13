@@ -683,7 +683,7 @@ def simple_four_run(parameter_array):
     chi_2=run[1]
     #print(np.sum(chi_2))
     #save the value to the optimization data file
-    sls=chi_2[0]+chi_2[1] # +chi_2[3] +chi_2[4]+chi_2[6]+chi_2[7]+chi_2[9]+chi_2[10]
+    sls=chi_2[9]+chi_2[10] # +chi_2[3] +chi_2[4]+chi_2[6]+chi_2[7]+chi_2[9]+chi_2[10]
     #sls=np.sum(chi_2)
     print(sls)
     with open('optimization_data.csv', 'a+') as file_object:
@@ -706,7 +706,7 @@ def simple_four_constant_peak_temp_and_start_time(parameter_array):
 
     run=run4(peak_temp,parameter_array[0],parameter_array[1],start_time)
     chi_2=run[1]
-    sls=chi_2[0]+chi_2[1]#+chi_2[3]+chi_2[6]+chi_2[7]+chi_2[9]+chi_2[10]
+    sls=chi_2[3] #+chi_2[1]#+chi_2[3]+chi_2[6]+chi_2[7]+chi_2[9]+chi_2[10]
     print(sls)
     with open('optimization_data.csv', 'a+') as file_object:
         num_iterations=sum(1 for line in open('optimization_data.csv'))-1
@@ -714,3 +714,29 @@ def simple_four_constant_peak_temp_and_start_time(parameter_array):
         file_object.write(str(num_iterations)+', '+str(sls)+', '+str(peak_temp)+', '+str(parameter_array[0])+', '+str(parameter_array[1])+', '+str(start_time))
 
     return sls
+
+def simple_four_run2(parameter_array):
+
+    #For running multiple optimizations in parallel
+
+    #Takes a single parameter array as input
+    #The parameter array is defined as below
+    # parameter_array[0]=peak_temp
+    # parameter_array[1]=a
+    # parameter_array[2]=b
+    # parameter_array[3]=time_shift
+
+    #run the model & return single chi^2 value
+    run=run4(parameter_array[0],parameter_array[1],parameter_array[2],parameter_array[3])
+    chi_2=run[1]
+    #print(np.sum(chi_2))
+    #save the value to the optimization data file
+    sls=chi_2[3] #+chi_2[1] # +chi_2[3] +chi_2[4]+chi_2[6]+chi_2[7]+chi_2[9]+chi_2[10]
+    #sls=np.sum(chi_2)
+    print(sls)
+    with open('optimization_data.csv', 'a+') as file_object:
+        num_iterations=sum(1 for line in open('optimization_data.csv'))-1
+        file_object.write('\n')#newline
+        file_object.write(str(num_iterations)+', '+str(sls)+', '+str(parameter_array[0])+', '+str(parameter_array[1])+', '+str(parameter_array[2])+', '+str(parameter_array[3]))
+
+    return sls 
