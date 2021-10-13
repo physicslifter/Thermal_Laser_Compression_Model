@@ -38,10 +38,10 @@
     - initial parameters:  params0=[0.03,30]
 
 ### Initial fit:  
-  ![Initial fit, run 3](run3_initial.PNG)  
+  ![Initial fit, run 3](run3_initial.png)  
 
 ### Final Fit:  
-  ![Final fit, run 3](run3_final.PNG)  
+  ![Final fit, run 3](run3_final.png)  
   
 ### Parameters:
   ![Parameters, run 3](run3_params.PNG)
