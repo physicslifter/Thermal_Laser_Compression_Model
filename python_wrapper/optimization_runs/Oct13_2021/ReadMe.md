@@ -1,6 +1,8 @@
 # Optimization runs on October 13, 2021
 
 ## Run 1
+- trying starting from totally random parameters, then getting it to optimize to a good fit
+
 ### Parameters  
     - initial parameters:  params0=[55000.0, 0.03,50.0, 3.0*10**-8]
 
