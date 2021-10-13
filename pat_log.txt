@@ -1155,3 +1155,13 @@ To-do's:
     1. look through yesterday's notes and figure out what to do for today
     2. update Tyler on the fits from the other day
     3. 
+
+========================================
+October 13, 2021
+========================================
+- started work day by syncing my laptop with the current version of the repository
+- now I have to go and figure out what the next step is for optimizations
+- so yesterday, it didn't find a good optimization, (it converged to a "bad fit")
+- today, I will try to find a good fit by starting with a higher start_time and a higher peak_temp and try to see if the optimization will find its way from there
+- I can also work on trying to streamline the model for optimizations so that they can run more smoothly
+- okay working now on optimizations...
