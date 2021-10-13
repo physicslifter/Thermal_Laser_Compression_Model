@@ -5,13 +5,13 @@
     - initial parameters:  params0=[55000.0, 0.03,50.0, 3.0*10**-8]
 
 ### Initial fit:  
-  ![Initial fit, run 1](run1_initial.png)  
+  ![Initial fit, run 1](run1_initial.PNG)  
 
 ### Final Fit:  
-  ![Final fit, run 1](run1_final.png)  
+  ![Final fit, run 1](run1_final.PNG)  
   
 ### Parameters:
-  ![Parameters, run 1](run1_params.png)
+  ![Parameters, run 1](run1_params.PNG)
 
 ## Run 2
     - similar to run 1, but starting from different initial parameters
@@ -20,10 +20,10 @@
     - params1=[45000, 0.03, 50.0, 2e-08]
 
 ### Initial fit:  
-  ![Initial fit, run 2](run2_initial.png)  
+  ![Initial fit, run 2](run2_initial.PNG)  
 
 ### Final Fit:  
-  ![Final fit, run 2](run2_final.png)  
+  ![Final fit, run 2](run2_final.PNG)  
   
 ### Parameters:
   ![Parameters, run 2](run2_params.png)
@@ -46,3 +46,4 @@
 ### Parameters:
   ![Parameters, run 3](run3_params.png)
 
+  ![Parameters, run 2](run2_params.png)
