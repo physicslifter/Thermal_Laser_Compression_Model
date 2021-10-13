@@ -44,7 +44,7 @@
   ![Final fit, run 3](run3_final.png)  
   
 ### Parameters:
-  ![Parameters, run 3](run3_params.png)
+  ![Parameters, run 3](run3_params.PNG)
 
 
 ## Run 4
@@ -62,7 +62,7 @@
   ![Final fit, run 4](run4_final.png)  
   
 ### Parameters:
-  ![Parameters, run 4](run4_params.png)
+  ![Parameters, run 4](run4_params.PNG)
 
 
 # Run 5
@@ -79,7 +79,7 @@
   ![Final fit, run 5](run5_final.png)  
   
 ### Parameters:
-  ![Parameters, run 5](run5_params.png)
+  ![Parameters, run 5](run5_params.PNG)
 
 
 # Run 6
@@ -97,7 +97,7 @@
   ![Final fit, run 6](run6_final.png)  
   
 ### Parameters:
-  ![Parameters, run 6](run6_params.png)
+  ![Parameters, run 6](run6_params.PNG)
 
 
 # Run 7
@@ -115,7 +115,7 @@ Fitting the s88780 data with the same initial parameters as runs 5 & 6
   ![Final fit, run 7](run7_final.png)  
   
 ### Parameters:
-  ![Parameters, run 7](run7_params.png)
+  ![Parameters, run 7](run7_params.PNG)
 
 
 # Run 8
@@ -133,4 +133,4 @@ Fitting the s86483 data with the same initial parameters as runs 5, 6 & 7
   ![Final fit, run 8](run8_final.png)  
   
 ### Parameters:
-  ![Parameters, run 8](run8_params.png)
+  ![Parameters, run 8](run8_params.PNG)
