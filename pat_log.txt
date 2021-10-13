@@ -1115,3 +1115,43 @@ Streamlining goals:
         5. add the initial plots, the final plots, and the parameter plots to the ReadMe.md file
         
 Time to break with some pullups and dips. Have to save these notes to the repo
+
+Okay, now working for the day... 
+Have to chop and fit data
+    - going into the Matlab file, I have to see how to chop the data as I have chopped the other runs previously
+    - Have to look at the plots for a reasonable time for the data cutoffs to happens
+        - looking in the excel file...
+        - okay I've got the times to chop (or indices, rather)
+        - I've edited the matlab file for the indices & plotting... now running the file to see if it works
+        - okay, it looks good to go
+        
+        - Next step: Edit the least squares function in RUN_1D_FEM_v3 so that it reads from all the variables as intended
+            - I think it should be good, now time to test it...
+
+        - Testing...
+
+It works, and I saved the results as run1. I also forgot that it was Columbus day/indigenous peoples' day, so I went home after saving the results from this run
+
+=====================================================
+October 12, 2021
+=======================================================
+-----
+
+Beginning/Misc. Notes:
+    - starting today by sending my results from yesterday
+    - then I need to look over yesterday's notes to figure out where to pick it up from here
+
+-----
+
+Tasks:
+
+TASK 1
+- looking through yesterday's notes
+- 
+
+-----
+
+To-do's:
+    1. look through yesterday's notes and figure out what to do for today
+    2. update Tyler on the fits from the other day
+    3. 
