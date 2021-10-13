@@ -27,3 +27,22 @@
   
 ### Parameters:
   ![Parameters, run 2](run2_params.png)
+
+## Run 3
+
+### Notes:
+    - now trying to optimize for the first two faces on the first shot, shot s88773
+    - using new function that holds peak_temp and start_time constant while optimizing for the two k parameters
+
+### Parameters  
+    - initial parameters:  params0=[0.03,30]
+
+### Initial fit:  
+  ![Initial fit, run 3](run3_initial.png)  
+
+### Final Fit:  
+  ![Final fit, run 3](run3_final.png)  
+  
+### Parameters:
+  ![Parameters, run 3](run3_params.png)
+
