@@ -99,7 +99,7 @@ def get_chi_sq_from_output_mat(filepath):
     cs763=chi_sq_interp(x0,y0_3_76,x1_76,y1_3_76) # s88773 face 3
     cs801=chi_sq_interp(x0,y0_1_80,x1_80,y1_1_80) # s88773 face 1
     cs802=chi_sq_interp(x0,y0_2_80,x1_80,y1_2_80) # s88773 face 2
-    cs803=chi_sq_interp(x0,y0_3_80,x1_80,y1_3_80) # s88773 face 3
+    cs803=chi_sq_interp(x0,y0_3_80,x1_80,y1_3_80) # s88773 face 3 
 
     #finally, return the values as an array
     return [cs731,cs732,cs733,cs761,cs762,cs763,cs801,cs802,cs803]
@@ -569,7 +569,7 @@ def run4(peak_temp, a, b, time_shift):
 
     #And finally, get the chi^2 value
     #chi_2=get_chi_sq_from_output_mat('FEM_output/1D_combo_run_output.mat')
-    chi_2=get_least_sq_from_output_mat('FEM_output/1D_combo_run_output4.mat')
+    chi_2=get_least_sq_from_output_mat_run4('FEM_output/1D_combo_run_output4.mat')
 
     #now return the output
     return [mydata, chi_2]
@@ -681,10 +681,11 @@ def simple_four_run(parameter_array):
     #run the model & return single chi^2 value
     run=run4(parameter_array[0],parameter_array[1],parameter_array[2],parameter_array[3])
     chi_2=run[1]
-    print(np.sum(chi_2))
+    #print(np.sum(chi_2))
     #save the value to the optimization data file
-    #sls=chi_2[0]+chi_2[1]+chi_2[6]+chi_2[7]
-    sls=np.sum(chi_2)
+    sls=chi_2[0]+chi_2[1]+chi_2[3] +chi_2[4]+chi_2[6]+chi_2[7]+chi_2[7]+chi_2[9]+chi_2[10]
+    #sls=np.sum(chi_2)
+    print(sls)
     with open('optimization_data.csv', 'a+') as file_object:
         num_iterations=sum(1 for line in open('optimization_data.csv'))-1
         file_object.write('\n')#newline

@@ -18,8 +18,13 @@ elseif(state.time <= 1000)
   
   %This is where we define our boundary conditions or "initial input". 
   %right now, its a square wave so peak temp is only free parameter
+<<<<<<< HEAD:python_wrapper/BC_external_exp2.txt
   peak=39895.542290489306; 
   start_time=-4.393928156930086e-09; 
+=======
+  peak=24114.594656544272; 
+  start_time=-1.977855358011267e-08; 
+>>>>>>> 9f366adda473b0d016d7cada374859044a920503:python_wrapper/BC_external_exp2.m
   %start_time=2.0e-08; 
   
   t=state.time; %print time to see live progress

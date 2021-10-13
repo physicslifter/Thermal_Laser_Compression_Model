@@ -27,7 +27,7 @@ dlif=4700; %kg/m^3
 clif=1600; %J/kg K (800)
 t0lif=2000; %K - old value 1000
 
-tlist = [20:0.2:40]*10^-9;
+tlist = [10:0.2:40]*10^-9;
 
 
 %**** Creating geometry ****
@@ -356,7 +356,7 @@ t0a=1.909;% Based on ND filter of 0 (1.909)
 %SOP data for s88776
 start1=88;
 start2=93;
-start3=246
+start3=246;
 stop1=172;
 stop2=418;
 stop3=468;
@@ -403,14 +403,24 @@ t0a=1.909;% Based on ND filter of 0 (1.909)
 
 
 %SOP data for s86483
-start=50;
-stop=900;
+start1=342;
+start2=388;
+start3=377;
+stop1=412;
+stop2=732;
+stop3=500;
+stop_final=750;
 opts = detectImportOptions('s86483_SOP_TP.xlsx');
 m = readtable('s86483_SOP_TP.xlsx',opts);
-t_data_83=m.time(start:stop)*10^-9;
-temp1_data83=m.step1_corrected(start:stop);
-temp2_data83=m.step2_corrected(start:stop);
-temp3_data83=m.step3_corrected(start:stop);
+t_data1_83=m.time(start1:stop1)*10^-9;
+t_data2_83=m.time(start2:stop2)*10^-9;
+t_data3_83=m.time(start3:stop3)*10^-9;
+t_data1end_83=m.time(stop1:stop_final)*10^-9;
+t_data2end_83=m.time(stop2:stop_final)*10^-9;
+t_data2end_83=m.time(stop3:stop_final)*10^-9;
+temp1_data83=m.step1_corrected(start1:stop1);
+temp2_data83=m.step2_corrected(start2:stop2);
+temp3_data83=m.step3_corrected(start3:stop3);
 xw = 1; %throughput correction based on slit width and shot number
 aeta=25.5; %1/delta_t of SOP data, was 46
 a0=481000;% Based on ND filter of 0 (481000) (395900)
@@ -494,7 +504,7 @@ xlim([18 35]);
 
 figure
 ax1=axes('Position',[0.13,0.11,0.85,0.69]);
-plot(t_data_83,temp1_83,'o',t_data_83,temp2_83,'o',t_data_83,temp3_83,'o',...
+plot(t_data1_83,temp1_83,'o',t_data2_83,temp2_83,'o',t_data3_83,temp3_83,'o',...
     tlist,T1(nid1_83,:),'-',tlist,T1(nid2_83,:),'-',tlist,T1(nid3_83,:),'-','Linewidth',2)
 legend('Data 0.76 um','Data 2.76 um','Data 4.76 um','Model 0.76 um','Model 2.76 um', 'Model 4.76 um')
 grid on
@@ -535,4 +545,4 @@ T41=T1(nid1_83,:);
 T42=T1(nid2_83,:);
 T43=T1(nid3_83,:);
 
-save('FEM_output/1d_combo_run_output4.mat','tlist','T11','T12','T13','T21','T22','T23','T31','T32','T33','T41','T42','T43','t_data1_73','t_data2_73','t_data3_73','temp1_73','temp2_73','temp3_73','t_data1_76','t_data2_76','t_data3_76','temp1_76','temp2_76','temp3_76','t_data1_80','t_data2_80','t_data3_80','temp1_80','temp2_80','temp3_80','t_data_83','temp1_83','temp2_83','temp3_83')
+save('FEM_output/1d_combo_run_output4.mat','tlist','T11','T12','T13','T21','T22','T23','T31','T32','T33','T41','T42','T43','t_data1_73','t_data2_73','t_data3_73','temp1_73','temp2_73','temp3_73','t_data1_76','t_data2_76','t_data3_76','temp1_76','temp2_76','temp3_76','t_data1_80','t_data2_80','t_data3_80','temp1_80','temp2_80','temp3_80','t_data1_83','t_data2_83','t_data3_83','temp1_83','temp2_83','temp3_83')

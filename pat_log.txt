@@ -1040,4 +1040,118 @@ September 29, 2021
 October 1, 2021
 ===============================================
 finishing trying out the dfifferent ptimization techniques from yesterday. Today the goal is to get something built and running in SfePy
+
+=====================================
+October 4, 2021
+=====================================
+Have spent a substantial amount of time this AM ocumenting my last run from friday as well as initiatin a new run, and trying to get fenics to work. Now I will spend the rest of the day trying to get sfepy to work with this data in some way
+
+looking at the getfem python package
+- nice (and unexpected) progress today
+
+=============================================
+October 5, 2021
+=============================================
+- Fridays @ 1PM UQ + warm dense matters
+- craedl.jhu
+- starting today with the runs from yesterday, and building out from there... 
+- Have to do another run like the second run from yesterday, but where I am only trying to optimize the best-looking curves
+- Okay I've done the new run for today, and we appear to be getting the same issue, we've been getting this whole time - start_time is minimized, k is larger than predicted, and the peak_temp is lowered further than it should be
+    - let's try again, this time using the exact initial parameters from Tyler that I started using at some point last week
+    - params0=[36000.0,0.017,30,2.0*10**-8]
+
+- Okay, it's time to hypothesize from here how to proceed with the rest of the runs
+    - earlier today, in meeting with Zach, he gave us the very useful idea of optimizing each run independently, then plotting the results of the parameters in k-space on a scatter plot (perhaps k-space with a 3rd axis? I think just k-space would suffice)
+
+
+- most recent optimization was having the same problem as the first one that I did today
+==============================================
+- NOTE: I fixed a problem with the optimization code today: the simple four run was using the sls function for the three datasets (instead of 4), and so it was only optimizing the first three at once
+==============================================
+- now I have to select an approach from here
+    - I will go ahead with trying to optimize one run at a time, then scattering their different values in k-space
+    - next to try: all of the 4 data runs, do an optimization where the lowest possible temperature @ 4000K (edit this in the boundary condition file)
+    - try the tlist starting @ 12 or 13
+    - 
+
+=================================================
+October 6, 2021
+=================================================
+- I spent most of the morning working on getting my travel approved. Now it's time to work on getting the other shots optimized from yesterday. I have to do 80 & 83
+- I also have to write up the ReadMe.md file
+
+- Finished the day with wrapping up the four runs independently
+- still have to redo the fourth run 
+
+=================================================
+October 7, 2021
+==================================================
+- time to go redo the 4th run now, while censoring the data from the final face
+- successfully prepared and presented a summary of our work at group meeting with tyler
+- tyler got his talk approved for this project at AGU conference in December
+- talked with Deepak about going to the Texas experiment, and we discussed that I would likely have to stay in separate housing, since I am not vaccinated against COVID
+- other than that, it seems like it is going pretty well and that I will be welcome at the experiemnet as is
+- finished syncing the github repo on the lab computer with the status of the github repo on the online version
+- now I have to go in nd make sure that the run is saved
+
+==================================================
+October 11, 2021
+==================================================
+- Goals for today:
+    - chop data for the last run
+    - fit chopped data
+    - stremline optimization according to my goals
+
+Streamlining goals:
+    - fit into single function where the user sends:
+        1. initial parameters
+        2. the number of the run
+
+    - what this function performs:
+        1. write data into an excel file once run is complete
+        2. saves excel folder in the runs for the day
+        3. print and save beginning plots for the run in the day's optimization folder
+        4. save final plots for each of the parameters
+        5. add the initial plots, the final plots, and the parameter plots to the ReadMe.md file
+        
+Time to break with some pullups and dips. Have to save these notes to the repo
+
+Okay, now working for the day... 
+Have to chop and fit data
+    - going into the Matlab file, I have to see how to chop the data as I have chopped the other runs previously
+    - Have to look at the plots for a reasonable time for the data cutoffs to happens
+        - looking in the excel file...
+        - okay I've got the times to chop (or indices, rather)
+        - I've edited the matlab file for the indices & plotting... now running the file to see if it works
+        - okay, it looks good to go
+        
+        - Next step: Edit the least squares function in RUN_1D_FEM_v3 so that it reads from all the variables as intended
+            - I think it should be good, now time to test it...
+
+        - Testing...
+
+It works, and I saved the results as run1. I also forgot that it was Columbus day/indigenous peoples' day, so I went home after saving the results from this run
+
+=====================================================
+October 12, 2021
+=======================================================
+-----
+
+Beginning/Misc. Notes:
+    - starting today by sending my results from yesterday
+    - then I need to look over yesterday's notes to figure out where to pick it up from here
+
+-----
+
+Tasks:
+
+TASK 1
+- looking through yesterday's notes
 - 
+
+-----
+
+To-do's:
+    1. look through yesterday's notes and figure out what to do for today
+    2. update Tyler on the fits from the other day
+    3. 
