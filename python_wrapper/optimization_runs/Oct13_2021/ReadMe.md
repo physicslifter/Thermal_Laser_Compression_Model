@@ -26,7 +26,7 @@
   ![Final fit, run 2](run2_final.PNG)  
   
 ### Parameters:
-  ![Parameters, run 2](run2_params.png)
+  ![Parameters, run 2](run2_params.PNG)
 
 ## Run 3
 
