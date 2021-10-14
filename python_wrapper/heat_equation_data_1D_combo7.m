@@ -4,8 +4,11 @@
 
 %****     2um     *****
 
+input_parameter_file="inputs/1d_combined_input_matrix.mat";
+load(input_parameter_file,'a','b');
+
 %***** Parameters *******
-k = @(~,state) 30+0.017*state.u; %W/mK - 
+k = @(~,state) b+a*state.u; %W/mK - 
 % (previous fit): 0.045*state.u + 3000./sqrt(abs(state.u)), (de koker fit):
 % 30+0.0288t, (good linear fit): 120+0.02t
 d=12800; %kg/m^3 - determined from Smith et al. 2018 isentrope (previous at 11000) 190 GPa for MgO
@@ -404,7 +407,7 @@ t0a=1.909;% Based on ND filter of 0 (1.909)
 
 %SOP data for s86483
 start1=342;
-start2=388;
+start2=582;
 start3=377;
 stop1=412;
 stop2=732;
