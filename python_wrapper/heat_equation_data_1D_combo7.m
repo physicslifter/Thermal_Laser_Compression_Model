@@ -30,7 +30,7 @@ dlif=4700; %kg/m^3
 clif=1600; %J/kg K (800)
 t0lif=2000; %K - old value 1000
 
-tlist = [10:0.2:40]*10^-9;
+tlist = [15:0.2:40]*10^-9;
 
 
 %**** Creating geometry ****
@@ -40,18 +40,33 @@ inc = 0.1; %amount measuring into window
 finc = 0.1; %measurement into iron
 lwin=2.0; % length of window (um)
 
+%Old values, lfe_long for 73 & 80, lfe_short for s88776
+%lfe_long=ratio*1.07; % Length of iron (um) 0.89 0.72 0.77
+%lfe2_long=ratio*2.3; % Length of iron (um) 1.57
+%lfe3_long=ratio*3.23; % Length of iron (um) 1.57
 
-lfe_long=ratio*1.07; % Length of iron (um) 0.89 0.72 0.77
-lfe2_long=ratio*2.3; % Length of iron (um) 1.57
-lfe3_long=ratio*3.23; % Length of iron (um) 1.57
+%lfe_short=ratio*0.45; % Length of iron (um) 0.89 0.72 0.77
+%lfe2_short=ratio*1.68; % Length of iron (um) 1.57
+%lfe3_short=ratio*2.61; % Length of iron (um) 1.57
 
-lfe_short=ratio*0.45; % Length of iron (um) 0.89 0.72 0.77
-lfe2_short=ratio*1.68; % Length of iron (um) 1.57
-lfe3_short=ratio*2.61; % Length of iron (um) 1.57
+%lfe_83=ratio*0.76; % Length of iron (um) 0.89 0.72 0.77
+%lfe2_83=ratio*2.76; % Length of iron (um) 1.57
+%lfe3_83=ratio*4.76; % Length of iron (um) 1.57
 
-lfe_83=ratio*0.76; % Length of iron (um) 0.89 0.72 0.77
-lfe2_83=ratio*2.76; % Length of iron (um) 1.57
-lfe3_83=ratio*4.76; % Length of iron (um) 1.57
+%New values
+%s88773 & s888776
+lfe_long=ratio*1.07;
+lfe2_long=ratio*2.22;
+lfe3_long=ratio*3.07;
+
+%s88780
+lfe_short=ratio*0.45;
+lfe2_short=ratio*1.7;
+lfe3_short=ratio*2.8;
+
+lfe_83=ratio*0.76;
+lfe2_83=ratio*2.76;
+lfe3_83=ratio*4.76;
 
 
 sfe_long=(lfe_long-finc)*10^-6; % Measurement spot in iron
@@ -333,9 +348,9 @@ getClosestNode = @(p,x,y) min((p(1,:) - x).^2 + (p(2,:) - y).^2);
 %******    Plotting    ******
 
 %SOP data for s88773%
-start1=179;
-start2=259;
-start3=310;
+start1=179; 
+start2=259; 
+start3=310; 
 stop1=265;
 stop2=415;
 stop3=706;
@@ -411,7 +426,7 @@ start2=582;
 start3=377;
 stop1=412;
 stop2=732;
-stop3=500;
+stop3=800;
 stop_final=750;
 opts = detectImportOptions('s86483_SOP_TP.xlsx');
 m = readtable('s86483_SOP_TP.xlsx',opts);

@@ -1165,3 +1165,13 @@ October 13, 2021
 - today, I will try to find a good fit by starting with a higher start_time and a higher peak_temp and try to see if the optimization will find its way from there
 - I can also work on trying to streamline the model for optimizations so that they can run more smoothly
 - okay working now on optimizations...
+
+===========================================
+October 14, 2021
+==========================================
+- starting today by changing lines in the file so that it reads in from the variable file
+- working through run 5, most of the notes are being kept in the ReadMe.md file currently. Will add notes here as I reasonably see fit
+- trying to get it working. Fixed problems this AM that caused me to not be reading in the a and b values as it was supposed to be doing
+- okay what I'm going to try to do now is optimize the visualization capacity of the application
+- now trying adding a second plot to the live_plot script in the testingGUI folder
+- 

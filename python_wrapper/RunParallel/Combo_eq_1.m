@@ -4,8 +4,11 @@
 
 %****     2um     *****
 
+input_parameter_file="1d_combined_input_matrix1.mat";
+load(input_parameter_file,'a','b');
+
 %***** Parameters *******
-k = @(~,state) 30+0.017*state.u; %W/mK - 
+k = @(~,state) b+a*state.u; %W/mK - 
 % (previous fit): 0.045*state.u + 3000./sqrt(abs(state.u)), (de koker fit):
 % 30+0.0288t, (good linear fit): 120+0.02t
 d=12800; %kg/m^3 - determined from Smith et al. 2018 isentrope (previous at 11000) 190 GPa for MgO
@@ -27,7 +30,7 @@ dlif=4700; %kg/m^3
 clif=1600; %J/kg K (800)
 t0lif=2000; %K - old value 1000
 
-tlist = [10:0.2:40]*10^-9;
+tlist = [15:0.2:40]*10^-9;
 
 
 %**** Creating geometry ****
@@ -37,18 +40,33 @@ inc = 0.1; %amount measuring into window
 finc = 0.1; %measurement into iron
 lwin=2.0; % length of window (um)
 
+%Old values, lfe_long for 73 & 80, lfe_short for s88776
+%lfe_long=ratio*1.07; % Length of iron (um) 0.89 0.72 0.77
+%lfe2_long=ratio*2.3; % Length of iron (um) 1.57
+%lfe3_long=ratio*3.23; % Length of iron (um) 1.57
 
-lfe_long=ratio*1.07; % Length of iron (um) 0.89 0.72 0.77
-lfe2_long=ratio*2.3; % Length of iron (um) 1.57
-lfe3_long=ratio*3.23; % Length of iron (um) 1.57
+%lfe_short=ratio*0.45; % Length of iron (um) 0.89 0.72 0.77
+%lfe2_short=ratio*1.68; % Length of iron (um) 1.57
+%lfe3_short=ratio*2.61; % Length of iron (um) 1.57
 
-lfe_short=ratio*0.45; % Length of iron (um) 0.89 0.72 0.77
-lfe2_short=ratio*1.68; % Length of iron (um) 1.57
-lfe3_short=ratio*2.61; % Length of iron (um) 1.57
+%lfe_83=ratio*0.76; % Length of iron (um) 0.89 0.72 0.77
+%lfe2_83=ratio*2.76; % Length of iron (um) 1.57
+%lfe3_83=ratio*4.76; % Length of iron (um) 1.57
 
-lfe_83=ratio*0.76; % Length of iron (um) 0.89 0.72 0.77
-lfe2_83=ratio*2.76; % Length of iron (um) 1.57
-lfe3_83=ratio*4.76; % Length of iron (um) 1.57
+%New values
+%s88773 & s888776
+lfe_long=ratio*1.07;
+lfe2_long=ratio*2.22;
+lfe3_long=ratio*3.07;
+
+%s88780
+lfe_short=ratio*0.45;
+lfe2_short=ratio*1.7;
+lfe3_short=ratio*2.8;
+
+lfe_83=ratio*0.76;
+lfe2_83=ratio*2.76;
+lfe3_83=ratio*4.76;
 
 
 sfe_long=(lfe_long-finc)*10^-6; % Measurement spot in iron
@@ -262,38 +280,38 @@ square=true;
 
 if square==true
     thermalIC(thermalmodelT,t0);             
-    thermalBC(thermalmodelT,'Edge',51,'Temperature',@BC_external_exp2); %8, 12
-    thermalBC(thermalmodelT,'Edge',52,'Temperature',@BC_external_exp2); %9, 13
-    thermalBC(thermalmodelT,'Edge',53,'Temperature',@BC_external_exp2); %10, 14
+    thermalBC(thermalmodelT,'Edge',51,'Temperature',@BC1); %8, 12
+    thermalBC(thermalmodelT,'Edge',52,'Temperature',@BC1); %9, 13
+    thermalBC(thermalmodelT,'Edge',53,'Temperature',@BC1); %10, 14
 
-    thermalBC(thermalmodelT,'Edge',54,'Temperature',@BC_external_exp2); %8, 12
-    thermalBC(thermalmodelT,'Edge',55,'Temperature',@BC_external_exp2); %9, 13
-    thermalBC(thermalmodelT,'Edge',56,'Temperature',@BC_external_exp2); %10, 14
+    thermalBC(thermalmodelT,'Edge',54,'Temperature',@BC1); %8, 12
+    thermalBC(thermalmodelT,'Edge',55,'Temperature',@BC1); %9, 13
+    thermalBC(thermalmodelT,'Edge',56,'Temperature',@BC1); %10, 14
 
-    thermalBC(thermalmodelT,'Edge',57,'Temperature',@BC_external_exp2); %8, 12
-    thermalBC(thermalmodelT,'Edge',58,'Temperature',@BC_external_exp2); %9, 13
-    thermalBC(thermalmodelT,'Edge',59,'Temperature',@BC_external_exp2); %10, 14
+    thermalBC(thermalmodelT,'Edge',57,'Temperature',@BC1); %8, 12
+    thermalBC(thermalmodelT,'Edge',58,'Temperature',@BC1); %9, 13
+    thermalBC(thermalmodelT,'Edge',59,'Temperature',@BC1); %10, 14
     
-    thermalBC(thermalmodelT,'Edge',60,'Temperature',@BC_external_exp2); %8, 12
-    thermalBC(thermalmodelT,'Edge',61,'Temperature',@BC_external_exp2); %9, 13
-    thermalBC(thermalmodelT,'Edge',62,'Temperature',@BC_external_exp2); %10, 14
+    thermalBC(thermalmodelT,'Edge',60,'Temperature',@BC1); %8, 12
+    thermalBC(thermalmodelT,'Edge',61,'Temperature',@BC1); %9, 13
+    thermalBC(thermalmodelT,'Edge',62,'Temperature',@BC1); %10, 14
 else
     thermalIC(thermalmodelT,t0);             
-    thermalBC(thermalmodelT,'Edge',51,'Temperature',@BC_external_exp2); %8, 12
-    thermalBC(thermalmodelT,'Edge',52,'Temperature',@BC_external_exp2); %9, 13
-    thermalBC(thermalmodelT,'Edge',53,'Temperature',@BC_external_exp2); %10, 14
+    thermalBC(thermalmodelT,'Edge',51,'Temperature',@BC1); %8, 12
+    thermalBC(thermalmodelT,'Edge',52,'Temperature',@BC1); %9, 13
+    thermalBC(thermalmodelT,'Edge',53,'Temperature',@BC1); %10, 14
 
-    thermalBC(thermalmodelT,'Edge',54,'Temperature',@BC_external_exp2); %8, 12
-    thermalBC(thermalmodelT,'Edge',55,'Temperature',@BC_external_exp2); %9, 13
-    thermalBC(thermalmodelT,'Edge',56,'Temperature',@BC_external_exp2); %10, 14
+    thermalBC(thermalmodelT,'Edge',54,'Temperature',@BC1); %8, 12
+    thermalBC(thermalmodelT,'Edge',55,'Temperature',@BC1); %9, 13
+    thermalBC(thermalmodelT,'Edge',56,'Temperature',@BC1); %10, 14
 
-    thermalBC(thermalmodelT,'Edge',57,'Temperature',@BC_external_exp2); %8, 12
-    thermalBC(thermalmodelT,'Edge',58,'Temperature',@BC_external_exp2); %9, 13
-    thermalBC(thermalmodelT,'Edge',59,'Temperature',@BC_external_exp2); %10, 14
+    thermalBC(thermalmodelT,'Edge',57,'Temperature',@BC1); %8, 12
+    thermalBC(thermalmodelT,'Edge',58,'Temperature',@BC1); %9, 13
+    thermalBC(thermalmodelT,'Edge',59,'Temperature',@BC1); %10, 14
     
-    thermalBC(thermalmodelT,'Edge',60,'Temperature',@BC_external_exp2); %8, 12
-    thermalBC(thermalmodelT,'Edge',61,'Temperature',@BC_external_exp2); %9, 13
-    thermalBC(thermalmodelT,'Edge',62,'Temperature',@BC_external_exp2); %10, 14
+    thermalBC(thermalmodelT,'Edge',60,'Temperature',@BC1); %8, 12
+    thermalBC(thermalmodelT,'Edge',61,'Temperature',@BC1); %9, 13
+    thermalBC(thermalmodelT,'Edge',62,'Temperature',@BC1); %10, 14
 end
 
 R1 = solve(thermalmodelT,tlist);
@@ -330,15 +348,15 @@ getClosestNode = @(p,x,y) min((p(1,:) - x).^2 + (p(2,:) - y).^2);
 %******    Plotting    ******
 
 %SOP data for s88773%
-start1=179;
-start2=259;
-start3=310;
+start1=179; 
+start2=259; 
+start3=310; 
 stop1=265;
 stop2=415;
 stop3=706;
 stop_final=750;
-opts = detectImportOptions('s88773_sop_lineouts_TP.xlsx','Sheet','June2021');
-m = readtable('s88773_sop_lineouts_TP.xlsx',opts,'Sheet','June2021');
+opts = detectImportOptions('../s88773_sop_lineouts_TP.xlsx','Sheet','June2021');
+m = readtable('../s88773_sop_lineouts_TP.xlsx',opts,'Sheet','June2021');
 t_data1_73=m.Time(start1:stop1)*10^-9;
 t_data2_73=m.Time(start2:stop2)*10^-9;
 t_data3_73=m.Time(start3:stop3)*10^-9;
@@ -361,8 +379,8 @@ stop1=172;
 stop2=418;
 stop3=468;
 stop_final=750;
-opts = detectImportOptions('s88776_SOP_TP.xlsx');
-m = readtable('s88776_SOP_TP.xlsx',opts);
+opts = detectImportOptions('../s88776_SOP_TP.xlsx');
+m = readtable('../s88776_SOP_TP.xlsx',opts);
 t_data1_76=m.time(start1:stop1)*10^-9;
 t_data2_76=m.time(start2:stop2)*10^-9;
 t_data3_76=m.time(start3:stop3)*10^-9;
@@ -385,8 +403,8 @@ stop1=190;
 stop2=370;
 stop3=500;
 stop_final=750;
-opts = detectImportOptions('s88780_SOP_TP.xlsx');
-m = readtable('s88780_SOP_TP.xlsx',opts);
+opts = detectImportOptions('../s88780_SOP_TP.xlsx');
+m = readtable('../s88780_SOP_TP.xlsx',opts);
 t_data1_80=m.time(start1:stop1)*10^-9;
 t_data2_80=m.time(start2:stop2)*10^-9;
 t_data3_80=m.time(start3:stop3)*10^-9;
@@ -403,19 +421,24 @@ t0a=1.909;% Based on ND filter of 0 (1.909)
 
 
 %SOP data for s86483
-start1=158;
-start2=262;
+start1=342;
+start2=582;
 start3=377;
-stop1=190;
-stop2=370;
-stop3=500;
+stop1=412;
+stop2=732;
+stop3=800;
 stop_final=750;
-opts = detectImportOptions('s86483_SOP_TP.xlsx');
-m = readtable('s86483_SOP_TP.xlsx',opts);
-t_data_83=m.time(start:stop)*10^-9;
-temp1_data83=m.step1_corrected(start:stop);
-temp2_data83=m.step2_corrected(start:stop);
-temp3_data83=m.step3_corrected(start:stop);
+opts = detectImportOptions('../s86483_SOP_TP.xlsx');
+m = readtable('../s86483_SOP_TP.xlsx',opts);
+t_data1_83=m.time(start1:stop1)*10^-9;
+t_data2_83=m.time(start2:stop2)*10^-9;
+t_data3_83=m.time(start3:stop3)*10^-9;
+t_data1end_83=m.time(stop1:stop_final)*10^-9;
+t_data2end_83=m.time(stop2:stop_final)*10^-9;
+t_data2end_83=m.time(stop3:stop_final)*10^-9;
+temp1_data83=m.step1_corrected(start1:stop1);
+temp2_data83=m.step2_corrected(start2:stop2);
+temp3_data83=m.step3_corrected(start3:stop3);
 xw = 1; %throughput correction based on slit width and shot number
 aeta=25.5; %1/delta_t of SOP data, was 46
 a0=481000;% Based on ND filter of 0 (481000) (395900)
@@ -499,7 +522,7 @@ xlim([18 35]);
 
 figure
 ax1=axes('Position',[0.13,0.11,0.85,0.69]);
-plot(t_data_83,temp1_83,'o',t_data_83,temp2_83,'o',t_data_83,temp3_83,'o',...
+plot(t_data1_83,temp1_83,'o',t_data2_83,temp2_83,'o',t_data3_83,temp3_83,'o',...
     tlist,T1(nid1_83,:),'-',tlist,T1(nid2_83,:),'-',tlist,T1(nid3_83,:),'-','Linewidth',2)
 legend('Data 0.76 um','Data 2.76 um','Data 4.76 um','Model 0.76 um','Model 2.76 um', 'Model 4.76 um')
 grid on
@@ -540,4 +563,4 @@ T41=T1(nid1_83,:);
 T42=T1(nid2_83,:);
 T43=T1(nid3_83,:);
 
-save('FEM_output/1d_combo_run_output4.mat','tlist','T11','T12','T13','T21','T22','T23','T31','T32','T33','T41','T42','T43','t_data1_73','t_data2_73','t_data3_73','temp1_73','temp2_73','temp3_73','t_data1_76','t_data2_76','t_data3_76','temp1_76','temp2_76','temp3_76','t_data1_80','t_data2_80','t_data3_80','temp1_80','temp2_80','temp3_80','t_data_83','temp1_83','temp2_83','temp3_83')
+save('combo1.mat','tlist','T11','T12','T13','T21','T22','T23','T31','T32','T33','T41','T42','T43','t_data1_73','t_data2_73','t_data3_73','temp1_73','temp2_73','temp3_73','t_data1_76','t_data2_76','t_data3_76','temp1_76','temp2_76','temp3_76','t_data1_80','t_data2_80','t_data3_80','temp1_80','temp2_80','temp3_80','t_data1_83','t_data2_83','t_data3_83','temp1_83','temp2_83','temp3_83')
