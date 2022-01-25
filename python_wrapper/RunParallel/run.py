@@ -100,90 +100,67 @@ def get_least_sq_from_output_mat_run4(filepath):
 
 #Run 1
 #================================================================================================
-    def write_sqwv_input_parameters1(peak_temp, a, b, time_shift, filename):
-        
-        my_values={
-            'a':a,
-            'b':b,
-        }
-
-        #And saving the dictionary as a .mat file...
-        #Finally, save the dictionary as a .mat file
-        io.savemat('1D_combined_input_matrix1.mat',mdict=my_values)
-
-        #Now for rewriting the BC file...
-
-        #Changing the name of the file to .txt so we can edit
-        os.system('cmd /c "ren '+filename+'.m '+filename+'.txt"')
-
-        f=open(filename+'.txt') #open file
-        s=f.readlines() #read file contents into a list
-        f.close() #close the file
-
-        #change lines accordingly
-        s[20]='  '+'peak='+str(peak_temp)+'; \n'#peak_temp
-
-        s[21]='  '+'start_time='+str(time_shift)+'; \n'#time_shift
-
-        #Now write the new lines to the .txt BC file
-        with open(filename+'.txt','w') as filehandle:
-            filehandle.writelines("%s" % line for line in s)
-
-        #And finally, change the file back to .m
-        os.system('cmd /c "ren '+filename+'.txt '+filename+'.m"')
-
-
-    def run41(peak_temp, a, b, time_shift):
-        BC_filename='BC1'
-
-        #write the input parameters for the run file
-        write_sqwv_input_parameters1(peak_temp, a, b, time_shift, BC_filename)
-
-        #Set up and run the matlab engine
-        eng=matlab.engine.start_matlab() 
-
-        #run the file with no output arguments
-        eng.Combo_eq_1(nargout=0)
-
-        #once the file runs, go get the output
-        mydata=io.loadmat('combo1.mat')
-
-        #save as numpy file .npy
-        #np.save(out_filename,allow_pickle=True)
-
-        #And finally, get the chi^2 value
-        #chi_2=get_chi_sq_from_output_mat('FEM_output/1D_combo_run_output.mat')
-        chi_2=get_least_sq_from_output_mat_run4('combo1.mat')
-
-        #now return the output
-        return [mydata, chi_2]
-
-        
-
-    def sfr1(parameter_array):
-
-        #Takes a single parameter array as input
-        #The parameter array is defined as below
-        # parameter_array[0]=peak_temp
-        # parameter_array[1]=a
-        # parameter_array[2]=b
-        # parameter_array[3]=time_shift
-
-        #run the model & return single chi^2 value
-        run=run41(parameter_array[0],parameter_array[1],parameter_array[2],parameter_array[3])
-        chi_2=run[1]
-        #print(np.sum(chi_2))
-        #save the value to the optimization data file
-        sls=chi_2[0]+chi_2[1]+chi_2[3] +chi_2[4]+chi_2[6]+chi_2[7]+chi_2[8]+chi_2[9]+chi_2[10]+chi_2[11]
-        #sls=np.sum(chi_2)
-        print(sls)
-        with open('data1.csv', 'a+') as file_object:
-            num_iterations=sum(1 for line in open('data1.csv'))-1
-            file_object.write('\n')#newline
-            file_object.write(str(num_iterations)+', '+str(sls)+', '+str(parameter_array[0])+', '+str(parameter_array[1])+', '+str(parameter_array[2])+', '+str(parameter_array[3]))
-
-        return sls
-
+def write_sqwv_input_parameters1(peak_temp, a, b, time_shift, filename):
+    
+    my_values={
+        'a':a,
+        'b':b,
+    }
+    #And saving the dictionary as a .mat file...
+    #Finally, save the dictionary as a .mat file
+    io.savemat('1D_combined_input_matrix1.mat',mdict=my_values)
+    #Now for rewriting the BC file...
+    #Changing the name of the file to .txt so we can edit
+    os.system('cmd /c "ren '+filename+'.m '+filename+'.txt"')
+    f=open(filename+'.txt') #open file
+    s=f.readlines() #read file contents into a list
+    f.close() #close the file
+    #change lines accordingly
+    s[20]='  '+'peak='+str(peak_temp)+'; \n'#peak_temp
+    s[21]='  '+'start_time='+str(time_shift)+'; \n'#time_shift
+    #Now write the new lines to the .txt BC file
+    with open(filename+'.txt','w') as filehandle:
+        filehandle.writelines("%s" % line for line in s)
+    #And finally, change the file back to .m
+    os.system('cmd /c "ren '+filename+'.txt '+filename+'.m"')
+def run41(peak_temp, a, b, time_shift):
+    BC_filename='BC1'
+    #write the input parameters for the run file
+    write_sqwv_input_parameters1(peak_temp, a, b, time_shift, BC_filename)
+    #Set up and run the matlab engine
+    eng=matlab.engine.start_matlab() 
+    #run the file with no output arguments
+    eng.Combo_eq_1(nargout=0)
+    #once the file runs, go get the output
+    mydata=io.loadmat('combo1.mat')
+    #save as numpy file .npy
+    #np.save(out_filename,allow_pickle=True)
+    #And finally, get the chi^2 value
+    #chi_2=get_chi_sq_from_output_mat('FEM_output/1D_combo_run_output.mat')
+    chi_2=get_least_sq_from_output_mat_run4('combo1.mat')
+    #now return the output
+    return [mydata, chi_2]
+    
+def sfr1(parameter_array):
+    #Takes a single parameter array as input
+    #The parameter array is defined as below
+    # parameter_array[0]=peak_temp
+    # parameter_array[1]=a
+    # parameter_array[2]=b
+    # parameter_array[3]=time_shift
+    #run the model & return single chi^2 value
+    run=run41(parameter_array[0],parameter_array[1],parameter_array[2],parameter_array[3])
+    chi_2=run[1]
+    #print(np.sum(chi_2))
+    #save the value to the optimization data file
+    sls=+chi_2[9]+chi_2[10]+chi_2[11]
+    #sls=np.sum(chi_2)
+    print(sls)
+    with open('data1.csv', 'a+') as file_object:
+        num_iterations=sum(1 for line in open('data1.csv'))-1
+        file_object.write('\n')#newline
+        file_object.write(str(num_iterations)+', '+str(sls)+', '+str(parameter_array[0])+', '+str(parameter_array[1])+', '+str(parameter_array[2])+', '+str(parameter_array[3]))
+    return sls
 #==============================================================================================================
 
 #Run 2 
@@ -267,6 +244,355 @@ def sfr2(parameter_array):
     print(sls)
     with open('data2.csv', 'a+') as file_object:
         num_iterations=sum(1 for line in open('data2.csv'))-1
+        file_object.write('\n')#newline
+        file_object.write(str(num_iterations)+', '+str(sls)+', '+str(parameter_array[0])+', '+str(parameter_array[1])+', '+str(parameter_array[2])+', '+str(parameter_array[3]))
+
+    return sls
+
+#========================================================================================
+#Run 3
+#=========================================================================================
+
+def write_sqwv_input_parameters3(peak_temp, a, b, time_shift, filename):
+    
+    my_values={
+        'a':a,
+        'b':b,
+    }
+
+    #And saving the dictionary as a .mat file...
+    #Finally, save the dictionary as a .mat file
+    io.savemat('1D_combined_input_matrix3.mat',mdict=my_values)
+
+    #Now for rewriting the BC file...
+
+    #Changing the name of the file to .txt so we can edit
+    os.system('cmd /c "ren '+filename+'.m '+filename+'.txt"')
+
+    f=open(filename+'.txt') #open file
+    s=f.readlines() #read file contents into a list
+    f.close() #close the file
+
+    #change lines accordingly
+    s[20]='  '+'peak='+str(peak_temp)+'; \n'#peak_temp
+
+    s[21]='  '+'start_time='+str(time_shift)+'; \n'#time_shift
+
+    #Now write the new lines to the .txt BC file
+    with open(filename+'.txt','w') as filehandle:
+        filehandle.writelines("%s" % line for line in s)
+
+    #And finally, change the file back to .m
+    os.system('cmd /c "ren '+filename+'.txt '+filename+'.m"')
+
+
+def run43(peak_temp, a, b, time_shift):
+    BC_filename='BC3'
+
+    #write the input parameters for the run file
+    write_sqwv_input_parameters3(peak_temp, a, b, time_shift, BC_filename)
+
+    #Set up and run the matlab engine
+    eng=matlab.engine.start_matlab() 
+
+    #run the file with no output arguments
+    eng.Combo_eq_3(nargout=0)
+
+    #once the file runs, go get the output
+    mydata=io.loadmat('combo3.mat')
+
+    #save as numpy file .npy
+    #np.save(out_filename,allow_pickle=True)
+
+    #And finally, get the chi^2 value
+    #chi_2=get_chi_sq_from_output_mat('FEM_output/1D_combo_run_output.mat')
+    chi_2=get_least_sq_from_output_mat_run4('combo3.mat')
+
+    #now return the output
+    return [mydata, chi_2]
+
+    
+
+def sfr3(parameter_array):
+
+    #Takes a single parameter array as input
+    #The parameter array is defined as below
+    # parameter_array[0]=peak_temp
+    # parameter_array[1]=a
+    # parameter_array[2]=b
+    # parameter_array[3]=time_shift
+
+    #run the model & return single chi^2 value
+    run=run43(parameter_array[0],parameter_array[1],parameter_array[2],parameter_array[3])
+    chi_2=run[1]
+    #print(np.sum(chi_2))
+    #save the value to the optimization data file
+    sls=chi_2[0]+chi_2[1]+chi_2[3]+chi_2[6]+chi_2[7]+chi_2[8]+chi_2[9]+chi_2[10]+chi_2[11]
+    #sls=np.sum(chi_2)
+    print(sls)
+    with open('data3.csv', 'a+') as file_object:
+        num_iterations=sum(1 for line in open('data3.csv'))-1
+        file_object.write('\n')#newline
+        file_object.write(str(num_iterations)+', '+str(sls)+', '+str(parameter_array[0])+', '+str(parameter_array[1])+', '+str(parameter_array[2])+', '+str(parameter_array[3]))
+
+    return sls
+
+#================================================================================
+#Run 4
+#=================================================================================
+def write_sqwv_input_parameters4(peak_temp, a, b, time_shift, filename):
+    
+    my_values={
+        'a':a,
+        'b':b,
+    }
+
+    #And saving the dictionary as a .mat file...
+    #Finally, save the dictionary as a .mat file
+    io.savemat('1D_combined_input_matrix4.mat',mdict=my_values)
+
+    #Now for rewriting the BC file...
+
+    #Changing the name of the file to .txt so we can edit
+    os.system('cmd /c "ren '+filename+'.m '+filename+'.txt"')
+
+    f=open(filename+'.txt') #open file
+    s=f.readlines() #read file contents into a list
+    f.close() #close the file
+
+    #change lines accordingly
+    s[20]='  '+'peak='+str(peak_temp)+'; \n'#peak_temp
+
+    s[21]='  '+'start_time='+str(time_shift)+'; \n'#time_shift
+
+    #Now write the new lines to the .txt BC file
+    with open(filename+'.txt','w') as filehandle:
+        filehandle.writelines("%s" % line for line in s)
+
+    #And finally, change the file back to .m
+    os.system('cmd /c "ren '+filename+'.txt '+filename+'.m"')
+
+
+def run44(peak_temp, a, b, time_shift):
+    BC_filename='BC4'
+
+    #write the input parameters for the run file
+    write_sqwv_input_parameters4(peak_temp, a, b, time_shift, BC_filename)
+
+    #Set up and run the matlab engine
+    eng=matlab.engine.start_matlab() 
+
+    #run the file with no output arguments
+    eng.combo_eq_4(nargout=0)
+
+    #once the file runs, go get the output
+    mydata=io.loadmat('combo4.mat')
+
+    #save as numpy file .npy
+    #np.save(out_filename,allow_pickle=True)
+
+    #And finally, get the chi^2 value
+    #chi_2=get_chi_sq_from_output_mat('FEM_output/1D_combo_run_output.mat')
+    chi_2=get_least_sq_from_output_mat_run4('combo4.mat')
+
+    #now return the output
+    return [mydata, chi_2]
+
+    
+
+def sfr4(parameter_array):
+
+    #Takes a single parameter array as input
+    #The parameter array is defined as below
+    # parameter_array[0]=peak_temp
+    # parameter_array[1]=a
+    # parameter_array[2]=b
+    # parameter_array[3]=time_shift
+
+    #run the model & return single chi^2 value
+    run=run44(parameter_array[0],parameter_array[1],parameter_array[2],parameter_array[3])
+    chi_2=run[1]
+    #print(np.sum(chi_2))
+    #save the value to the optimization data file
+    sls=chi_2[0]+chi_2[1]+chi_2[3]+chi_2[6]+chi_2[7]+chi_2[8]+chi_2[9]+chi_2[10]+chi_2[11]
+    #sls=np.sum(chi_2)
+    print(sls)
+    with open('data4.csv', 'a+') as file_object:
+        num_iterations=sum(1 for line in open('data4.csv'))-1
+        file_object.write('\n')#newline
+        file_object.write(str(num_iterations)+', '+str(sls)+', '+str(parameter_array[0])+', '+str(parameter_array[1])+', '+str(parameter_array[2])+', '+str(parameter_array[3]))
+
+    return sls
+
+#=================================================================================
+#s1, single run for s88773
+#=================================================================================
+def write_sqwv_input_parameterss1(peak_temp, a, b, time_shift, filename):
+    
+    my_values={
+        'a':a,
+        'b':b,
+    }
+
+    #And saving the dictionary as a .mat file...
+    #Finally, save the dictionary as a .mat file
+    io.savemat('1D_combined_input_matrixs1.mat',mdict=my_values)
+
+    #Now for rewriting the BC file...
+
+    #Changing the name of the file to .txt so we can edit
+    os.system('cmd /c "ren '+filename+'.m '+filename+'.txt"')
+
+    f=open(filename+'.txt') #open file
+    s=f.readlines() #read file contents into a list
+    f.close() #close the file
+
+    #change lines accordingly
+    s[20]='  '+'peak='+str(peak_temp)+'; \n'#peak_temp
+
+    s[21]='  '+'start_time='+str(time_shift)+'; \n'#time_shift
+
+    #Now write the new lines to the .txt BC file
+    with open(filename+'.txt','w') as filehandle:
+        filehandle.writelines("%s" % line for line in s)
+
+    #And finally, change the file back to .m
+    os.system('cmd /c "ren '+filename+'.txt '+filename+'.m"')
+
+
+def run4s1(peak_temp, a, b, time_shift):
+    BC_filename='BCs1'
+
+    #write the input parameters for the run file
+    write_sqwv_input_parameterss1(peak_temp, a, b, time_shift, BC_filename)
+
+    #Set up and run the matlab engine
+    eng=matlab.engine.start_matlab() 
+
+    #run the file with no output arguments
+    eng.combo_eq_s1(nargout=0)
+
+    #once the file runs, go get the output
+    mydata=io.loadmat('combos1.mat')
+
+    #save as numpy file .npy
+    #np.save(out_filename,allow_pickle=True)
+
+    #And finally, get the chi^2 value
+    #chi_2=get_chi_sq_from_output_mat('FEM_output/1D_combo_run_output.mat')
+    chi_2=get_least_sq_from_output_mat_run4('combos1.mat')
+
+    #now return the output
+    return [mydata, chi_2]
+
+    
+
+def sfrs1(parameter_array):
+
+    #Takes a single parameter array as input
+    #The parameter array is defined as below
+    # parameter_array[0]=peak_temp
+    # parameter_array[1]=a
+    # parameter_array[2]=b
+    # parameter_array[3]=time_shift
+
+    #run the model & return single chi^2 value
+    run=run4s1(parameter_array[0],parameter_array[1],parameter_array[2],parameter_array[3])
+    chi_2=run[1]
+    #print(np.sum(chi_2))
+    #save the value to the optimization data file
+    sls=chi_2[0]+chi_2[1] #+chi_2[2] #+chi_2[3] +chi_2[4]+chi_2[6]+chi_2[7]+chi_2[8]+chi_2[9]+chi_2[10]+chi_2[11]
+    #sls=np.sum(chi_2)
+    print(sls)
+    with open('datas1.csv', 'a+') as file_object:
+        num_iterations=sum(1 for line in open('datas1.csv'))-1
+        file_object.write('\n')#newline
+        file_object.write(str(num_iterations)+', '+str(sls)+', '+str(parameter_array[0])+', '+str(parameter_array[1])+', '+str(parameter_array[2])+', '+str(parameter_array[3]))
+
+    return sls
+
+#=================================================================================
+#s1, single run for s88773
+#=================================================================================
+def write_sqwv_input_parameterss2(peak_temp, a, b, time_shift, filename):
+    
+    my_values={
+        'a':a,
+        'b':b,
+    }
+
+    #And saving the dictionary as a .mat file...
+    #Finally, save the dictionary as a .mat file
+    io.savemat('1D_combined_input_matrixs2.mat',mdict=my_values)
+
+    #Now for rewriting the BC file...
+
+    #Changing the name of the file to .txt so we can edit
+    os.system('cmd /c "ren '+filename+'.m '+filename+'.txt"')
+
+    f=open(filename+'.txt') #open file
+    s=f.readlines() #read file contents into a list
+    f.close() #close the file
+
+    #change lines accordingly
+    s[20]='  '+'peak='+str(peak_temp)+'; \n'#peak_temp
+
+    s[21]='  '+'start_time='+str(time_shift)+'; \n'#time_shift
+
+    #Now write the new lines to the .txt BC file
+    with open(filename+'.txt','w') as filehandle:
+        filehandle.writelines("%s" % line for line in s)
+
+    #And finally, change the file back to .m
+    os.system('cmd /c "ren '+filename+'.txt '+filename+'.m"')
+
+
+def run4s2(peak_temp, a, b, time_shift):
+    BC_filename='BCs2'
+
+    #write the input parameters for the run file
+    write_sqwv_input_parameterss2(peak_temp, a, b, time_shift, BC_filename)
+
+    #Set up and run the matlab engine
+    eng=matlab.engine.start_matlab() 
+
+    #run the file with no output arguments
+    eng.combo_eq_s2(nargout=0)
+
+    #once the file runs, go get the output
+    mydata=io.loadmat('combos2.mat')
+
+    #save as numpy file .npy
+    #np.save(out_filename,allow_pickle=True)
+
+    #And finally, get the chi^2 value
+    #chi_2=get_chi_sq_from_output_mat('FEM_output/1D_combo_run_output.mat')
+    chi_2=get_least_sq_from_output_mat_run4('combos2.mat')
+
+    #now return the output
+    return [mydata, chi_2]
+
+    
+
+def sfrs2(parameter_array):
+
+    #Takes a single parameter array as input
+    #The parameter array is defined as below
+    # parameter_array[0]=peak_temp
+    # parameter_array[1]=a
+    # parameter_array[2]=b
+    # parameter_array[3]=time_shift
+
+    #run the model & return single chi^2 value
+    run=run4s2(parameter_array[0],parameter_array[1],parameter_array[2],parameter_array[3])
+    chi_2=run[1]
+    #print(np.sum(chi_2))
+    #save the value to the optimization data file
+    sls=chi_2[3] #+chi_2[4]+chi_2[5] #+chi_2[1] #+chi_2[3] +chi_2[4]+chi_2[6]+chi_2[7]+chi_2[8]+chi_2[9]+chi_2[10]+chi_2[11]
+    #sls=np.sum(chi_2)
+    print(sls)
+    with open('datas2.csv', 'a+') as file_object:
+        num_iterations=sum(1 for line in open('datas2.csv'))-1
         file_object.write('\n')#newline
         file_object.write(str(num_iterations)+', '+str(sls)+', '+str(parameter_array[0])+', '+str(parameter_array[1])+', '+str(parameter_array[2])+', '+str(parameter_array[3]))
 

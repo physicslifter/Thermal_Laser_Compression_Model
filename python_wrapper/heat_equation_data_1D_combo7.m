@@ -392,8 +392,8 @@ temp2_data76=m.step2_corrected(start2:stop2);
 temp3_data76=m.step3_corrected(start3:stop3);
 xw = 1; %throughput correction based on slit width and shot number
 aeta=25.5; %1/delta_t of SOP data, was 46
-a0_76=481000;% Based on ND filter of 0 (481000) (395900)
-t0a_76=1.909;% Based on ND filter of 0 (1.909) (1.91)
+a0_76=395900;% Based on ND filter of 0.1 (481000) (395900)
+t0a_76=1.91;% Based on ND filter of 0.1 (1.909) (1.91)
 
 %SOP data for s88780
 start1=158;

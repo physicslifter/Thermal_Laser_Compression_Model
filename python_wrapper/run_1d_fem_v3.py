@@ -458,7 +458,7 @@ def run_model(peak_temp, a, b, time_shift, diffusivity):
     eng=matlab.engine.start_matlab()
 
     #run the file with no output arguments
-    eng.heat_equation_data_1D_combo3(nargout=0)
+    eng.heat_equation_data_1D_combo3(nargout=0)                                                
 
     #once the file runs, go get the output
     mydata=io.loadmat('FEM_output/1D_combo_run_output.mat')
@@ -653,7 +653,7 @@ def simple_sqwv_run(parameter_array):
     # parameter_array[0]=peak_temp
     # parameter_array[1]=a
     # parameter_array[2]=b
-    # parameter_array[3]=time_shift
+    # parameter_array[3]=time_shiftf
 
     #run the model & return single chi^2 value
     run=run_sqwv_model(parameter_array[0],parameter_array[1],parameter_array[2],parameter_array[3])
@@ -683,7 +683,7 @@ def simple_four_run(parameter_array):
     chi_2=run[1]
     #print(np.sum(chi_2))
     #save the value to the optimization data file
-    sls=chi_2[0]+chi_2[1]+chi_2[3] +chi_2[4]+chi_2[6]+chi_2[7]+chi_2[8]+chi_2[9]+chi_2[10]+chi_2[11]
+    sls=chi_2[6]+chi_2[7]+chi_2[8]#+chi_2[9]+chi_2[10]+chi_2[11]
     #sls=np.sum(chi_2)
     print(sls)
     with open('optimization_data.csv', 'a+') as file_object:

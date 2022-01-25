@@ -1,0 +1,71 @@
+
+Run 1
+min on peak_temp constrained to 34K
+accidentally fit second face on s88776 (not pictured)
+min sls:2.4855e+10
+k_CMB=162
+
+==================================================================
+
+Run 2
+accidentally fit second face on s88776 (not pictured)
+terminated early
+peak_temp minimum constraint @ 36K
+min sls: 3.64e+10
+k_CMB=175
+
+==================================================================
+
+Run 3
+accidentally fit second face on s88776 (not pictured)
+peak_temp min constraint @ 38K
+min sls: 3.64e+10
+k_CMB=149
+
+==================================================================
+
+Run 4
+solo fit of s88773
+peak_temp min constraint @ 28K
+min sls: 4.63e+8
+k_CMB=233
+
+==================================================================
+
+Run 5
+Another solo fit of s88773
+peak_temp min constraint @ 34K
+min sls: 1.05e+9
+k_CMB=190
+
+=================================================================
+
+Run 6
+solo run of s88776
+peak_temp min constraint @ 28K
+k_CMB=108
+
+==================================================================
+
+Run 7
+fitting all runs, faces plotted (fixed problem w second face from s88776)
+starting w/ narrow bounds to try to get good fit
+starting with good fit that we have stashed in the "best fits" folder
+min sls 2.84e+10
+k_CMB=164
+
+==================================================================
+
+Run 8
+fitting all runs, faces plotted (fixed problem w second face from s88776)
+min sls 2.84e+10
+k_CMB=161
+peak_temp lower bound @ 32K
+
+==================================================================
+
+Run 9
+fitting all runs, faces plotted (fixed problem w second face from s88776)
+min sls: 2.56e+10
+k_CMB=148.23
+peak_temp lower bound: 38K

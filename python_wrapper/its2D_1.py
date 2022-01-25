@@ -21,12 +21,12 @@ from sfepy.discrete.fem.utils import refine_mesh
 from sfepy import data_dir
 
 # Fix the mesh file name if you run this file outside the SfePy directory.
-filename_mesh = data_dir + '/meshes/2d/its2D.mesh'
+filename_mesh = data_dir + './FELTCoMPY/Mesh/modelmesh3.msh'
 
 refinement_level = 0
 filename_mesh = refine_mesh(filename_mesh, refinement_level)
 
-output_dir = '.' # set this to a valid directory you have write access to
+output_dir = './FELTCoMPy/test_output' # set this to a valid directory you have write access to
 
 young = 2000.0 # Young's modulus [MPa]
 poisson = 0.4  # Poisson's ratio

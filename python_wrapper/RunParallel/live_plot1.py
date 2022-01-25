@@ -8,16 +8,16 @@ from scipy import io
 
 #set up plot
 fig1=plt.figure()
-fig1.suptitle('Run 1')
-ax1=fig1.add_subplot(3,3,1) #sls
-ax2=fig1.add_subplot(3,3,2) #peak_temp
-ax3=fig1.add_subplot(3,3,3) #a
-ax4=fig1.add_subplot(3,3,4) #b
-ax5=fig1.add_subplot(3,3,5) #start_time
-ax6=fig1.add_subplot(3,3,6) #s88773
-ax7=fig1.add_subplot(3,3,7) #s88776
-ax8=fig1.add_subplot(3,3,8) #s88780
-ax9=fig1.add_subplot(3,3,9) #s86483
+fig1.suptitle('s86483 single optimization')
+ax1=fig1.add_subplot(2,3,1) #sls
+ax2=fig1.add_subplot(2,3,2) #peak_temp
+ax3=fig1.add_subplot(2,3,3) #a
+ax4=fig1.add_subplot(2,3,4) #b
+ax5=fig1.add_subplot(2,3,5) #start_time
+#ax6=fig1.add_subplot(3,3,6) #s88773
+#ax7=fig1.add_subplot(3,3,7) #s88776
+#ax8=fig1.add_subplot(3,3,8) #s88780
+ax9=fig1.add_subplot(2,3,6) #s86483
 
 def animate(i):
     pullData = open("data1.csv","r").read()
@@ -106,19 +106,19 @@ def animate(i):
     ax3.clear()
     ax4.clear()
     ax5.clear()
-    ax6.clear()
-    ax6.clear()
-    ax7.clear()
-    ax8.clear()
+    #ax6.clear()
+    #ax6.clear()
+    #ax7.clear()
+    #ax8.clear()
     ax9.clear()
     ax1.set_title('sls')
     ax2.set_title('peak_temp')
     ax3.set_title('a')
     ax4.set_title('b')
     ax5.set_title('start_time')
-    ax6.set_title('s88773')
-    ax7.set_title('s88776')
-    ax8.set_title('s88780')
+    #ax6.set_title('s88773')
+    #ax7.set_title('s88776')
+    #ax8.set_title('s88780')
     ax9.set_title('s86483')
 
     #parameters
@@ -129,28 +129,28 @@ def animate(i):
     ax5.plot(itar,tsar)
 
     #s88773
-    ax6.plot(x0, y0_1_73, color='mediumorchid')
-    ax6.scatter(x1_1_73,y1_1_73, color='blue')
-    ax6.plot(x0, y0_2_73, color='green')
-    ax6.scatter(x1_2_73, y1_2_73, color='darkorange')
+    #ax6.plot(x0, y0_1_73, color='mediumorchid')
+    #ax6.scatter(x1_1_73,y1_1_73, color='blue')
+    #ax6.plot(x0, y0_2_73, color='green')
+    #ax6.scatter(x1_2_73, y1_2_73, color='darkorange')
     #ax6.scatter(x1_3_73, y1_3_73, color='gold')
     #ax6.plot(x0, y0_3_73, color='cyan')
 
     #s88776
-    ax7.plot(x0, y0_1_76, color='mediumorchid')
-    ax7.scatter(x1_1_76,y1_1_76, color='blue')
+    #ax7.plot(x0, y0_1_76, color='mediumorchid')
+    #ax7.scatter(x1_1_76,y1_1_76, color='blue')
     #ax7.plot(x0, y0_2_76, color='green')
     #ax7.scatter(x1_2_76, y1_2_76, color='darkorange')
     #ax7.scatter(x1_3_76, y1_3_76, color='gold')
     #ax7.plot(x0, y0_3_76, color='cyan')
 
     #s88780
-    ax8.plot(x0, y0_1_80, color='mediumorchid')
-    ax8.scatter(x1_1_80,y1_1_80, color='blue')
-    ax8.plot(x0, y0_2_80, color='green')
-    ax8.scatter(x1_2_80, y1_2_80, color='darkorange')
-    ax8.scatter(x1_3_80, y1_3_80, color='gold')
-    ax8.plot(x0, y0_3_80, color='cyan')
+    #ax8.plot(x0, y0_1_80, color='mediumorchid')
+    #ax8.scatter(x1_1_80,y1_1_80, color='blue')
+    #ax8.plot(x0, y0_2_80, color='green')
+    #ax8.scatter(x1_2_80, y1_2_80, color='darkorange')
+    #ax8.scatter(x1_3_80, y1_3_80, color='gold')
+    #ax8.plot(x0, y0_3_80, color='cyan')
 
     #s88773
     ax9.plot(x0, y0_1_83, color='mediumorchid')
