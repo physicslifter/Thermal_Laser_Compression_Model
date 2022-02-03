@@ -3,6 +3,7 @@ from json import tool
 from matplotlib import pyplot as plt
 from fenics import *
 import numpy as np
+import json
 
 '''
 File for getting a simple FEM running that is like a single FEM of our model in Matlab
@@ -103,12 +104,43 @@ MgO_density=5800 #kg/m^3 (4200) from Jin et al. 2010
 MgO_specific_heat=800 #J/kg K (800)
 MgO_inc = 0.1 #measurement into iron
 
+#%%
 #Geometry
-def convert_geometry(length, density, specific_heat_capacity):
-    ratio = 7900/density
-    new_length=length*ratio
-    
-    return new_length
+5
 
-#Now let's get the new length for Fe
-Fe_length=
+#%%
+
+#Function for opening our JSON file
+def load_json(fname):
+    with open(fname) as json_file:
+        data=json.load(json_file)
+        
+    return data
+
+#Now we can define simple functions for running each of the models independently
+def run_model(run_IDs, num_steps, a, b, peak_temp):
+    num_runs=len(run_IDs)
+    geometry_dict=load_json('geometry_dict.json')
+    values_dict=load_json('default_values_dict.json')
+    results={}
+    for x in range(num_runs):
+        runID=run_IDs[x] # get the xth name of the run specified in run_IDs input
+        solution={
+            'face1':run_simple_fem(tf=values_dict['tf'], num_steps=num_steps,a=a, b=b, peak_temp=peak_temp, init_temp=values_dict['init_temp'], k_1=values_dict['k_1'], rho=values_dict['rho'], c=values_dict['c'], Fe_length=geometry_dict[runID]['face1'] , MgO_length=values_dict['MgO_length']),
+            'face2':run_simple_fem(tf=values_dict['tf'], num_steps=num_steps,a=a, b=b, peak_temp=peak_temp, init_temp=values_dict['init_temp'], k_1=values_dict['k_1'], rho=values_dict['rho'], c=values_dict['c'], Fe_length=geometry_dict[runID]['face2'] , MgO_length=values_dict['MgO_length']),
+            'face3':run_simple_fem(tf=values_dict['tf'], num_steps=num_steps,a=a, b=b, peak_temp=peak_temp, init_temp=values_dict['init_temp'], k_1=values_dict['k_1'], rho=values_dict['rho'], c=values_dict['c'], Fe_length=geometry_dict[runID]['face3'] , MgO_length=values_dict['MgO_length'])
+        }
+        results[runID]=solution
+    return results
+#%%
+#Now time to show the function works
+test_run=run_model(['s88773'], 60, 0.03, 30, 30000)
+# %%
+runID='s88773'
+geometry_dict=load_json('geometry_dict.json')
+values_dict=load_json('default_values_dict.json')
+test1=run_simple_fem(tf=values_dict['tf'], num_steps=60,a=0.03, b=30, peak_temp=30000, init_temp=values_dict['init_temp'], k_1=values_dict['k_1'], rho=values_dict['rho'], c=values_dict['c'], Fe_length=geometry_dict[runID]['face1'] , MgO_length=values_dict['MgO_length'])
+
+#%%
+run_simple_fem(tf=30*10**-9, num_steps=60, a=0.03, b=30, peak_temp=30000, init_temp=2000, k_1=100, rho=12000, c=450, Fe_length=convert_geometry(1.07), MgO_length=2)
+# %%
