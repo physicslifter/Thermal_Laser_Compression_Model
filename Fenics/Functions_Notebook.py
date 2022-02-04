@@ -9,6 +9,13 @@ import json
 File for getting a simple FEM running that is like a single FEM of our model in Matlab
 '''
 
+#Function for converting length(s)
+def convert_geometry(length, density=12800, ambient_density=7900):
+    ratio=ambient_density/density
+    new_length=ratio*length
+    
+    return new_length
+
 #Defining Boundary Condition square wave
 def boundary ( x ):
     value = x[0] < DOLFIN_EPS
@@ -68,6 +75,8 @@ def run_simple_fem(tf, num_steps, a, b, peak_temp, init_temp, k_1, rho, c, Fe_le
 
             # Update previous solution
             u_n.assign(u)
+            
+    del dt, meshpoints, my_mesh, V, u_D, bc, u_0, u_n, u, v, kappa,inc, loc, points, num_loops, t, F 
         
     return times, time_line
 
@@ -125,22 +134,34 @@ def run_model(run_IDs, num_steps, a, b, peak_temp):
     results={}
     for x in range(num_runs):
         runID=run_IDs[x] # get the xth name of the run specified in run_IDs input
+        f1=run_simple_fem(tf=values_dict['tf'], num_steps=num_steps,a=a, b=b, peak_temp=peak_temp, init_temp=values_dict['init_temp'], k_1=values_dict['k_1'], rho=values_dict['rho'], c=values_dict['c'], Fe_length=convert_geometry(geometry_dict[runID]['face1']) , MgO_length=convert_geometry(values_dict['MgO_length']))
+        f2=run_simple_fem(tf=values_dict['tf'], num_steps=num_steps,a=a, b=b, peak_temp=peak_temp, init_temp=values_dict['init_temp'], k_1=values_dict['k_1'], rho=values_dict['rho'], c=values_dict['c'], Fe_length=convert_geometry(geometry_dict[runID]['face2']) , MgO_length=convert_geometry(values_dict['MgO_length']))
+        #f3=run_simple_fem(tf=values_dict['tf'], num_steps=num_steps,a=a, b=b, peak_temp=peak_temp, init_temp=values_dict['init_temp'], k_1=values_dict['k_1'], rho=values_dict['rho'], c=values_dict['c'], Fe_length=convert_geometry(geometry_dict[runID]['face3']) , MgO_length=convert_geometry(values_dict['MgO_length']))
+        test_run= 10 #run_simple_fem(tf=30*10**-9, num_steps=60, a=0.03, b=30, peak_temp=30000, init_temp=2000, k_1=100, rho=12000, c=450, Fe_length=convert_geometry(1.07*10**-6), MgO_length=2*10**-6)
         solution={
-            'face1':run_simple_fem(tf=values_dict['tf'], num_steps=num_steps,a=a, b=b, peak_temp=peak_temp, init_temp=values_dict['init_temp'], k_1=values_dict['k_1'], rho=values_dict['rho'], c=values_dict['c'], Fe_length=geometry_dict[runID]['face1'] , MgO_length=values_dict['MgO_length']),
-            'face2':run_simple_fem(tf=values_dict['tf'], num_steps=num_steps,a=a, b=b, peak_temp=peak_temp, init_temp=values_dict['init_temp'], k_1=values_dict['k_1'], rho=values_dict['rho'], c=values_dict['c'], Fe_length=geometry_dict[runID]['face2'] , MgO_length=values_dict['MgO_length']),
-            'face3':run_simple_fem(tf=values_dict['tf'], num_steps=num_steps,a=a, b=b, peak_temp=peak_temp, init_temp=values_dict['init_temp'], k_1=values_dict['k_1'], rho=values_dict['rho'], c=values_dict['c'], Fe_length=geometry_dict[runID]['face3'] , MgO_length=values_dict['MgO_length'])
+            'face1': f1, #run_simple_fem(tf=values_dict['tf'], num_steps=num_steps,a=a, b=b, peak_temp=peak_temp, init_temp=values_dict['init_temp'], k_1=values_dict['k_1'], rho=values_dict['rho'], c=values_dict['c'], Fe_length=convert_geometry(geometry_dict[runID]['face1']) , MgO_length=convert_geometry(values_dict['MgO_length'])),
+            'face2': f2, #run_simple_fem(tf=values_dict['tf'], num_steps=num_steps,a=a, b=b, peak_temp=peak_temp, init_temp=values_dict['init_temp'], k_1=values_dict['k_1'], rho=values_dict['rho'], c=values_dict['c'], Fe_length=convert_geometry(geometry_dict[runID]['face2']) , MgO_length=convert_geometry(values_dict['MgO_length'])),
+            'face3': 'HELLO', #run_simple_fem(tf=values_dict['tf'], num_steps=num_steps,a=a, b=b, peak_temp=peak_temp, init_temp=values_dict['init_temp'], k_1=values_dict['k_1'], rho=values_dict['rho'], c=values_dict['c'], Fe_length=convert_geometry(geometry_dict[runID]['face3']) , MgO_length=convert_geometry(values_dict['MgO_length']))
         }
         results[runID]=solution
     return results
 #%%
 #Now time to show the function works
-test_run=run_model(['s88773'], 60, 0.03, 30, 30000)
+test_run=run_model(['s88773', 's88776'], 60, 0.03, 30, 30000)
 # %%
-runID='s88773'
+runID='s88776'
 geometry_dict=load_json('geometry_dict.json')
 values_dict=load_json('default_values_dict.json')
-test1=run_simple_fem(tf=values_dict['tf'], num_steps=60,a=0.03, b=30, peak_temp=30000, init_temp=values_dict['init_temp'], k_1=values_dict['k_1'], rho=values_dict['rho'], c=values_dict['c'], Fe_length=geometry_dict[runID]['face1'] , MgO_length=values_dict['MgO_length'])
+test1=run_simple_fem(tf=values_dict['tf'], num_steps=60,a=0.03, b=30, peak_temp=30000, init_temp=values_dict['init_temp'], k_1=values_dict['k_1'], rho=values_dict['rho'], c=values_dict['c'], Fe_length=convert_geometry(geometry_dict[runID]['face1']) , MgO_length=convert_geometry(values_dict['MgO_length']))
 
 #%%
-run_simple_fem(tf=30*10**-9, num_steps=60, a=0.03, b=30, peak_temp=30000, init_temp=2000, k_1=100, rho=12000, c=450, Fe_length=convert_geometry(1.07), MgO_length=2)
+data=run_simple_fem(tf=30*10**-9, num_steps=60, a=0.03, b=30, peak_temp=30000, init_temp=2000, k_1=100, rho=12000, c=450, Fe_length=convert_geometry(1.07*10**-6), MgO_length=2*10**-6)
+plt.plot(data[0],data[1])
+plt.show()
+# %%
+def test_store(run_IDs, num_steps, a, b, peak_temp):
+    
+    test1=run_simple_fem(tf=30*10**-9, num_steps=60, a=0.03, b=30, peak_temp=30000, init_temp=2000, k_1=100, rho=12000, c=450, Fe_length=convert_geometry(1.07*10**-6), MgO_length=2*10**-6)
+    
+    return test1
 # %%

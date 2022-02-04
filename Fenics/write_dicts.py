@@ -2,24 +2,24 @@ import json
 
 geometry_dict = {
     's88773': {
-        'face1':1.07,
-        'face2':2.22,
-        'face3':3.07
+        'face1':1.07*10**(-6),
+        'face2':2.22*10**(-6),
+        'face3':3.07*10**(-6)
     },
     's88776': {
-        'face1':1.07,
-        'face2':2.22,
-        'face3':3.07
+        'face1':1.07*10**(-6),
+        'face2':2.22*10**(-6),
+        'face3':3.07*10**(-6)
     },
     's88780': {
-        'face1':0.45,
-        'face2': 1.7,
-        'face3':2.8
+        'face1':0.45*10**(-6),
+        'face2': 1.7*10**(-6),
+        'face3':2.8*10**(-6)
     },
     's88783': {
-        'face1': 0.76,
-        'face2': 2.76,
-        'face3': 4.76
+        'face1': 0.76*10**(-6),
+        'face2': 2.76*10**(-6),
+        'face3': 4.76*10**(-6)
     }
 }
 
@@ -33,7 +33,7 @@ default_values = {
     'k_1' : 100,
     'rho' : 12000,
     'c' : 450,
-    'MgO_length':2 #window length in microns
+    'MgO_length':2*10**(-6) #window length in microns
     }
 
 geometry_json=json.dumps(geometry_dict)
