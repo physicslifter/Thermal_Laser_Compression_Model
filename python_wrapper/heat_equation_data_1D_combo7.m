@@ -7,6 +7,8 @@
 input_parameter_file="inputs/1d_combined_input_matrix.mat";
 load(input_parameter_file,'a','b');
 
+
+
 %***** Parameters *******
 k = @(~,state) b+a*state.u; %W/mK - 
 % (previous fit): 0.045*state.u + 3000./sqrt(abs(state.u)), (de koker fit):
