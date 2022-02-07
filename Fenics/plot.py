@@ -2,6 +2,7 @@ import matplotlib
 matplotlib.use('WebAgg')
 from matplotlib import pyplot as plt
 
+#Plotting model output
 def plot(dict):
     #Takes a dictionary type object as input (the type
     # output by our run_model function)
@@ -33,4 +34,7 @@ def plot(dict):
             plt.legend(loc="upper left")
             
     plt.show()
+    
+#Plotting model output with experimental data
+
     
