@@ -29,13 +29,13 @@ def main(run_IDs, num_steps, a, b, peak_temp, start_time):
         }
         results[runID]=solution
     
-    '''  
+    
     #save file to json for live plotting
     data_json=json.dumps(results)
     f=open('model_results.json', 'w')
     f.write(data_json)
     f.close()
-    '''
+    
     
     return results
 
