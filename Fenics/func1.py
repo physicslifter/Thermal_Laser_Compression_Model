@@ -12,7 +12,7 @@ def boundary ( x ):
     value = x[0] < DOLFIN_EPS
     return value
 
-def main(tf, num_steps, a, b, peak_temp, init_temp, k_1, rho, c, Fe_length, MgO_length):
+def main(tf, num_steps, a, b, peak_temp, init_temp, k_1, rho, c, Fe_length, MgO_length, start_time):
     # | T  - Final time
     # | num_steps - number of time steps
     # | dt - time step size
@@ -69,6 +69,8 @@ def main(tf, num_steps, a, b, peak_temp, init_temp, k_1, rho, c, Fe_length, MgO_
             
     del dt, meshpoints, my_mesh, V, u_D, bc, u_0, u_n, u, v, kappa,inc, loc, points, num_loops, t, F 
         
+    times=(np.asarray(times)+start_time).tolist() #+start_time
+    
     return times, time_line
 
 if __name__ == "__main__":

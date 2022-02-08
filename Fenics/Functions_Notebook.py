@@ -4,6 +4,7 @@ from matplotlib import pyplot as plt
 from fenics import *
 import numpy as np
 import json
+import sys
 
 '''
 File for getting a simple FEM running that is like a single FEM of our model in Matlab
@@ -165,3 +166,4 @@ def test_store(run_IDs, num_steps, a, b, peak_temp):
     
     return test1
 # %%
+if __name__=="__main__":
