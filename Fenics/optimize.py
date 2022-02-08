@@ -44,4 +44,4 @@ def optimizable_function(parameters):
 initial_parameters=[0.1, 60, 42000, 1.5*10**-8] #for minimize method
 bounds=((0.01,0.05),(5,100),(20000,30000),(1.5*10**-8,2.5*10**-8)) #for differential_evolution method
 #minimization_optimization=minimize(optimizable_function, initial_parameters, method='Nelder-Mead', options={'maxiter':100, 'disp':True})
-DE_optimization=differential_evolution(optimizable_function,((0.01,0.05),(5,100),(20000,30000),(1.5*10**-8,2.5*10**-8)), popsize=10, disp=True)
+DE_optimization=differential_evolution(optimizable_function,((0.01,0.05),(5,100),(20000,50000),(1.5*10**-8,2.5*10**-8)), popsize=10, disp=True)
