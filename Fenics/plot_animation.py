@@ -1,3 +1,6 @@
+import matplotlib
+matplotlib.use('WebAgg')
+from matplotlib import pyplot as plt
 import matplotlib.animation as animation
 from matplotlib import pyplot as plt
 from scipy import io
