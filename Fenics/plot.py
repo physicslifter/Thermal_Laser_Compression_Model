@@ -10,7 +10,7 @@ def plot(dict):
     keys=dict.keys()
     num_runs=len(keys)
     nrows=int((num_runs+num_runs%2)/2)
-    ncols=int((num_runs-num_runs%2)/2)
+    ncols=int((num_runs-num_runs%2)/2)+1
     if ncols==0:
         name=list(dict.keys())[0]
         faces=list(dict[name])
