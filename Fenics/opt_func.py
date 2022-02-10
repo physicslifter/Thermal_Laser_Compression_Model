@@ -20,7 +20,7 @@ def rewrite_global_params(num_steps, my_shots, optimization_name, bounds, popsiz
     f.write(global_json)
     f.close()
     
-def run_optimization(num_steps, my_shots, optimization_name, bounds, popsize):
+def run_optimization(num_steps:int, my_shots:list, optimization_name:str, bounds:tuple, popsize:int):
     rewrite_global_params(num_steps, my_shots, optimization_name, bounds, popsize) #rewrite params to global json
     import optimize
     optimize.run_optimization() #Run the optimization
