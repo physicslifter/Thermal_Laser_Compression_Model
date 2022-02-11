@@ -21,6 +21,9 @@ Base function for running the FEM
 ## gen.csv
 Optimization data in terms of generation
 
+## global_variables.json
+JSON file for global variables to be used throughout the optimization process
+
 ## geometry_dict.json
 json specifying the geometry of the finite element experiment
 
@@ -35,6 +38,9 @@ Output from the optimization
 
 ## optimize.py
 Script for running the optimization
+
+## opt_func.py
+Wrapped function for setting up and running the optimization
 
 ## plot.py
 Functions for plotting a single FEM run
