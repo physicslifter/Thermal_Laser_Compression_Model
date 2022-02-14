@@ -59,5 +59,8 @@ def pop_to_gen(pop_array):
 def eval_to_gen(input_file, num_params, popsize):
     pop=eval_to_pop_array(input_file, num_params, popsize)
     gen=pop_to_gen(pop)
+    f=open('gen.csv', 'w')
+    f.truncate()
+    f.close()
     np.savetxt('gen.csv', gen, delimiter= ",")
     
