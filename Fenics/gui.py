@@ -1,5 +1,5 @@
 import matplotlib
-#matplotlib.use('TkAgg')
+matplotlib.use('TkAgg')
 from matplotlib import pyplot as plt
 from tkinter import *
 from tkinter import ttk
@@ -9,9 +9,6 @@ import opt_func
 import numpy as np
 from threading import *
 import matplotlib.animation as animation
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg 
-from matplotlib.figure import Figure 
-from multiprocessing import Process
 
 #JSOn func
 def load_json(fname):
@@ -233,20 +230,6 @@ Entry(root, textvariable=peak_temp_bounds).grid(column=0, row=current_row+14)
 
 Label(root, text="=================================").grid(column=0, row=current_row+15) 
 
-run_opt=BooleanVar()
-run_opt.set(False)
-
-continueRun=False
-def stop_run():
-    import sys
-    #Get run_opt variable to see if we are trying to run the optimization
-    run_opt.set(False)
-    #check if thread is running
-    if t1.is_alive():
-        t1.terminate()
-        
-    messagebox.showwarning('TERMINATED','RUN TERMINATED: Data stored in' + global_vars['optimization_data_path']+'/'+run_name.get()+'/optimization_output.csv')
-
 def print_var():
     #Get Bounds
     s_a_bounds=a_bounds.get()
@@ -292,66 +275,75 @@ def print_var():
         messagebox.showinfo('Return','You will now return to the application screen')
     else:
         messagebox.showwarning('error', 'Something went wrong!')
- 
-#Check_Button=Button(root, text="Check Optimization Progress", command=)      
+        
+    count=0
+    while count<10000:
+        count=count+1
+       
 
-stop_threads=Event()
+run_opt=BooleanVar()
+run_opt.set(False)
+ 
+#Check_Button=Button(root, text="Check Optimization Progress", command=)
 
 def threading():
-    global t1
-    t1=Process(target=run_optimization)
+    t1=Thread(target=run_optimization)
     t1.start()
-
 
 def run_optimization():
     if run_opt.get()==True:
-        while run_opt.get()==True:
-            #Rewrite the global json to include the new root folder path
-            global_json_as_dict=opt_func.load_json('global_variables.json')
-            global_json_as_dict['optimization_data_path']=folder_path.get()
-            global_json=json.dumps(global_json_as_dict)
-            f=open('global_variables.json', 'w')
-            f.write(global_json)
-            f.close()
-            default_shots=['s88773','s88776', 's88780', 's86483']
-            shots_run=[]
-            for shot in default_shots:
-                if globals()[shot].get()==True:
-                    shots_run.append(shot)
-            for k in range(len(shots_run)):
-                if k==0:
-                    shots_run_string=shots_run[k]
-                else:
-                    shots_run_string=shots_run_string+','+shots_run[k]
-            s_a_bounds=a_bounds.get()
-            s_b_bounds=b_bounds.get()
-            s_start_time_bounds=start_time_bounds.get()
-            s_peak_temp_bounds=peak_temp_bounds.get()
-            a_min=float(s_a_bounds.split('(')[1].split(')')[0].split(',')[0].replace(" ",""))
-            a_max=float(s_a_bounds.split('(')[1].split(')')[0].split(',')[1].replace(" ",""))
-            b_min=float(s_b_bounds.split('(')[1].split(')')[0].split(',')[0].replace(" ",""))
-            b_max=float(s_b_bounds.split('(')[1].split(')')[0].split(',')[1].replace(" ",""))
-            start_time_min=float(s_start_time_bounds.split('(')[1].split(')')[0].split(',')[0].replace(" ",""))
-            start_time_max=float(s_start_time_bounds.split('(')[1].split(')')[0].split(',')[1].replace(" ",""))
-            peak_temp_min=float(s_peak_temp_bounds.split('(')[1].split(')')[0].split(',')[0].replace(" ",""))
-            peak_temp_max=float(s_peak_temp_bounds.split('(')[1].split(')')[0].split(',')[1].replace(" ",""))
-            my_bounds=((a_min, a_max),(b_min, b_max),(start_time_min, start_time_max),(peak_temp_min, peak_temp_max))
-            #Run optimization
-            Bounds=my_bounds
-            NumSteps=int(num_steps.get())
-            MyShots=shots_run
-            OptimizationName=run_name.get()
-            PopSize=int(popsize.get())
-            opt_func.run_optimization(NumSteps, MyShots, OptimizationName, Bounds, PopSize)
-            if run_opt.get()==False:
-                break
+        #Rewrite the global json to include the new root folder path
+        global_json_as_dict=opt_func.load_json('global_variables.json')
+        global_json_as_dict['optimization_data_path']=folder_path.get()
+
+        global_json=json.dumps(global_json_as_dict)
+        f=open('global_variables.json', 'w')
+        f.write(global_json)
+        f.close()
+
+        default_shots=['s88773','s88776', 's88780', 's86483']
+        shots_run=[]
+        for shot in default_shots:
+            if globals()[shot].get()==True:
+                shots_run.append(shot)
+
+        for k in range(len(shots_run)):
+            if k==0:
+                shots_run_string=shots_run[k]
+            else:
+                shots_run_string=shots_run_string+','+shots_run[k]
+
+        s_a_bounds=a_bounds.get()
+        s_b_bounds=b_bounds.get()
+        s_start_time_bounds=start_time_bounds.get()
+        s_peak_temp_bounds=peak_temp_bounds.get()
+        a_min=float(s_a_bounds.split('(')[1].split(')')[0].split(',')[0].replace(" ",""))
+        a_max=float(s_a_bounds.split('(')[1].split(')')[0].split(',')[1].replace(" ",""))
+        b_min=float(s_b_bounds.split('(')[1].split(')')[0].split(',')[0].replace(" ",""))
+        b_max=float(s_b_bounds.split('(')[1].split(')')[0].split(',')[1].replace(" ",""))
+        start_time_min=float(s_start_time_bounds.split('(')[1].split(')')[0].split(',')[0].replace(" ",""))
+        start_time_max=float(s_start_time_bounds.split('(')[1].split(')')[0].split(',')[1].replace(" ",""))
+        peak_temp_min=float(s_peak_temp_bounds.split('(')[1].split(')')[0].split(',')[0].replace(" ",""))
+        peak_temp_max=float(s_peak_temp_bounds.split('(')[1].split(')')[0].split(',')[1].replace(" ",""))
+        my_bounds=((a_min, a_max),(b_min, b_max),(start_time_min, start_time_max),(peak_temp_min, peak_temp_max))
+
+        #Run optimization
+        Bounds=my_bounds
+        NumSteps=int(num_steps.get())
+        MyShots=shots_run
+        OptimizationName=run_name.get()
+        PopSize=int(popsize.get())
+        opt_func.run_optimization(NumSteps, MyShots, OptimizationName, Bounds, PopSize)
+        
     elif run_opt.get()==False:
         messagebox.showinfo('Not running', 'optimization not running. Please set up new parameters & run')
+        
     else:
         messagebox.showwarning()
         
 def combined():
-    print_var()    
+    print_var()
+    
     threading()
         
 def visualize_plots():
@@ -359,20 +351,19 @@ def visualize_plots():
     fp=global_vars['optimization_data_path']+'/'+global_vars['optimization_name']+'/'+'optimization_output.csv'
     newWindow=Tk()
     newWindow.title(global_vars['optimization_name'])
-    newWindow.geometry("650x500")
+    newWindow.geometry("800x800")
     
-    lab=Label(newWindow, text="Live Plotting", bg="White").pack()
+    frm=ttk.Frame(root, padding=10)
+    frm.grid()
+    
+    parameters=('a', 'b', 'peak_temp', 'start_time')
 
-    fig=Figure()
+    fig=plt.figure()
     ax1=fig.add_subplot(2,3,1) #sls
     ax2=fig.add_subplot(2,3,2) #peak_temp
     ax3=fig.add_subplot(2,3,3) #a
     ax4=fig.add_subplot(2,3,4) #b
     ax5=fig.add_subplot(2,3,5) #start_time
-    
-    graph=FigureCanvasTkAgg(fig, master=newWindow)
-    
-    graph.get_tk_widget().pack(side="top",fill='both',expand=True)
     
     def animate(i):
         
@@ -421,14 +412,12 @@ def visualize_plots():
         ax4.plot(itar,bar)
         ax5.plot(itar,tsar)
         
-    ani=animation.FuncAnimation(fig,animate, interval=1000)
+    ani=animation.FuncAnimation(fig,animate, interval=20000)
     
     newWindow.mainloop()
         
 Run_Button=Button(root, text="Run Optimization", command=combined).grid(column=0, row=current_row+16) 
 Visualization_Button=Button(root, text="Visualize Optimization", command=visualize_plots).grid(column=0, row=current_row+17)
-Stop_Button=Button(root, text="Terminate Optimization", command=stop_run).grid(column=0, row=current_row+18)
-
 
 root.config(menu=menubar)
 root.mainloop()
