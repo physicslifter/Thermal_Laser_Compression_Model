@@ -1,0 +1,6 @@
+Forgot to update progress.txt???
+
+To do:
+  - put all functions/files in one place
+  - rewrite code to be more pythonic
+    - write classes (I have no classes right now)
