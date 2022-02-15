@@ -1175,3 +1175,11 @@ October 14, 2021
 - okay what I'm going to try to do now is optimize the visualization capacity of the application
 - now trying adding a second plot to the live_plot script in the testingGUI folder
 - 
+
+=========================================
+February 15, 2022
+=========================================
+Goals: 
+    - get GUI to work as a cross-platform.exe
+    - generalize optimization function to allow user to select which faces to optimize
+    - re-organize fenics files to be in terms of classes (ie more "pythonic")
