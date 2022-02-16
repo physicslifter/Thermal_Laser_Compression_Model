@@ -1,6 +1,9 @@
 Forgot to update progress.txt???
 
 To do:
+  - update README file in Fenics subfolder
+  - create Default formats for the excel files
+  - Define function/script for reading in all files that are in the data folder (using default formats) & putting them in an organized JSON file like with the other data
   - put all functions/files in one place
   - rewrite code to be more pythonic
     - write classes (I have no classes right now)
