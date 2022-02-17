@@ -19,3 +19,4 @@ Okay, Now I've narrowed it down to:
     have to fix this function, then go from here
     
 
+- Next to-do is to fix the function so that it actually accounts for start time. Right now, the FEM model is starting back @ 0
