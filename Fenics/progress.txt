@@ -7,3 +7,9 @@ To do:
   - put all functions/files in one place
   - rewrite code to be more pythonic
     - write classes (I have no classes right now)
+
+========================================
+February 17, 2022
+========================================
+Have to figure out what is going wrong with the function and where. For starters, I think I have mixed up start_time and peak_temp
+
