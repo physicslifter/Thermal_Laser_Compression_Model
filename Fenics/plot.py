@@ -1,6 +1,13 @@
 import matplotlib
 matplotlib.use('WebAgg')
 from matplotlib import pyplot as plt
+import json
+
+def load_json(fname):
+    with open(fname) as json_file:
+        data=json.load(json_file)
+        
+    return data
 
 #Plotting model output
 def plot(dict):
@@ -35,6 +42,25 @@ def plot(dict):
             
     plt.show()
     
+def plot_json(json="model_results.json"):
+    plot(load_json(json))
+    
 #Plotting model output with experimental data
+def comparePlots():
+    model_output=load_json('model_results.json')
+    real_data=load_json('data_dict.json')
+    plt.clf()
+    keys=model_output.keys()
+    num_runs=len(keys)
+    nrows=int((num_runs+num_runs%2)/2)
+    ncols=int((num_runs-num_runs%2)/2)+1
+
+    name=list(model_output.keys())[0]
+    faces=list(model_output[name])
+    for face in faces:
+        plt.scatter(real_data[name][face][0], real_data[name][face][1])
+        plt.plot(model_output[name][face][0], model_output[name][face][1], label=face)
+        
+    plt.show()
 
     
