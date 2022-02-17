@@ -13,3 +13,9 @@ February 17, 2022
 ========================================
 Have to figure out what is going wrong with the function and where. For starters, I think I have mixed up start_time and peak_temp
 
+Okay, Now I've narrowed it down to:
+  in opt_func.py the function only runs because I do "import optimize"
+    the code executes upon being imported
+    have to fix this function, then go from here
+    
+
