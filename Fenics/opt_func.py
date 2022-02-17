@@ -51,7 +51,7 @@ def optimizable_function(parameters):
     with open(output_file, 'a+') as file_object:
         num_iterations=sum(1 for line in open(output_file))-1
         file_object.write('\n')#newline
-        file_object.write(str(num_iterations)+','+str(np.sum(chi_2))+','+str(a)+','+str(b)+','+str(peak_temp)+','+str(start_time))
+        file_object.write(str(num_iterations)+','+str(np.sum(chi_2))+','+str(a)+','+str(b)+','+str(start_time)+','+str(peak_temp))
     
     #return our fitness function values
     return np.sum(chi_2)
