@@ -52,27 +52,27 @@ stop2_83= 732
 stop3_83= 800
 
 dict_73={
-    'face1':[list((s88773['Time'][start1_73:stop1_73].to_numpy()*10**-8).astype(float)), list((s88773['step1_corrected'][start1_73:stop1_73].to_numpy()).astype(float))],
-    'face2':[list((s88773['Time'][start2_73:stop2_73].to_numpy()*10**-8).astype(float)), list((s88773['step2_corrected'][start2_73:stop2_73].to_numpy()).astype(float))],
-    'face3':[list((s88773['Time'][start3_73:stop3_73].to_numpy()*10**-8).astype(float)), list((s88773['step3_corrected'][start3_73:stop3_73].to_numpy()).astype(float))]
+    'face1':[list((s88773['Time'][start1_73:stop1_73].to_numpy()*10**-9).astype(float)), list((s88773['step1_corrected'][start1_73:stop1_73].to_numpy()).astype(float))],
+    'face2':[list((s88773['Time'][start2_73:stop2_73].to_numpy()*10**-9).astype(float)), list((s88773['step2_corrected'][start2_73:stop2_73].to_numpy()).astype(float))],
+    'face3':[list((s88773['Time'][start3_73:stop3_73].to_numpy()*10**-9).astype(float)), list((s88773['step3_corrected'][start3_73:stop3_73].to_numpy()).astype(float))]
 }
 
 dict_76={
-    'face1':[list((s88776['time'][start1_76:stop1_76].to_numpy()*10**-8).astype(float)), list((s88776['step1_corrected'][start1_76:stop1_76].to_numpy()).astype(float))],
-    'face2':[list((s88776['time'][start2_76:stop2_76].to_numpy()*10**-8).astype(float)), list((s88776['step2_corrected'][start2_76:stop2_76].to_numpy()).astype(float))],
-    'face3':[list((s88776['time'][start3_76:stop3_76].to_numpy()*10**-8).astype(float)), list((s88776['step3_corrected'][start3_76:stop3_76].to_numpy()).astype(float))]
+    'face1':[list((s88776['time'][start1_76:stop1_76].to_numpy()*10**-9).astype(float)), list((s88776['step1_corrected'][start1_76:stop1_76].to_numpy()).astype(float))],
+    'face2':[list((s88776['time'][start2_76:stop2_76].to_numpy()*10**-9).astype(float)), list((s88776['step2_corrected'][start2_76:stop2_76].to_numpy()).astype(float))],
+    'face3':[list((s88776['time'][start3_76:stop3_76].to_numpy()*10**-9).astype(float)), list((s88776['step3_corrected'][start3_76:stop3_76].to_numpy()).astype(float))]
 }
 
 dict_80={
-    'face1':[list((s88780['time'][start1_80:stop1_80].to_numpy()*10**-8).astype(float)), list((s88780['step1_corrected'][start1_80:stop1_80].to_numpy()).astype(float))],
-    'face2':[list((s88780['time'][start2_80:stop2_80].to_numpy()*10**-8).astype(float)), list((s88780['step2_corrected'][start2_80:stop2_80].to_numpy()).astype(float))],
-    'face3':[list((s88780['time'][start3_80:stop3_80].to_numpy()*10**-8).astype(float)), list((s88780['step3_corrected'][start3_80:stop3_80].to_numpy()).astype(float))]
+    'face1':[list((s88780['time'][start1_80:stop1_80].to_numpy()*10**-9).astype(float)), list((s88780['step1_corrected'][start1_80:stop1_80].to_numpy()).astype(float))],
+    'face2':[list((s88780['time'][start2_80:stop2_80].to_numpy()*10**-9).astype(float)), list((s88780['step2_corrected'][start2_80:stop2_80].to_numpy()).astype(float))],
+    'face3':[list((s88780['time'][start3_80:stop3_80].to_numpy()*10**-9).astype(float)), list((s88780['step3_corrected'][start3_80:stop3_80].to_numpy()).astype(float))]
 }
 
 dict_83={
-    'face1':[list((s86483['time'][start1_83:stop1_83].to_numpy()*10**-8).astype(float)), list((s86483['step1_corrected'][start1_83:stop1_83].to_numpy()).astype(float))],
-    'face2':[list((s86483['time'][start2_83:stop2_83].to_numpy()*10**-8).astype(float)), list((s86483['step2_corrected'][start2_83:stop2_83].to_numpy()).astype(float))],
-    'face3':[list((s86483['time'][start3_83:stop3_83].to_numpy()*10**-8).astype(float)), list((s86483['step3_corrected'][start3_83:stop3_83].to_numpy()).astype(float))]
+    'face1':[list((s86483['time'][start1_83:stop1_83].to_numpy()*10**-9).astype(float)), list((s86483['step1_corrected'][start1_83:stop1_83].to_numpy()).astype(float))],
+    'face2':[list((s86483['time'][start2_83:stop2_83].to_numpy()*10**-9).astype(float)), list((s86483['step2_corrected'][start2_83:stop2_83].to_numpy()).astype(float))],
+    'face3':[list((s86483['time'][start3_83:stop3_83].to_numpy()*10**-9).astype(float)), list((s86483['step3_corrected'][start3_83:stop3_83].to_numpy()).astype(float))]
 }
 
 

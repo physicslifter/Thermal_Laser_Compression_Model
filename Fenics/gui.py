@@ -390,13 +390,26 @@ def combined():
     threading()
     
 def view_current_fit():
+    currentPlotWindow=Tk()
+    currentPlotWindow.title(global_vars['optimization_name'])
+    currentPlotWindow.geometry("650x500")
+    
+    fig=Figure()
+    ax=fig.add_subplot(1,1,1)
+    
+    graph=FigureCanvasTkAgg(fig, master=currentPlotWindow)
+    
+    graph.get_tk_widget().pack(side="top", fill="both", expand=True)
+    
     model_output=load_json('model_results.json')
-    num_runs=len(model_output.keys())
-    for key in model_output.keys():
-        model_data=model_output[key]
-        for face in model_data.keys():
-            pass
-        
+    real_data=load_json('data_dict.json')
+    key=list(model_output.keys())[0]
+    model_data=model_output[key]
+    for face in model_data.keys():
+        ax.scatter(real_data[key][face][0], real_data[key][face][1])
+        ax.plot(model_data[key][face][0],model_data[key][face][1])
+    ax.show()
+    
 def visualize_plots():
     global_vars=load_json('global_variables.json')
     fp=global_vars['optimization_data_path']+'/'+global_vars['optimization_name']+'/'+'optimization_output.csv'
