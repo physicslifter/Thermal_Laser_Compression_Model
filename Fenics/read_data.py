@@ -51,6 +51,37 @@ stop1_83= 412
 stop2_83= 732
 stop3_83= 800
 
+#===========================
+#Constants for SOP -> Temperature conversion
+#===========================
+xw=1
+aeta=25.5
+a0=481000
+t0a=1.909
+a0_76=481000
+t0a_76=1.909
+reference=0.55
+#===========================
+
+#===========================
+#Pull SOP data
+#===========================
+sop_73_1=[(s88773['Time'][start1_73:stop1_73].to_numpy()*10**-9).astype(float), s88773['step1_corrected'][start1_73:stop1_73].to_numpy().astype(float)]
+sop_73_2=[(s88773['Time'][start2_73:stop2_73].to_numpy()*10**-9).astype(float), s88773['step2_corrected'][start2_73:stop2_73].to_numpy().astype(float)]
+sop_73_3=[(s88773['Time'][start3_73:stop3_73].to_numpy()*10**-9).astype(float), s88773['step3_corrected'][start3_73:stop3_73].to_numpy().astype(float)]
+sop_76_1=[(s88776['time'][start1_76:stop1_76].to_numpy()*10**-9).astype(float), s88776['step1_corrected'][start1_76:stop1_76].to_numpy().astype(float)]
+sop_76_2=[(s88776['time'][start2_76:stop2_76].to_numpy()*10**-9).astype(float), s88776['step2_corrected'][start2_76:stop2_76].to_numpy().astype(float)]
+sop_76_3=[(s88776['time'][start3_76:stop3_76].to_numpy()*10**-9).astype(float), s88776['step3_corrected'][start3_76:stop3_76].to_numpy().astype(float)]
+sop_80_1=[(s88780['time'][start1_80:stop1_80].to_numpy()*10**-9).astype(float), s88780['step1_corrected'][start1_80:stop1_80].to_numpy().astype(float)]
+sop_80_2=[(s88780['time'][start2_80:stop2_80].to_numpy()*10**-9).astype(float), s88780['step2_corrected'][start2_80:stop2_80].to_numpy().astype(float)]
+sop_80_3=[(s88780['time'][start3_80:stop3_80].to_numpy()*10**-9).astype(float), s88780['step3_corrected'][start3_80:stop3_80].to_numpy().astype(float)]
+sop_83_1=[(s86483['time'][start1_83:stop1_83].to_numpy()*10**-9).astype(float), s86483['step1_corrected'][start1_83:stop1_83].to_numpy().astype(float)]
+sop_83_2=[(s86483['time'][start2_83:stop2_83].to_numpy()*10**-9).astype(float), s86483['step2_corrected'][start2_83:stop2_83].to_numpy().astype(float)]
+sop_83_3=[(s86483['time'][start3_83:stop3_83].to_numpy()*10**-9).astype(float), s86483['step3_corrected'][start3_83:stop3_83].to_numpy().astype(float)]
+print(type(sop_73_1[0]), type(aeta))
+print(np.real(11605*sop_73_1[0])/(np.log(1+((1-reference)*a0/(aeta*sop_73_1[0])))))
+#===========================
+
 dict_73={
     'face1':[list((s88773['Time'][start1_73:stop1_73].to_numpy()*10**-9).astype(float)), list((s88773['step1_corrected'][start1_73:stop1_73].to_numpy()).astype(float))],
     'face2':[list((s88773['Time'][start2_73:stop2_73].to_numpy()*10**-9).astype(float)), list((s88773['step2_corrected'][start2_73:stop2_73].to_numpy()).astype(float))],

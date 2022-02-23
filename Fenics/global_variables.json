@@ -1,1 +1,1 @@
-{"optimization_data_path": "../../winhome/Desktop/optimization_data", "num_steps": 60, "my_shots": ["s88776"], "optimization_name": "s88780run1", "bounds": [[0.01, 0.05], [10.0, 100.0], [1.75e-08, 2.25e-08], [25000.0, 60000.0]], "popsize": 5}
+{"optimization_data_path": "../../winhome/Desktop/optimization_data", "num_steps": 60, "my_shots": ["s88776"], "optimization_name": "0224Test3", "bounds": [[0.0, 0.05], [0.0, 100.0], [1.75e-08, 2.25e-08], [25000.0, 60000.0]], "popsize": 3}

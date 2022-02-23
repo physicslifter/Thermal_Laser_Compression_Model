@@ -61,6 +61,27 @@ def comparePlots():
         plt.scatter(real_data[name][face][0], real_data[name][face][1])
         plt.plot(model_output[name][face][0], model_output[name][face][1], label=face)
         
+    plt.xlim(1.5*10**-8,4*10**-8)
+    plt.ylim(0, 10000)
+    plt.show()
+    
+def comparePlotsByName(runID):
+    model_output=load_json('model_results.json')
+    real_data=load_json('data_dict.json')
+    plt.clf()
+    keys=model_output.keys()
+    num_runs=len(keys)
+    nrows=int((num_runs+num_runs%2)/2)
+    ncols=int((num_runs-num_runs%2)/2)+1
+
+    name=runID
+    faces=list(model_output[name])
+    for face in faces:
+        plt.scatter(real_data[name][face][0], real_data[name][face][1])
+        plt.plot(model_output[name][face][0], model_output[name][face][1], label=face)
+        
+    plt.xlim(1.5*10**-8,4*10**-8)
+    plt.ylim(0, 10000)
     plt.show()
 
     
