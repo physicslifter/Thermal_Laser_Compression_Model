@@ -36,12 +36,12 @@ stop2_76= 418
 stop3_76= 468
 
 #s88780
-start1_80=342
-start2_80=582
-start3_80=377
-stop1_80= 412
-stop2_80= 732
-stop3_80= 800
+start1_80=136
+start2_80=229
+start3_80=291
+stop1_80= 205
+stop2_80= 365
+stop3_80= 502
 
 #s86483
 start1_83=342
@@ -93,9 +93,9 @@ temp_76_1=np.real(11605*t0a_76)/(np.log(1+((1-reference)*a0_76/(aeta*sop_76_1[1]
 temp_76_2=np.real(11605*t0a_76)/(np.log(1+((1-reference)*a0_76/(aeta*sop_76_2[1]))))
 temp_76_3=np.real(11605*t0a_76)/(np.log(1+((1-reference)*a0_76/(aeta*sop_76_3[1]))))
 
-temp_80_1=np.real(11605*t0a)/(np.log(1+((1-reference)*a0/(aeta*sop_80_1[1]))))
-temp_80_2=np.real(11605*t0a)/(np.log(1+((1-reference)*a0/(aeta*sop_80_2[1]))))
-temp_80_3=np.real(11605*t0a)/(np.log(1+((1-reference)*a0/(aeta*sop_80_3[1]))))
+temp_80_1=np.real(11605*t0a)/(np.log(1+((1-reference)*a0/(aeta*np.abs(sop_80_1[1])))))
+temp_80_2=np.real(11605*t0a)/(np.log(1+((1-reference)*a0/(aeta*np.abs(sop_80_2[1])))))
+temp_80_3=np.real(11605*t0a)/(np.log(1+((1-reference)*a0/(aeta*np.abs(sop_80_3[1])))))
 
 temp_83_1=np.real(11605*t0a)/(np.log(1+((1-reference)*a0/(aeta*sop_83_1[1]))))
 temp_83_2=np.real(11605*t0a)/(np.log(1+((1-reference)*a0/(aeta*sop_83_2[1]))))

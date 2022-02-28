@@ -83,5 +83,14 @@ def comparePlotsByName(runID):
     plt.xlim(1.5*10**-8,4*10**-8)
     plt.ylim(0, 30000)
     plt.show()
-
     
+def plot_real_data(runID):
+    plt.clf()
+    my_data=load_json('data_dict.json')
+    faces=list(my_data[runID])
+    for face in faces:
+        plt.scatter(my_data[runID][face][0],my_data[runID][face][1])
+
+    plt.xlim(1.5*10**-8,4*10**-8)
+    plt.ylim(0, 30000)
+    plt.show()   

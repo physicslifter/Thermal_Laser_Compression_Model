@@ -20,3 +20,16 @@ Okay, Now I've narrowed it down to:
     
 
 - Next to-do is to fix the function so that it actually accounts for start time. Right now, the FEM model is starting back @ 0
+
+=======================================
+February 28, 2022
+======================================
+Goal(s) for today?
+Let's open up the GUI and see what has to be worked one
+- Get convergence on all runs
+- fix reading in the data for s88780
+- check the data for each run to make sure it is good
+- rewrite current optimizer so that multiple instances can be run in parallel
+- fix "view current fits" button so that it actually plots the current fits
+- figure out how to automate the plotting process
+
