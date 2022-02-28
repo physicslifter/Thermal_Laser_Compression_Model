@@ -78,10 +78,76 @@ sop_80_3=[(s88780['time'][start3_80:stop3_80].to_numpy()*10**-9).astype(float), 
 sop_83_1=[(s86483['time'][start1_83:stop1_83].to_numpy()*10**-9).astype(float), s86483['step1_corrected'][start1_83:stop1_83].to_numpy().astype(float)]
 sop_83_2=[(s86483['time'][start2_83:stop2_83].to_numpy()*10**-9).astype(float), s86483['step2_corrected'][start2_83:stop2_83].to_numpy().astype(float)]
 sop_83_3=[(s86483['time'][start3_83:stop3_83].to_numpy()*10**-9).astype(float), s86483['step3_corrected'][start3_83:stop3_83].to_numpy().astype(float)]
-print(type(sop_73_1[0]), type(aeta))
+#==========================
+
+#=================================================================
+print(type(sop_73_1[0]), type(aeta), sop_83_3[1])
+
 print(np.real(11605*sop_73_1[0])/(np.log(1+((1-reference)*a0/(aeta*sop_73_1[0])))))
+
+temp_73_1=np.real(11605*t0a)/(np.log(1+((1-reference)*a0/(aeta*sop_73_1[1]))))
+temp_73_2=np.real(11605*t0a)/(np.log(1+((1-reference)*a0/(aeta*sop_73_2[1]))))
+temp_73_3=np.real(11605*t0a)/(np.log(1+((1-reference)*a0/(aeta*sop_73_3[1]))))
+
+temp_76_1=np.real(11605*t0a_76)/(np.log(1+((1-reference)*a0_76/(aeta*sop_76_1[1]))))
+temp_76_2=np.real(11605*t0a_76)/(np.log(1+((1-reference)*a0_76/(aeta*sop_76_2[1]))))
+temp_76_3=np.real(11605*t0a_76)/(np.log(1+((1-reference)*a0_76/(aeta*sop_76_3[1]))))
+
+temp_80_1=np.real(11605*t0a)/(np.log(1+((1-reference)*a0/(aeta*sop_80_1[1]))))
+temp_80_2=np.real(11605*t0a)/(np.log(1+((1-reference)*a0/(aeta*sop_80_2[1]))))
+temp_80_3=np.real(11605*t0a)/(np.log(1+((1-reference)*a0/(aeta*sop_80_3[1]))))
+
+temp_83_1=np.real(11605*t0a)/(np.log(1+((1-reference)*a0/(aeta*sop_83_1[1]))))
+temp_83_2=np.real(11605*t0a)/(np.log(1+((1-reference)*a0/(aeta*sop_83_2[1]))))
+temp_83_3=np.real(11605*t0a)/(np.log(1+((1-reference)*a0/(aeta*np.abs(sop_83_3[1])))))
+#=================================================================
+
+#=========================
+#Convert to Temp data
+#========================
+
+
 #===========================
 
+dict_73={
+    'face1':[list((s88773['Time'][start1_73:stop1_73].to_numpy()*10**-9).astype(float)), list(temp_73_1.astype(float))],
+    'face2':[list((s88773['Time'][start2_73:stop2_73].to_numpy()*10**-9).astype(float)), list(temp_73_2.astype(float))],
+    'face3':[list((s88773['Time'][start3_73:stop3_73].to_numpy()*10**-9).astype(float)), list(temp_73_3.astype(float))]
+}
+
+dict_76={
+    'face1':[list((s88776['time'][start1_76:stop1_76].to_numpy()*10**-9).astype(float)), list(temp_76_1.astype(float))],
+    'face2':[list((s88776['time'][start2_76:stop2_76].to_numpy()*10**-9).astype(float)), list(temp_76_2.astype(float))],
+    'face3':[list((s88776['time'][start3_76:stop3_76].to_numpy()*10**-9).astype(float)), list(temp_76_3.astype(float))]
+}
+
+dict_80={
+    'face1':[list((s88780['time'][start1_80:stop1_80].to_numpy()*10**-9).astype(float)), list(temp_80_1.astype(float))],
+    'face2':[list((s88780['time'][start2_80:stop2_80].to_numpy()*10**-9).astype(float)), list(temp_80_2.astype(float))],
+    'face3':[list((s88780['time'][start3_80:stop3_80].to_numpy()*10**-9).astype(float)), list(temp_80_3.astype(float))]
+}
+
+dict_83={
+    'face1':[list((s86483['time'][start1_83:stop1_83].to_numpy()*10**-9).astype(float)), list(temp_83_1.astype(float))],
+    'face2':[list((s86483['time'][start2_83:stop2_83].to_numpy()*10**-9).astype(float)), list(temp_83_2.astype(float))],
+    'face3':[list((s86483['time'][start3_83:stop3_83].to_numpy()*10**-9).astype(float)), list(temp_83_3.astype(float))]
+}
+
+
+data={}
+data['s88773']=dict_73
+data['s88776']=dict_76
+data['s88780']=dict_80
+data['s86483']=dict_83
+
+#save our new data dictionary to data_dit.json
+data_json=json.dumps(data)
+f=open('data_dict.json', 'w')
+f.write(data_json)
+f.close()
+
+
+'''
 dict_73={
     'face1':[list((s88773['Time'][start1_73:stop1_73].to_numpy()*10**-9).astype(float)), list((s88773['step1_corrected'][start1_73:stop1_73].to_numpy()).astype(float))],
     'face2':[list((s88773['Time'][start2_73:stop2_73].to_numpy()*10**-9).astype(float)), list((s88773['step2_corrected'][start2_73:stop2_73].to_numpy()).astype(float))],
@@ -105,16 +171,4 @@ dict_83={
     'face2':[list((s86483['time'][start2_83:stop2_83].to_numpy()*10**-9).astype(float)), list((s86483['step2_corrected'][start2_83:stop2_83].to_numpy()).astype(float))],
     'face3':[list((s86483['time'][start3_83:stop3_83].to_numpy()*10**-9).astype(float)), list((s86483['step3_corrected'][start3_83:stop3_83].to_numpy()).astype(float))]
 }
-
-
-data={}
-data['s88773']=dict_73
-data['s88776']=dict_76
-data['s88780']=dict_80
-data['s86483']=dict_83
-
-#save our new data dictionary to data_dit.json
-data_json=json.dumps(data)
-f=open('data_dict.json', 'w')
-f.write(data_json)
-f.close()
+'''

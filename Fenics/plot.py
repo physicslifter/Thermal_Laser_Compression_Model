@@ -62,7 +62,7 @@ def comparePlots():
         plt.plot(model_output[name][face][0], model_output[name][face][1], label=face)
         
     plt.xlim(1.5*10**-8,4*10**-8)
-    plt.ylim(0, 10000)
+    plt.ylim(0, 30000)
     plt.show()
     
 def comparePlotsByName(runID):
@@ -81,7 +81,7 @@ def comparePlotsByName(runID):
         plt.plot(model_output[name][face][0], model_output[name][face][1], label=face)
         
     plt.xlim(1.5*10**-8,4*10**-8)
-    plt.ylim(0, 10000)
+    plt.ylim(0, 30000)
     plt.show()
 
     
