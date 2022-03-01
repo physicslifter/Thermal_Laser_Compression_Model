@@ -26,7 +26,7 @@ geometry_dict = {
 default_values = {
     'tf' : 30*10**-9,
     'num_steps' : 60,     
-    'init_temp' : 2000,
+    'init_temp' : 0,
     'peak_temp' : 30000,
     'a' : 0.03,
     'b' : 30,

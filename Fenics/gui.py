@@ -12,6 +12,9 @@ import matplotlib.animation as animation
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg 
 from matplotlib.figure import Figure 
 from multiprocessing import Process
+from plot import plot
+#from plot2 import ComparitivePlot
+import math
 
 #JSOn func
 def load_json(fname):
@@ -19,6 +22,39 @@ def load_json(fname):
         data=json.load(json_file)
         
     return data
+
+#Plot Function
+def plot(dict):
+    #Takes a dictionary type object as input (the type
+    # output by our run_model function)
+    plt.clf()
+    keys=dict.keys()
+    num_runs=len(keys)
+    nrows=int((num_runs+num_runs%2)/2)
+    ncols=int((num_runs-num_runs%2)/2)+1
+    if ncols==0:
+        name=list(dict.keys())[0]
+        faces=list(dict[name])
+        for face in faces:
+            plt.plot(dict[name][face][0],dict[name][face][1], label=face)
+        plt.legend(loc='upper left')
+    
+    else:
+        fig, ax = plt.subplots(nrows,ncols)
+
+        for x in range(num_runs):
+            run_ID=str(list(keys)[x])
+            c=x%ncols
+            r=int((x-c)/2)
+            faces=list(dict[run_ID])
+            for face in faces:
+                print(r,c)
+                ax[r,c].plot(dict[run_ID][face][0],dict[run_ID][face][1],label=face)
+                ax[r,c].set_title(run_ID)
+
+            plt.legend(loc="upper left")
+            
+    plt.show()
 
 def donothing():
    filewin = Toplevel(root)
@@ -354,7 +390,77 @@ def run_optimization():
 def combined():
     print_var()    
     threading()
-        
+    
+def view_current_fit():
+    currentPlotWindow=Tk()
+    currentPlotWindow.title(global_vars['optimization_name'])
+    currentPlotWindow.geometry("800x800")
+    run_IDs=global_vars['my_shots']
+    num_runs=len(run_IDs)
+    ncols=int(math.ceil(num_runs**0.5))
+    nrows=int(math.ceil(num_runs/ncols))
+    fig, ax = plt.subplots(nrows, ncols)
+    
+    graph=FigureCanvasTkAgg(fig, master=currentPlotWindow)
+    graph.get_tk_widget().pack(side="top", fill="both", expand=True)
+    
+    def animate(i,nrows=nrows, run_IDs=run_IDs):
+            if nrows>1:
+                model_output=load_json('model_results.json') #Get current model output
+                run_output=load_json('data_dict.json')
+                row_count=0
+                col_count=0
+                fig_count=0
+                for run in run_IDs:
+                    ax[row_count, col_count].clear() #clear data from previous plot
+                    for face in list(model_output[run].keys()):
+                        #print(run, face)
+                        ax[row_count,col_count].plot(run_output[run][face][0], run_output[run][face][1])
+                        ax[row_count,col_count].plot(model_output[run][face][0], model_output[run][face][1])
+                        ax[row_count,col_count].set_title(run)
+                    fig_count=fig_count+1
+                    col_count=fig_count%nrows
+                    row_count=int(fig_count/nrows)
+            else:
+                model_output=load_json('model_results.json') #Get current model output
+                run_output=load_json('data_dict.json')
+                fig_count=0
+                for run in run_IDs:
+                    ax[fig_count].clear() #clear data from previous plot
+                    for face in list(run_output[run].keys()):
+                        #print(run, face)
+                        ax[fig_count].plot(run_output[run][face][0], run_output[run][face][1])
+                        ax[fig_count].plot(model_output[run][face][0], model_output[run][face][1])
+                        ax[fig_count].set_title(run)
+                    fig_count=fig_count+1
+    
+    ani=animation.FuncAnimation(fig, animate, interval=5000)
+    plt.show()
+    
+    currentPlotWindow.mainloop()
+    
+    
+    
+    '''    currentPlotWindow=Tk()
+        currentPlotWindow.title(global_vars['optimization_name'])
+        currentPlotWindow.geometry("650x500")
+
+        fig=Figure()
+        ax=fig.add_subplot(1,1,1)
+
+        graph=FigureCanvasTkAgg(fig, master=currentPlotWindow)
+
+        graph.get_tk_widget().pack(side="top", fill="both", expand=True)
+
+        model_output=load_json('model_results.json')
+        real_data=load_json('data_dict.json')
+        key=list(model_output.keys())[0]
+        model_data=model_output[key]
+        for face in model_data.keys():
+            ax.scatter(real_data[key][face][0], real_data[key][face][1])
+            ax.plot(model_data[key][face][0],model_data[key][face][1])
+        ax.show()'''
+    
 def visualize_plots():
     global_vars=load_json('global_variables.json')
     fp=global_vars['optimization_data_path']+'/'+global_vars['optimization_name']+'/'+'optimization_output.csv'
@@ -393,7 +499,7 @@ def visualize_plots():
 
         for eachLine in dataArray:
             if len(eachLine)>1:
-                it, sls, a, b, pt, ts = eachLine.split(',')
+                it, sls, a, b, ts, pt = eachLine.split(',')
                 itar.append(float(it))
                 slsar.append(float(sls))
                 ptar.append(float(pt))
@@ -423,13 +529,13 @@ def visualize_plots():
         ax5.plot(itar,tsar)
         
     ani=animation.FuncAnimation(fig,animate, interval=1000)
+    Plot_Current_Run_Button=Button(newWindow, text="View Current Fit", command=view_current_fit).pack()
     
     newWindow.mainloop()
         
 Run_Button=Button(root, text="Run Optimization", command=combined).grid(column=0, row=current_row+16) 
 Visualization_Button=Button(root, text="Visualize Optimization", command=visualize_plots).grid(column=0, row=current_row+17)
 Stop_Button=Button(root, text="Terminate Optimization", command=stop_run).grid(column=0, row=current_row+18)
-
 
 root.config(menu=menubar)
 root.mainloop()
