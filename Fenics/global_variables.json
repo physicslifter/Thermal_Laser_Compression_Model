@@ -1,1 +1,1 @@
-{"optimization_data_path": "../../winhome/Desktop/optimization_data", "num_steps": 60, "my_shots": ["s88773"], "optimization_name": "20220228_test3_live-plotting", "bounds": [[0.01, 0.05], [10.0, 100.0], [1.75e-08, 2.25e-08], [25000.0, 60000.0]], "popsize": 5}
+{"optimization_data_path": "../../winhome/Desktop/optimization_data/20220308", "num_steps": 60, "my_shots": ["s88780"], "optimization_name": "s88780_individul_run", "bounds": [[0.01, 0.05], [10.0, 100.0], [1.75e-08, 2.25e-08], [30000.0, 60000.0]], "popsize": 3}

@@ -49,13 +49,13 @@ class ComparitivePlot:
         
         plt.show()
         
-    def animate_plots(self):
+    def animate_plots(self, gif_file):
         num_runs=len(self.run_IDs)
         ncols=int(math.ceil(num_runs**0.5))
         nrows=int(math.ceil(num_runs/ncols))
         fig, ax = plt.subplots(nrows, ncols)
         
-        def animate(i,nrows=nrows):
+        def animate(i,nrows=nrows, num_runs=num_runs, gif_file=gif_file):
             if nrows>1:
                 self.update_model_to_current_run() #Get current model output
                 row_count=0
@@ -65,27 +65,40 @@ class ComparitivePlot:
                     ax[row_count, col_count].clear() #clear data from previous plot
                     for face in list(self.run_output[run].keys()):
                         print(run, face)
-                        ax[row_count,col_count].plot(self.run_output[run][face][0], self.run_output[run][face][1])
+                        ax[row_count,col_count].scatter(self.run_output[run][face][0], self.run_output[run][face][1])
                         ax[row_count,col_count].plot(self.model_output[run][face][0], self.model_output[run][face][1])
                         ax[row_count,col_count].set_title(run)
                     fig_count=fig_count+1
                     col_count=fig_count%nrows
                     row_count=int(fig_count/nrows)
             else:
-                self.update_model_to_current_run() #Get current model output
-                fig_count=0
-                for run in self.run_IDs:
-                    ax[fig_count].clear() #clear data from previous plot
-                    for face in list(self.run_output[run].keys()):
-                        print(run, face)
-                        ax[fig_count].plot(self.run_output[run][face][0], self.run_output[run][face][1])
-                        ax[fig_count].plot(self.model_output[run][face][0], self.model_output[run][face][1])
-                        ax[fig_count].set_title(run)
-                    fig_count=fig_count+1
+                if num_runs==1:
+                    self.update_model_to_current_run() #Get current model output
+                    fig_count=0
+                    for run in self.run_IDs:
+                        ax.clear() #clear data from previous plot
+                        for face in list(self.run_output[run].keys()):
+                            print(run, face)
+                            ax.scatter(self.run_output[run][face][0], self.run_output[run][face][1])
+                            ax.plot(self.model_output[run][face][0], self.model_output[run][face][1])
+                            ax.set_title(run)
+                        fig_count=fig_count+1
+                else:
+                    self.update_model_to_current_run() #Get current model output
+                    fig_count=0
+                    for run in self.run_IDs:
+                        ax[fig_count].clear() #clear data from previous plot
+                        for face in list(self.run_output[run].keys()):
+                            print(run, face)
+                            ax[fig_count].scatter(self.run_output[run][face][0], self.run_output[run][face][1])
+                            ax[fig_count].plot(self.model_output[run][face][0], self.model_output[run][face][1])
+                            ax[fig_count].set_title(run)
+                        fig_count=fig_count+1
                 
         ani=animation.FuncAnimation(fig, animate, interval=1000)
+        #ani.save(gif_file, writer='imagemagick',fps=1)
         plt.show()
         
 m=ComparitivePlot('model_results.json')
-m.animate_plots()
+m.animate_plots('Output.gif')
             
