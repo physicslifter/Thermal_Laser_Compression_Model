@@ -7,6 +7,7 @@ import errno
 import os
 import numpy as np
 
+
 def load_json(fname):
     with open(fname) as json_file:
         data=json.load(json_file)

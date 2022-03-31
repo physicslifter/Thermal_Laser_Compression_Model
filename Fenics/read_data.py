@@ -20,12 +20,12 @@ s86483=pd.read_excel(fp83)
 #Defining start & stop times
 
 #s88773
-start1_73=179
-start2_73=259 
+start1_73=179 
+start2_73=259  
 start3_73=310 
-stop1_73=265
-stop2_73=415
-stop3_73=706
+stop1_73=240 #265
+stop2_73=390 #415
+stop3_73=700 #706
 
 #s88776
 start1_76=88
