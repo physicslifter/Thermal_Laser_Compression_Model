@@ -11,6 +11,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure 
 import numpy as np
 import matplotlib.animation as animation
+from tkinter.scrolledtext import ScrolledText
 
 def load_json(fname):
     with open(fname) as json_file:
@@ -277,6 +278,44 @@ class NewOptimizationWindow:
     def vis_current_fit(self):
         window=Toplevel(self.root)
         window.title('Current Fit - LIVE PLOT')
+        
+    def save_log(self):
+        fp=self.folder_path.get()
+        rn=self.run_name.get()
+        folder_path='../../winhome/Desktop/optimization_data/20220315/'+fp+'/'+rn
+        cur_inp=self.text_box.get("1.0", END)
+        log_filepath=folder_path+'/log.txt'
+        f1=open(log_filepath, "w")
+        f1.write(cur_inp)
+        f1.close()
+        
+    def log_comments(self):
+        window=Toplevel(self.root)
+        window.title('Optimization Log: '+self.run_name.get())
+        window.geometry('600x275')
+        window.config(bg="#84BF04")
+        frame=Frame(window)
+        text_box=Text(
+            frame,
+            height=15,
+            width=75,
+            wrap='word'
+        )
+        message='Enter Log text here: '
+        text_box.insert('end', message)
+        text_box.pack(side=LEFT, expand=True)
+        
+        sb=Scrollbar(frame)
+        sb.pack(side=RIGHT, fill=BOTH)
+        
+        text_box.config(yscrollcommand=sb.set)
+        sb.config(command=text_box.yview)
+        
+        frame.pack(expand=True)
+        
+        log_button=Button(window, text="Save Log", command=self.save_log).pack(side=TOP)
+        
+        window.mainloop()
 
     def visualize_optimization(self):
         fp=self.folder_path.get()     #Get Filepath
@@ -542,7 +581,7 @@ class NewOptimizationWindow:
         #Data_Chopping_Button=Button(self.root, text="Chop Data", command=self.chop_data).pack(side=BOTTOM)
         Vis_Button=Button(self.root, text="Visualize Optimization", command=self.visualize_optimization).pack(side=BOTTOM)
         Run_Button=Button(self.root, text="Run Optimization", command=self.show_run_dict).pack(side=BOTTOM)
-        Vis_Fit_Button=Button(self.root, text="View Model fit", command=self.vis_current_fit).pack(side=BOTTOM)
+        Log_Button=Button(self.root, text="Log comments", command=self.log_comments).pack(side=BOTTOM)
         #===============================================
         
         self.root.mainloop()
