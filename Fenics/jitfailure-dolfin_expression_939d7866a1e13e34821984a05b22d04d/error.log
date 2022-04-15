@@ -1,0 +1,12 @@
+/tmp/tmpzadp8475/dolfin_expression_939d7866a1e13e34821984a05b22d04d.cpp: In member function ‘virtual void dolfin::dolfin_expression_939d7866a1e13e34821984a05b22d04d::eval(Eigen::Ref<Eigen::Matrix<double, -1, 1> >, Eigen::Ref<const Eigen::Matrix<double, -1, 1> >) const’:
+/tmp/tmpzadp8475/dolfin_expression_939d7866a1e13e34821984a05b22d04d.cpp:70:49: error: ‘u2’ was not declared in this scope; did you mean ‘u’?
+   70 |           values[0] = x[0] <= l + tol ? b+a*u+c*u2 : k_1;
+      |                                                 ^~
+      |                                                 u
+/tmp/tmpzadp8475/dolfin_expression_939d7866a1e13e34821984a05b22d04d.cpp: In member function ‘virtual double dolfin::dolfin_expression_939d7866a1e13e34821984a05b22d04d::get_property(std::string) const’:
+/tmp/tmpzadp8475/dolfin_expression_939d7866a1e13e34821984a05b22d04d.cpp:82:11: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+   82 |           if (name == "tol") return tol;          if (name == "k_1") return k_1;          if (name == "a") return a;          if (name == "b") return b;          if (name == "c") return c;          if (name == "l") return l;
+      |           ^~
+/tmp/tmpzadp8475/dolfin_expression_939d7866a1e13e34821984a05b22d04d.cpp:82:51: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   82 |           if (name == "tol") return tol;          if (name == "k_1") return k_1;          if (name == "a") return a;          if (name == "b") return b;          if (name == "c") return c;          if (name == "l") return l;
+      |                                                   ^~

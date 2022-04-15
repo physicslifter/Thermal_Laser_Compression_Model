@@ -27,7 +27,7 @@ def moving_average(a, n=3) :
     return mov_avg
 
 
-all_shots=['s88773', 's88776', 's88780', 's86483']
+all_shots=['s88773', 's88776', 's88780', 's86483', 's86480', 's86484', 's88774']
 
 class DataChoppingWindow:
     def __init__(self, root):
@@ -84,14 +84,14 @@ class NewOptimizationWindow:
         
     def chop_data(self):
         datawin=Toplevel(self.root)
-        
+        datawin.title(self.run_name.get()+'Data Chopping')
         #========================================
         #Entry Windows for the bounds for each run
         #========================================
         
         #========================================
         #Default Data Chopping
-        self.default_start_stop_dict={
+        '''self.default_start_stop_dict={
             's88773':{
                     1:[179, 240],
                     2:[259, 390],       
@@ -112,7 +112,45 @@ class NewOptimizationWindow:
                     2:[582, 732],       
                     3:[377, 800]
             }
-        }
+        }'''
+        
+        self.default_start_stop_dict={
+        's88773':{
+                1:[179, 240],
+                2:[259, 390],       
+                3:[310, 700]
+        },
+        's88776':{
+                1:[88, 155],        
+                2:[93, 400],        
+                3:[246, 468]
+        },
+        's88780':{
+                1:[145, 190],       
+                2:[240, 350],       
+                3:[310, 502]
+        },
+        's86483':{
+                1:[355, 400],       
+                2:[582, 732],       
+                3:[377, 800]
+        },
+        's86480':{
+                1:[202, 234],
+                2:[293, 345],
+                3:[310, 473]
+        },
+        's86484':{
+                1:[187, 256],
+                2:[195, 322],
+                3:[670, 772]
+        },        
+        's88774':{
+                1:[199, 284],
+                2:[190, 458],
+                3:[333, 725]
+        },        
+}
         #========================================
         
         
@@ -201,9 +239,9 @@ class NewOptimizationWindow:
         global t1 
         t1=Process(target=self.opt_func)
         t1.start()
-        while t1.is_alive():
-            self.opt_running_flag.set(True)
-        self.save_plots()
+        #while t1.is_alive():
+        #    self.opt_running_flag.set(True)
+        #self.save_plots()
         
     
     def threaded_run(self):
@@ -295,21 +333,21 @@ class NewOptimizationWindow:
         window.geometry('600x275')
         window.config(bg="#84BF04")
         frame=Frame(window)
-        text_box=Text(
+        self.text_box=Text(
             frame,
             height=15,
             width=75,
             wrap='word'
         )
         message='Enter Log text here: '
-        text_box.insert('end', message)
-        text_box.pack(side=LEFT, expand=True)
+        self.text_box.insert('end', message)
+        self.text_box.pack(side=LEFT, expand=True)
         
         sb=Scrollbar(frame)
         sb.pack(side=RIGHT, fill=BOTH)
         
-        text_box.config(yscrollcommand=sb.set)
-        sb.config(command=text_box.yview)
+        self.text_box.config(yscrollcommand=sb.set)
+        sb.config(command=self.text_box.yview)
         
         frame.pack(expand=True)
         
