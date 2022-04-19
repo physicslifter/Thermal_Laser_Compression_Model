@@ -12,6 +12,25 @@ from matplotlib.figure import Figure
 import numpy as np
 import matplotlib.animation as animation
 from tkinter.scrolledtext import ScrolledText
+from threading import Thread
+from rewrite_globals import rewrite_globals
+from datetime import datetime
+
+date=datetime.now()
+year, month, day = str(date.year), str(date.month), str(date.day)
+if len(day)==1:
+    day='0'+day
+if len(month)==1:
+    month='0'+month
+new_opt_data_path="../../winhome/Desktop/optimization_data/"+str(year)+str(month)+str(day)
+rewrite_dict={
+    "optimization_data_path":new_opt_data_path
+}
+rewrite_globals(rewrite_dict)
+bot = main.EndOperationsBot()
+bot.get_yesterdays_plots()
+
+#Make sure that all plots from yesterday have been saved
 
 def load_json(fname):
     with open(fname) as json_file:
@@ -34,6 +53,8 @@ class DataChoppingWindow:
         pass
     
 class NewOptimizationWindow:
+    
+    
     def donothing(self):
         filewin = Toplevel(self.root)
         button = Button(filewin, text="Do nothing button")
@@ -233,17 +254,29 @@ class NewOptimizationWindow:
     def opt_func(self):
         main.optimize(self.group, self.opt_data, bounds=self.my_bounds, popsize=self.popsize.get())
     
+    def run_post_opt_operations(self):
+        path = self.folder_path.get()+'/'+self.run_name.get()
+        post_opt=main.PostOptOperations(path)
+        post_opt.run_end_operations()
+    
     def run_threaded_opt(self):
         path_for_optimization=self.folder_path.get()+'/'+self.run_name.get()
         self.group=main.OptimizationGroup(self.meshpoints.get(), self.shots_and_faces_run,path_for_optimization, self.real_data)
-        global t1 
-        t1=Process(target=self.opt_func)
-        t1.start()
+        global t1, p1
+        #t1=Thread(target = self.opt_func)
+        p1=Process(target = self.opt_func)
+        #t2=Thread(target = self.run_post_opt_operations)
+        p2 = Process(target = self.run_post_opt_operations)
+        #t1.start()
+        p1.start()
+        #t1.join() #Wait for the optimization to terminate (either by failure or from successful completion)
+        #t2.start() #Once the optimization has completed, go through and save
+        p2.start()
+        
         #while t1.is_alive():
         #    self.opt_running_flag.set(True)
         #self.save_plots()
         
-    
     def threaded_run(self):
         pass
 
@@ -446,6 +479,9 @@ class NewOptimizationWindow:
     
     def __init__(self, root):
         
+        #Make sure all previous runs from today are optimized
+        bot = main.EndOperationsBot()
+        bot.get_todays_plots()
         
         #Boolean flag for whether the optimization is running
         self.opt_running_flag=BooleanVar()
@@ -469,6 +505,16 @@ class NewOptimizationWindow:
         self.header_frame.pack(side=TOP)
         Label(self.header_frame, text="Create New Optimization").pack()
         Label(self.header_frame, text="========================").pack()
+        #===========================================
+        
+        #===========================================
+        #Equation number
+        #===========================================
+        self.equation_frm = ttk.Frame(self.root)
+        self.equation_frm.pack(side=TOP)
+        Label(self.equation_frm, text="Equation: ").pack()
+        Label(self.shot_and_face_frame, text=' ').pack()
+        
         #===========================================
         
         #===========================================

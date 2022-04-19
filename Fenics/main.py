@@ -27,6 +27,7 @@ from matplotlib.figure import Figure
 import pickle
 import dill
 from matplotlib.pyplot import figure
+from datetime import datetime
 
 default_best_SLS=10e+20 #Set initial best sls very large
 
@@ -663,7 +664,7 @@ def optimize(group:OptimizationGroup, data_obj:OptimizationData, bounds, popsize
         out.write('\n')
         out.write('Optimization initialized @: ')
         out.write('\n')
-        out.write(str(datetime.datetime.now()))
+        out.write(str(datetime.now()))
         out.write('\n')
         out.write('popsize: '+str(popsize))
         out.write('\n')
@@ -788,6 +789,7 @@ class PostOptOperations: #A class for writing and defining operations to be done
         self.has_opt_group=False #Variable for whether the optimization group exists for these post optimization operations
         f=open(folder_path+'/metadata.txt', 'r')
         equation_string=f.readlines()[4][10:][:-1]
+        print(equation_string)
         f=open(folder_path+'/metadata.txt', 'r')
         self.metadata=f.readlines()
         if equation_string=='k = a * T + b':
@@ -1079,4 +1081,115 @@ class PostOptOperations: #A class for writing and defining operations to be done
         self.clean_data()
         self.get_optimization_plot()
         
+class EndOperationsBot:
+    '''
+    Class for automating and getting the end operations for optimizations that have been run
+    '''
+    def __init__(self):
+        date=datetime.now()
+        self.year, self.month, self.day = str(date.year), str(date.month), str(date.day)
+        if len(self.month) == 1:
+            self.month='0'+self.month
+        if len(self.day) == 1:
+            self.day = '0'+self.day
+        self.general_opt_path = "../../winhome/Desktop/optimization_data/silly/../../winhome/Desktop/optimization_data/"
+        self.days_data_path = "../../winhome/Desktop/optimization_data/silly/../../winhome/Desktop/optimization_data/"+str(self.year)+str(self.month)+str(self.day)
+        self.yesterdays_data_path = "../../winhome/Desktop/optimization_data/silly/../../winhome/Desktop/optimization_data/"+str(self.year)+str(self.month)+str(int(self.day)-1)
         
+        
+    def get_todays_plots(self):
+        if os.path.isdir(self.days_data_path):
+            print(self.days_data_path)
+            for file in os.listdir(self.days_data_path): #iterate through the files in the directory
+                new_path = self.days_data_path+'/'+file
+                if os.path.isdir(new_path):
+                    has_end_plot=False #Assume this optimization folder does not have a plot at the end
+                    has_opt_data=False #Assume there is not optimization data for this run
+                    has_metadata = False #Assume no metadata file is present
+                    for file1 in os.listdir(new_path):
+                        if file1 == 'Optimization_Results.png':
+                            has_end_plot = True
+                        if file1 == 'optimization_output.csv':
+                            has_opt_data = True
+                        if file1 == 'metadata.txt':
+                            #print(file1)
+                            has_metadata = True
+                    if has_end_plot == False and has_opt_data == True and has_metadata == True:
+                        print(new_path)
+                        post_opt_operator = PostOptOperations(new_path)
+                        post_opt_operator.run_end_operations()
+            #post_opt_operator = PostOptOperations(self.days_data_path)
+            #post_opt_operator.run_end_operations()
+        
+    def get_yesterdays_plots(self):
+        print('Running')
+        if os.path.isdir(self.yesterdays_data_path):
+            print(self.yesterdays_data_path)
+            for file in os.listdir(self.yesterdays_data_path): #iterate through the files in the directory
+                new_path = self.yesterdays_data_path+'/'+file
+                if os.path.isdir(new_path):
+                    has_end_plot=False #Assume this optimization folder does not have a plot at the end
+                    has_opt_data=False #Assume there is not optimization data for this run
+                    has_metadata = False #Assume no metadata file is present
+                    for file1 in os.listdir(new_path):
+                        if file1 == 'Optimization_Results.png':
+                            has_end_plot = True
+                        if file1 == 'optimization_output.csv':
+                            has_opt_data = True
+                        if file1 == 'metadata.txt':
+                            #print(file1)
+                            has_metadata = True
+                    if has_end_plot == False and has_opt_data == True and has_metadata == True:
+                        print(new_path)
+                        post_opt_operator = PostOptOperations(new_path)
+                        post_opt_operator.run_end_operations()
+        
+    def update_all_plots(self):
+        for file in os.listdir(self.general_opt_path):
+            #print(file)
+            if len(file) == 8 and str(file).isnumeric()==True:
+                #print('---------------')
+                #print(file)
+                #print('---------------')
+                year=int(file[0:4])
+                month=int(file[-4:-2])
+                day=int(file[-2:])
+                get_plots=False #Assume we don't want to get plots for this day
+                if year == 2022:
+                    if month > 4:
+                        get_plots=True
+                    elif month == 4:
+                        if day >= 11:
+                            get_plots=True
+                else:
+                    get_plots=True
+                print('---------------')
+                print(file, get_plots, year, month, day)
+                print('---------------')
+                    
+                if get_plots == True:
+                    d = os.path.join(self.general_opt_path, file)
+                    if os.path.isdir(d): #If this is a folder, not a file
+                        #print(d)
+
+                        for opt_run in os.listdir(d): #Get each optimization run for the day
+                            opt_fold_path = os.path.join(d, opt_run)
+                            has_end_plot=False #Assume this optimization folder does not have a plot at the end
+                            has_opt_data=False #Assume there is not optimization data for this run
+                            has_metadata = False #Assume no metadata file is present
+                            for file1 in os.listdir(opt_fold_path):
+                                print(file1)
+                                fname = os.path.join(d, file1)
+                                #print(fname[-23:])
+                                #print(file1)
+                                if file1 == 'Optimization_Results.png':
+                                    has_end_plot = True
+                                if file1 == 'optimization_output.csv':
+                                    has_opt_data = True
+                                if file1 == 'metadata.txt':
+                                    #print(file1)
+                                    has_metadata = True
+
+                        if has_opt_data == True and has_end_plot == False and has_metadata == True: #If there is optimization data but no end plot, add an end plot
+                            o = PostOptOperations(opt_fold_path)
+                            o.run_end_operations()
