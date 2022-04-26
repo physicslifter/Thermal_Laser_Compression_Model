@@ -16,6 +16,14 @@ from threading import Thread
 from rewrite_globals import rewrite_globals
 from datetime import datetime
 import time
+from PIL import ImageTk, Image
+
+def load_json(fname):
+    with open(fname) as json_file:
+        data=json.load(json_file)
+        
+    return data
+
 
 date=datetime.now()
 year, month, day = str(date.year), str(date.month), str(date.day)
@@ -23,21 +31,18 @@ if len(day)==1:
     day='0'+day
 if len(month)==1:
     month='0'+month
-new_opt_data_path="../../winhome/Desktop/optimization_data/"+str(year)+str(month)+str(day)
+global_vars=load_json('global_variables.json')
+opt_path = global_vars['optimization_data_path'][:-8]
+#new_opt_data_path="../../winhome/Desktop/optimization_data/"+str(year)+str(month)+str(day)
+new_opt_data_path=opt_path + str(year)+str(month)+str(day)
 rewrite_dict={
     "optimization_data_path":new_opt_data_path
 }
 rewrite_globals(rewrite_dict)
-bot = main.EndOperationsBot()
-bot.get_yesterdays_plots()
+#bot = main.EndOperationsBot()
+#bot.get_yesterdays_plots()
 
 #Make sure that all plots from yesterday have been saved
-
-def load_json(fname):
-    with open(fname) as json_file:
-        data=json.load(json_file)
-        
-    return data
 
 def moving_average(a, n=3) :
     ret = np.cumsum(a, dtype=float)
@@ -261,20 +266,22 @@ class NewOptimizationWindow:
         post_opt.run_end_operations()
     
     def run_threaded_opt(self):
-        path_for_optimization=self.folder_path.get()+'/'+self.run_name.get()
-        self.group=main.OptimizationGroup(self.meshpoints.get(), self.shots_and_faces_run,path_for_optimization, self.real_data, equation = self.equation_to_run)
+        #path_for_optimization=self.folder_path.get()+'/'+self.run_name.get()
+        path_for_optimization=self.run_name.get()
+        self.group=main.OptimizationGroup(self.meshpoints.get(), self.shots_and_faces_run, path_for_optimization, self.real_data, equation = self.equation_to_run)
         global t1, p1
         #t1=Thread(target = self.opt_func)
         p1=Process(target = self.opt_func)
         #t2=Thread(target = self.run_post_opt_operations)
         #time.sleep(10) #Wait for 10 seconds to ensure that we have the metadata file
-        p2 = Process(target = self.run_post_opt_operations)
+        #p2 = Process(target = self.run_post_opt_operations)
         #t1.start()
         p1.start()
-        time.sleep(10)
+        self.run_post_opt_operations()
+        #time.sleep(10)
         #t1.join() #Wait for the optimization to terminate (either by failure or from successful completion)
         #t2.start() #Once the optimization has completed, go through and save
-        p2.start()
+        #p2.start()
         
         #while t1.is_alive():
         #    self.opt_running_flag.set(True)
@@ -286,12 +293,14 @@ class NewOptimizationWindow:
     def show_run_dict(self):
         #==============================================================
         #To-do if a single equation is selected
+        '''
         singleEquation=False
         equation_to_run = None
         equations = self.eq1_bool.get(), self.eq2_bool.get(), self.eq3_bool.get(), self.eq4_bool.get()
         num_checked = 0
         eq_num = 1
         running_eq = None
+        #Getting equations from first technique
         for eq in equations:
             if eq == True:
                 num_checked = num_checked + 1
@@ -313,9 +322,21 @@ class NewOptimizationWindow:
             if num_checked == 0:
                 error_string = 'Error: Please select a thermal conductivity equation to use'
             else:
-                error_string = 'Error: Multiple equations selected for thermal conductivity'
-        #Routine for getting whether we have a single equation
-        if singleEquation == True:
+                error_string = 'Error: Multiple equations selected for thermal conductivity'\
+        '''
+        #Getting equations in the second technique
+        eq_num = 1
+        for e in self.EQUATIONS:
+            if self.testVar.get() == e:
+                equation_num = eq_num
+            eq_num = eq_num + 1
+        
+        equation_string = self.testVar.get()
+        singleEquation = True
+        self.equation_to_run = equation_num
+        
+        #If we're running the first equation
+        if self.equation_to_run==1:
             s_a_bounds=self.a_bounds.get()
             s_b_bounds=self.b_bounds.get()
             s_start_time_bounds=self.st_bounds.get()
@@ -384,6 +405,81 @@ class NewOptimizationWindow:
 
             else:
                 messagebox.showinfo('Return', 'Please change parameters to be of your liking')
+        
+        #Otherwise, if we are running one of the equations that require the additional c parameter
+        elif self.equation_to_run == 2 or self.equation_to_run == 3 or self.equation_to_run ==4:
+            s_a_bounds=self.a_bounds.get()
+            s_b_bounds=self.b_bounds.get()
+            s_c_bounds = self.c_bounds.get()
+            s_start_time_bounds=self.st_bounds.get()
+            s_peak_temp_bounds=self.pt_bounds.get()
+            a_min=float(s_a_bounds.split('(')[1].split(')')[0].split(',')[0].replace(" ",""))
+            a_max=float(s_a_bounds.split('(')[1].split(')')[0].split(',')[1].replace(" ",""))
+            b_min=float(s_b_bounds.split('(')[1].split(')')[0].split(',')[0].replace(" ",""))
+            b_max=float(s_b_bounds.split('(')[1].split(')')[0].split(',')[1].replace(" ",""))
+            c_min = float(s_c_bounds.split('(')[1].split(')')[0].split(',')[0].replace(" ",""))
+            c_max = float(s_c_bounds.split('(')[1].split(')')[0].split(',')[1].replace(" ",""))
+            start_time_min=float(s_start_time_bounds.split('(')[1].split(')')[0].split(',')[0].replace(" ",""))
+            start_time_max=float(s_start_time_bounds.split('(')[1].split(')')[0].split(',')[1].replace(" ",""))
+            peak_temp_min=float(s_peak_temp_bounds.split('(')[1].split(')')[0].split(',')[0].replace(" ",""))
+            peak_temp_max=float(s_peak_temp_bounds.split('(')[1].split(')')[0].split(',')[1].replace(" ",""))
+            self.my_bounds=((a_min, a_max),(b_min, b_max),(c_min, c_max),(start_time_min, start_time_max),(peak_temp_min, peak_temp_max))
+
+            lines=[]
+            shots_run={}
+            for shot in all_shots:
+                print(shot, self.shot_var_dict[shot].get())
+                for i in range(3):
+                    face_string=shot+'_face'+str(i+1)
+                    face_num=i+1
+                    print('shot: '+shot+', face: '+face_string+', val: ', self.shot_face_var_dict[shot][i].get())
+                if self.shot_var_dict[shot].get()==True:
+                    lines.append(shot+':')
+                    shot_faces_list=[]
+                    for i in range(3):
+                        face_string=shot+'_face'+str(i)
+                        face_num=i+1
+                        if self.shot_face_var_dict[shot][i].get()==True:
+                            shot_faces_list.append(face_num)
+                            lines.append(face_string)
+                    shots_run[shot]=shot_faces_list
+
+            lines=['Parameters', 
+                   '================', 
+                   ' ', 
+                   '--', 
+                   'Run Name: '+str(self.run_name.get()), 
+                   ' ', 
+                   '--', 
+                   'Equation: '+equation_string, 
+                   ' ', 
+                   '--', 
+                   ' ', 
+                   'Bounds: '+str(self.my_bounds), 
+                   ' ',
+                   'No. of FEM meshpoints: '+str(self.meshpoints.get()), 
+                   ' ',
+                   'Population size: '+str(self.popsize.get()), 
+                   ' ',
+                   'Shots & Faces: ',
+                   ' ']
+            for shot in shots_run.keys(): #For each shot we have that is being run...
+                lines.append('  '+shot)
+                for face in shots_run[shot]:
+                    key='       face'+str(face+1)
+                    lines.append(key)
+
+            self.shots_and_faces_run=shots_run
+
+            res=messagebox.askquestion('Run Optimization?', "\n".join(lines))
+
+            if res=='yes':
+                print(self.equation_to_run)
+                self.run_threaded_opt()
+
+            else:
+                messagebox.showinfo('Return', 'Please change parameters to be of your liking')
+        
         else:
             messagebox.showinfo('Equation Error', error_string)
             
@@ -430,99 +526,262 @@ class NewOptimizationWindow:
         window.mainloop()
 
     def visualize_optimization(self):
-        fp=self.folder_path.get()     #Get Filepath
-        rn=self.run_name.get()
-        optimization_filepath=fp+'/'+rn+'/optimization_output.csv'
+        if self.equation_to_run == 1:
+            fp=self.folder_path.get()     #Get Filepath
+            rn=self.run_name.get()
+            optimization_filepath=fp+'/'+rn+'/optimization_output.csv'
+            print('======================')
+            print('==================')
+            print(optimization_filepath)
+            print('=============================')
         
-        newWindow=Toplevel(self.root)
-        newWindow.title('Optimization LIVE PLOT')
-        newWindow.geometry("650x500")
-        lab=Label(newWindow, text="Live Plotting", bg="White").pack()
+            newWindow=Toplevel(self.root)
+            title = self.run_name.get()+': Live Progress'
+            newWindow.title(title)
+            newWindow.geometry("650x500")
+            lab=Label(newWindow, text="Live Plotting", bg="White").pack()
 
-        fig=Figure()
-        ax1=fig.add_subplot(2,3,1) #sls
-        ax2=fig.add_subplot(2,3,2) #peak_temp
-        ax3=fig.add_subplot(2,3,3) #a
-        ax4=fig.add_subplot(2,3,4) #b
-        ax5=fig.add_subplot(2,3,5) #start_time
+            fig=Figure()
+            ax1=fig.add_subplot(2,3,1) #sls
+            ax2=fig.add_subplot(2,3,2) #peak_temp
+            ax3=fig.add_subplot(2,3,3) #a
+            ax4=fig.add_subplot(2,3,4) #b
+            ax5=fig.add_subplot(2,3,5) #start_time
         
-        graph=FigureCanvasTkAgg(fig, master=newWindow)
+            graph=FigureCanvasTkAgg(fig, master=newWindow)
     
-        graph.get_tk_widget().pack(side="top",fill='both',expand=True)
+            graph.get_tk_widget().pack(side="top",fill='both',expand=True)
         
-        def animate(i):
-            pullData=open(optimization_filepath, "r").read()
-            dataArray=pullData.split('\n')
+            def animate(i):
+                pullData=open(optimization_filepath, "r").read()
+                dataArray=pullData.split('\n')
             
-            #Defining list in which to store info
-            itar, slsar, aar, bar, star, ptar = [], [], [], [], [], []
-            
-            for eachLine in dataArray:
-                line=eachLine.replace('[','').replace(']','') #Get rid of brackets
-                if len(line)>0:
-                    it, sls, a, b, st, pt = line.split(',')    
-                    itar.append(float(it))
-                    slsar.append(float(sls))
-                    aar.append(float(a))
-                    bar.append(float(b))
-                    star.append(float(st))
-                    ptar.append(float(pt))
-            
-            #===========================
-            # Get Moving Averages of values
-            #===========================
-            
-            mov_avg=15
-            
-            if int(it)>mov_avg:
-                ma_sls=moving_average(slsar, n=mov_avg)
-                ma_a=moving_average(aar, n=mov_avg)
-                ma_b=moving_average(bar, n=mov_avg)
-                ma_st=moving_average(star, n=mov_avg)
-                ma_pt=moving_average(ptar, n=mov_avg)
-            
-                #==========================================
-                #plotting
-                #==========================================
-                ax1.clear()
-                ax2.clear()
-                ax3.clear()
-                ax4.clear()
-                ax5.clear()
+                #Defining list in which to store info
+                itar, slsar, aar, bar, star, ptar = [], [], [], [], [], []
 
-                ax1.set_title('sls')
-                ax2.set_title('peak_temp')
-                ax3.set_title('a')
-                ax4.set_title('b')
-                ax5.set_title('start_time')
+                for eachLine in dataArray:
+                    line=eachLine.replace('[','').replace(']','') #Get rid of brackets
+                    if len(line)>0:
+                        it, sls, a, b, st, pt = line.split(',')    
+                        itar.append(float(it))
+                        slsar.append(float(sls))
+                        aar.append(float(a))
+                        bar.append(float(b))
+                        star.append(float(st))
+                        ptar.append(float(pt))
+            
+                #===========================
+                # Get Moving Averages of values
+                #===========================
+            
+                mov_avg=15
+            
+                if int(it)>mov_avg:
+                    ma_sls=moving_average(slsar, n=mov_avg)
+                    ma_a=moving_average(aar, n=mov_avg)
+                    ma_b=moving_average(bar, n=mov_avg)
+                    ma_st=moving_average(star, n=mov_avg)
+                    ma_pt=moving_average(ptar, n=mov_avg)
+            
+                    #==========================================
+                    #plotting
+                    #==========================================
+                    ax1.clear()
+                    ax2.clear()
+                    ax3.clear()
+                    ax4.clear()
+                    ax5.clear()
 
-                ax1.scatter(itar,slsar, s=10, alpha=0.7, edgecolors='k')
-                ax1.plot(itar[(mov_avg-1):],ma_sls, linewidth=0.5, color='r')
-                ax2.scatter(itar,ptar, s=10, alpha=0.7, edgecolors='k')
-                ax2.plot(itar[(mov_avg-1):], ma_pt, linewidth=0.5, color='r')
-                ax3.scatter(itar,aar,  s=10, alpha=0.7, edgecolors='k')
-                ax3.plot(itar[(mov_avg-1):], ma_a, linewidth=0.5, color='r')
-                ax4.scatter(itar,bar,  s=10, alpha=0.7, edgecolors='k')
-                ax4.plot(itar[(mov_avg-1):], ma_b, linewidth=0.5, color='r')
-                ax5.scatter(itar,star,  s=10, alpha=0.7, edgecolors='k')
-                ax5.plot(itar[(mov_avg-1):], ma_st, linewidth=0.5, color='r')
+                    ax1.set_title('sls')
+                    ax2.set_title('peak_temp')
+                    ax3.set_title('a')
+                    ax4.set_title('b')
+                    ax5.set_title('start_time')
+
+                    ax1.scatter(itar,slsar, s=10, alpha=0.7, edgecolors='k')
+                    ax1.plot(itar[(mov_avg-1):],ma_sls, linewidth=0.5, color='r')
+                    ax2.scatter(itar,ptar, s=10, alpha=0.7, edgecolors='k')
+                    ax2.plot(itar[(mov_avg-1):], ma_pt, linewidth=0.5, color='r')
+                    ax3.scatter(itar,aar,  s=10, alpha=0.7, edgecolors='k')
+                    ax3.plot(itar[(mov_avg-1):], ma_a, linewidth=0.5, color='r')
+                    ax4.scatter(itar,bar,  s=10, alpha=0.7, edgecolors='k')
+                    ax4.plot(itar[(mov_avg-1):], ma_b, linewidth=0.5, color='r')
+                    ax5.scatter(itar,star,  s=10, alpha=0.7, edgecolors='k')
+                    ax5.plot(itar[(mov_avg-1):], ma_st, linewidth=0.5, color='r')
         
-        ani=animation.FuncAnimation(fig,animate, interval=1000)
+            ani=animation.FuncAnimation(fig,animate, interval=1000)
         
                          
-        #sample=np.arange(10)
-        #ax1.plot(sample, sample)
-        #ax2.plot(sample, sample)
-        #ax3.plot()
+            #sample=np.arange(10)
+            #ax1.plot(sample, sample)
+            #ax2.plot(sample, sample)
+            #ax3.plot()
         
-        newWindow.mainloop()
+            newWindow.mainloop()
+            
+        else:
+            
+            fp=self.folder_path.get()     #Get Filepath
+            rn=self.run_name.get()
+            optimization_filepath=fp+'/'+rn+'/optimization_output.csv'
+            print('======================')
+            print('==================')
+            print(optimization_filepath)
+            print('=============================')
         
+            newWindow=Toplevel(self.root)
+            title = self.run_name.get()+': Live Progress'
+            newWindow.title(title)
+            #newWindow.title('Optimization LIVE PLOT')
+            newWindow.geometry("650x500")
+            lab=Label(newWindow, text="Live Plotting", bg="White").pack()
+
+            fig=Figure()
+            ax1=fig.add_subplot(2,3,1) #sls
+            ax2=fig.add_subplot(2,3,2) #peak_temp
+            ax3=fig.add_subplot(2,3,3) #a
+            ax4=fig.add_subplot(2,3,4) #b
+            ax5=fig.add_subplot(2,3,6) #start_time
+            ax6 = fig.add_subplot(2,3,5) #c
+                
+                
+        
+            graph=FigureCanvasTkAgg(fig, master=newWindow)
+
+            graph.get_tk_widget().pack(side="top",fill='both',expand=True)
+
+            def animate(i):
+                pullData=open(optimization_filepath, "r").read()
+                dataArray=pullData.split('\n')
+            
+                #Defining list in which to store info
+                itar, slsar, aar, bar, car, star, ptar = [], [], [], [], [], [], []
+
+                for eachLine in dataArray:
+                    line=eachLine.replace('[','').replace(']','') #Get rid of brackets
+                    if len(line)>0:
+                        it, sls, a, b, c, st, pt = line.split(',')    
+                        itar.append(float(it))
+                        slsar.append(float(sls))
+                        aar.append(float(a))
+                        bar.append(float(b))
+                        car.append(float(c))
+                        star.append(float(st))
+                        ptar.append(float(pt))
+            
+                #===========================
+                # Get Moving Averages of values
+                #===========================
+            
+                mov_avg=15
+            
+                if int(it)>mov_avg:
+                    ma_sls=moving_average(slsar, n=mov_avg)
+                    ma_a=moving_average(aar, n=mov_avg)
+                    ma_b=moving_average(bar, n=mov_avg)
+                    ma_c = moving_average(car, n=mov_avg)
+                    ma_st=moving_average(star, n=mov_avg)
+                    ma_pt=moving_average(ptar, n=mov_avg)
+            
+                    #==========================================
+                    #plotting
+                    #==========================================
+                    ax1.clear()
+                    ax2.clear()
+                    ax3.clear()
+                    ax4.clear()
+                    ax5.clear()
+                    ax6.clear()
+
+                    ax1.set_title('sls')
+                    ax2.set_title('peak_temp')
+                    ax3.set_title('a')
+                    ax4.set_title('b')
+                    ax5.set_title('start_time')
+                    ax6.set_title('c')
+
+                    ax1.scatter(itar,slsar, s=10, alpha=0.7, edgecolors='k')
+                    ax1.plot(itar[(mov_avg-1):],ma_sls, linewidth=0.5, color='r')
+                    ax2.scatter(itar,ptar, s=10, alpha=0.7, edgecolors='k')
+                    ax2.plot(itar[(mov_avg-1):], ma_pt, linewidth=0.5, color='r')
+                    ax3.scatter(itar,aar,  s=10, alpha=0.7, edgecolors='k')
+                    ax3.plot(itar[(mov_avg-1):], ma_a, linewidth=0.5, color='r')
+                    ax4.scatter(itar,bar,  s=10, alpha=0.7, edgecolors='k')
+                    ax4.plot(itar[(mov_avg-1):], ma_b, linewidth=0.5, color='r')
+                    ax5.scatter(itar,star,  s=10, alpha=0.7, edgecolors='k')
+                    ax5.plot(itar[(mov_avg-1):], ma_st, linewidth=0.5, color='r')
+                    ax6.scatter(itar,car,  s=10, alpha=0.7, edgecolors='k')
+                    ax6.plot(itar[(mov_avg-1):], ma_c, linewidth=0.5, color='r')
+        
+            ani=animation.FuncAnimation(fig,animate, interval=1000)
+        
+                         
+            #sample=np.arange(10)
+            #ax1.plot(sample, sample)
+            #ax2.plot(sample, sample)
+            #ax3.plot()
+    
+            newWindow.mainloop()
+        
+    def view_best_fit(self):
+        fp=self.folder_path.get()     #Get Filepath
+        rn=self.run_name.get()
+        best_fit_filepath=fp+'/'+rn+'/Best_Fit.png'
+        
+        root = Tk()
+        title = self.run_name.get()+': Best Fit'
+        root.title(title)
+        self.best_fit_canvas = Canvas(root, width = 650, height = 500)
+        self.best_fit_canvas.pack()
+        self.best_fit_images=[]
+        def update_img_list():
+            current_best_fit = PhotoImage(master = root, file = best_fit_filepath)
+            self.best_fit_images.append(current_best_fit)
+        def update_image():
+            my_img = self.best_fit_images[-1]
+            new_img = PhotoImage(master = root, file = best_fit_filepath)
+            #img = ImageTk.PhotoImage(Image.open(best_fit_filepath))
+            #self.best_fit_canvas.create_image(10, 10, anchor = NW, image = img)
+            self.best_fit_canvas.itemconfig(image_container, image = my_img)
+            #root.mainloop()
+        def update():
+            update_img_list()
+            update_image()
+        img = PhotoImage(master = root, file = best_fit_filepath)
+        img2 = PhotoImage(master = root, file = fp+'/'+rn+'/Initial_Fit.png')
+        self.best_fit_images.append(img)
+        #self.best_fit_canvas.create_image(10, 10, anchor = NW, image = img)
+        #while True:
+        #    img = PhotoImage(master = root, file = best_fit_filepath)
+        #    #img = ImageTk.PhotoImage(Image.open(best_fit_filepath))
+        #    canvas.create_image(10, 10, anchor = NW, image = img)
+        #    root.mainloop()
+        #==================================================
+        #Buttons
+        Refresh_Button = Button(master = root, text = "Refresh", command = lambda:update()).pack(side = BOTTOM)
+        #Data_Chopping_Button=Button(self.root, text="Chop Data", command=self.chop_data).pack(side=TOP)
+        #==================================================
+        
+        image_container = self.best_fit_canvas.create_image(10,10,anchor='nw', image = img)
+        
+        
+        def run_main():
+            update()
+            root.after(10000, run_main)
+        #root.after(10000, update)
+        run_main()
+        root.mainloop()
+        
+    def open_vis_environ(self):
+        self.view_best_fit()
+        self.visualize_optimization()
     
     def __init__(self, root):
         
         #Make sure all previous runs from today are optimized
         bot = main.EndOperationsBot()
         bot.get_todays_plots()
+        #bot.get_yesterdays_plots()
         
         #Boolean flag for whether the optimization is running
         self.opt_running_flag=BooleanVar()
@@ -567,6 +826,8 @@ class NewOptimizationWindow:
         #6: pack checkbutton
         #=========================================
         
+        #EQUATIONS - FIRST TECHNIQUE
+        '''
         #Eq 1
         self.eq1_frm = ttk.Frame(self.equation_frm)
         self.eq1_frm.pack(side = TOP)
@@ -602,6 +863,20 @@ class NewOptimizationWindow:
         eq4_string = 'k = a*T + b + c*sqrt(T)'
         eq4_check = Checkbutton(self.eq4_frm, text=eq4_string, var = self.eq4_bool)
         eq4_check.pack(side=LEFT)
+        '''
+        
+        #EQUATIONS - 2nd technique
+        self.EQUATIONS = [
+            '(1): k = a * T + b',
+            '(2): k = a*T + b + c/(sqrt(T))',
+            '(3): k = a*T + b + c*T^2',
+            '(4): k = a*T + b + c*sqrt(T)'
+        ]
+        self.testVar = StringVar(self.equation_frm)
+        self.testVar.set(self.EQUATIONS[0])
+        
+        self.w = OptionMenu(self.equation_frm, self.testVar, *self.EQUATIONS)
+        self.w.pack()
         
         Label(self.equation_frm, text='===========================').pack()
         
@@ -678,6 +953,7 @@ class NewOptimizationWindow:
         fp_frm.pack(side=TOP)
         self.folder_path=StringVar()
         self.folder_path.set(self.global_vars['optimization_data_path'])
+        #self.folder_path.set('')
         Label(fp_frm, text="Root Folder").pack(side=LEFT)
         Entry(fp_frm, textvariable=self.folder_path).pack(side=LEFT)
 
@@ -730,6 +1006,14 @@ class NewOptimizationWindow:
         self.b_bounds.set('( 0 , 100 )')
         Label(b_frm, text="b:                ").pack(side=LEFT)
         Entry(b_frm, textvariable=self.b_bounds).pack(side=LEFT)
+        
+        #c
+        c_frm = ttk.Frame(bounds_frm)
+        c_frm.pack(side=TOP)
+        self.c_bounds=StringVar()
+        self.c_bounds.set('( 0 , 10 )')
+        Label(c_frm, text="c:                ").pack(side=LEFT)
+        Entry(c_frm, textvariable=self.c_bounds).pack(side=LEFT)
 
         #start_time
         st_frm=ttk.Frame(bounds_frm)
@@ -754,8 +1038,10 @@ class NewOptimizationWindow:
         Label(self.root, text="===========================").pack(side=TOP)
         #Data_Chopping_Button=Button(self.root, text="Chop Data", command=self.chop_data).pack(side=BOTTOM)
         Vis_Button=Button(self.root, text="Visualize Optimization", command=self.visualize_optimization).pack(side=BOTTOM)
+        #Vis_Button=Button(self.root, text="Visualize Optimization", command=self.open_vis_environ ).pack(side=BOTTOM)
         Run_Button=Button(self.root, text="Run Optimization", command=self.show_run_dict).pack(side=BOTTOM)
         Log_Button=Button(self.root, text="Log comments", command=self.log_comments).pack(side=BOTTOM)
+        Best_Fit_Button = Button(self.root, text = "View Best Fit", command = self.view_best_fit).pack(side = BOTTOM)
         #===============================================
         
         self.root.mainloop()
@@ -767,9 +1053,33 @@ class PrimaryWindow:
         button = Button(filewin, text="Do nothing button")
         button.pack()
     
+    def set_optimization_path(self):
+        pass
+    
     def open_new_optimization_window(self):
         new_window=NewOptimizationWindow(self.root)
+        
+    def set_data_path(self):
+        date=datetime.now()
+        year, month, day = str(date.year), str(date.month), str(date.day)
+        if len(day)==1:
+            day='0'+day
+        if len(month)==1:
+            month='0'+month
+        new_opt_data_path=self.data_folder_path.get()+str(year)+str(month)+str(day)
+        rewrite_dict={
+            "optimization_data_path":new_opt_data_path
+        }
+        rewrite_globals(rewrite_dict)
+        
+    def gyp(self):
+        bot = main.EndOperationsBot()
+        bot.get_yesterdays_plots()
     
+    def gtp(self):
+        bot = main.EndOperationsBot()
+        bot.get_todays_plots()
+        
     def __init__(self):
         self.root=Tk()
         self.root.title('Optimization Model - Main Window')
@@ -791,6 +1101,26 @@ class PrimaryWindow:
         menubar.add_cascade(label="Help", menu=helpmenu)
         #==============================
         self.root.config(menu=menubar)
+        
+        
+        self.rewrite_frm = ttk.Frame(self.root)
+        self.rewrite_frm.pack(side = TOP)
+        self.data_folder_path = StringVar()
+        #self.data_folder_path.set("../../winhome/Desktop/optimization_data/")  
+        self.global_vars=load_json('global_variables.json') 
+        self.data_folder_path.set(self.global_vars['optimization_data_path'][:-8]) 
+        print(self.data_folder_path.get())
+            
+        Label(master = self.rewrite_frm, text = '=========================').pack(side = TOP)
+        Label(master = self.rewrite_frm, text = 'Optimization Data Path:').pack(side = TOP)
+        Entry(master = self.rewrite_frm, textvariable = self.data_folder_path).pack(side = TOP)
+        Rewrite_Button = Button(self.rewrite_frm, text = 'Set new path for Opt Data', command = self.set_data_path).pack(side = BOTTOM)
+        
+        self.buttons_frm = ttk.Frame(self.root)
+        self.buttons_frm.pack(side = BOTTOM)
+        
+        Get_Yesterdays_Summaries_Button = Button(self.buttons_frm, text = "Get Yesterday's Summaries", command = self.gyp).pack(side = BOTTOM)
+        Get_Todays_Summaries_Button = Button(self.buttons_frm, text = "Get Today's Summaries", command = self.gtp).pack(side = BOTTOM)
         self.root.mainloop()
         
 PrimaryWindow()

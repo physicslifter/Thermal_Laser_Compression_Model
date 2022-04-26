@@ -28,6 +28,10 @@ import pickle
 import dill
 from matplotlib.pyplot import figure
 from datetime import datetime
+import mdutils
+from mdutils.mdutils import MdUtils
+from mdutils import Html
+import markdown
 
 default_best_SLS=10e+20 #Set initial best sls very large
 
@@ -329,7 +333,8 @@ class ComparitivePlot:
             shot_dict=self.model_output[shot]
             for face in shot_dict.keys():
                 #Add each face to the plot
-                plt.plot
+                #plt.plot
+                pass
 
 class SingleFaceModel:
     def __init__(self, data, tf=30*10**-9, num_steps=120, init_temp=2000, k_1=100, rho=12000, c=450, MgO_length=2*10**-6, Fe_length=1.07*10**-6, meshpoints=120, equation=1):
@@ -784,6 +789,117 @@ def optimize(group:OptimizationGroup, data_obj:OptimizationData, bounds, popsize
     return group
     #===========================================
     
+class SummaryWriter: #Class for writing summary html and markdown files
+    def __init__(self, folderpath):
+        self.path = folderpath
+        self.run_name = self.path.split('/')[-1]
+        self.has_metadata = False
+        self.has_optimization_data = False
+        self.has_initial_plot = False
+        self.has_log = False
+        self.has_best_fit = False
+        self.has_final_plot = False
+        
+    def check_files(self):
+        for item in os.listdir(self.path):
+            #print(item)
+            if item == 'metadata.txt':
+                self.has_metadata = True
+            elif item == 'Best_Fit.png':
+                self.has_best_fit = True
+            elif item == 'Initial_Fit.png':
+                self.has_initial_plot = True
+            elif item == 'Optimization_Results.png':
+                self.has_final_plot = True
+            elif item == 'optimization_output.csv':
+                self.has_optimization_data = True
+            elif item == 'log.txt':
+                self.has_log = True
+                
+    def write_summary(self):
+        #Writing the markdown file
+        md_fp = self.path + '/Summary.md'
+        html_fp = self.path + '/Summary.html'
+        md_title = self.run_name + ': Summary'
+        mdFile = MdUtils(file_name = md_fp, title = md_title)
+        mdFile.new_header(level = 1, title = 'Overview')
+        mdFile.new_header(level = 2, title = 'Log Comments')
+        if self.has_log:
+            log_path = self.path + '/log.txt'
+            with open(log_path, 'r') as f:
+                paragraph = f.read()
+                mdFile.new_paragraph(paragraph)
+        mdFile.new_header(level = 2, title = 'Metadata')
+        if self.has_metadata:
+            metadata_path = self.path + '/metadata.txt'
+            with open(metadata_path, 'r') as f:
+                text = f.read()
+                text = text.replace('===','').replace('==','')
+                text = text.split('\n')
+                c=0
+                to_print_list = [3, 4, 5, 6, 7, 8] #List containing the lines from metadata that we want printed
+                for t in text:
+                    printLine = False
+                    for l in to_print_list:
+                        if l == c:
+                            printLine = True
+                    if printLine:
+                        mdFile.new_paragraph(t)
+                    c=c+1
+                
+        mdFile.new_header(level = 1, title = 'Plots')
+        if self.has_final_plot:
+            mdFile.new_header(level = 2, title = 'Optimization Results')
+            img_path = 'Optimization_Results.png'
+            img_line = mdFile.new_inline_image(text = 'Best Fit', path = img_path)
+            mdFile.write(text = img_line)
+        if self.has_best_fit:
+            mdFile.new_header(level = 2, title = 'Best Fit')
+            img_path = 'Best_Fit.png'
+            img_line = mdFile.new_inline_image(text = 'Best Fit', path = img_path)
+            mdFile.write(text = img_line)
+            best_fit_fp = self.path + '/Best_Fit.pickle'
+            best_fit_file = open(best_fit_fp, 'rb')
+            best_fit = pickle.load(best_fit_file)
+            if len(best_fit) == 7: #If there is a c param
+                mdFile.new_header(level = 3, title = "Best Fit Parameters")
+                #mdFile.new_paragraph(text = 'Best fit parameters:  ')
+                mdFile.new_paragraph(text = 'iteration: '+str(best_fit[0]))
+                mdFile.new_paragraph(text = 'sls: '+str(best_fit[1]))
+                mdFile.new_paragraph(text = 'a: '+str(best_fit[2]))
+                mdFile.new_paragraph(text = 'b: '+str(best_fit[3]))
+                mdFile.new_paragraph(text = 'c: '+str(best_fit[4]))
+                mdFile.new_paragraph(text = 'start time: '+str(best_fit[5]))
+                mdFile.new_paragraph(text = 'peak temp: '+str(best_fit[6]))
+            else:
+                mdFile.new_header(level = 3, title = "Best Fit Parameters")
+                #mdFile.new_paragraph(text = 'Best fit parameters:  ')
+                mdFile.new_paragraph(text = 'iteration: '+str(best_fit[0]))
+                mdFile.new_paragraph(text = 'sls: '+str(best_fit[1]))
+                mdFile.new_paragraph(text = 'a: '+str(best_fit[2]))
+                mdFile.new_paragraph(text = 'b: '+str(best_fit[3]))
+                mdFile.new_paragraph(text = 'start time: '+str(best_fit[4]))
+                mdFile.new_paragraph(text = 'peak temp: '+str(best_fit[5]))
+        if self.has_initial_plot:
+            mdFile.new_header(level = 2, title = 'Initial Fit')
+            img_path = 'Initial_Fit.png'
+            img_code_string = '![Initial Fit]('+img_path+')'
+            img_line = mdFile.new_inline_image(text = 'Initial_Fit', path = img_path)
+            mdFile.write(text = img_code_string)
+        
+            #self.b = best_fit
+            
+        
+        mdFile.create_md_file()
+        
+        
+        #Writing the HTML file
+        with open(md_fp, 'r') as f:
+            text = f.read()
+            html = markdown.markdown(text)
+        with open(html_fp, 'w') as f:
+            f.write(html)
+    
 class PostOptOperations: #A class for writing and defining operations to be done on the optimization after it has completed
     def __init__(self, folder_path):
         self.has_opt_group=False #Variable for whether the optimization group exists for these post optimization operations
@@ -828,36 +944,36 @@ class PostOptOperations: #A class for writing and defining operations to be done
                 self.hasCleanData=True
                 
     def clean_data(self):
+        if self.hasCleanData == True:
+            os.remove(self.fp + '/Clean_Opt_Data.csv')
+            self.hasCleanData = False
         print(self.hasCleanData)
-        if self.hasCleanData==False:
-            pullData=open(self.data_path, 'r').read()
-            dataArray=pullData.split('\n')
-            print(dataArray[0].split(','), len(dataArray[0].split(',')))
-            if len(dataArray[0].split(','))==6:
+        pullData=open(self.data_path, 'r').read()
+        dataArray=pullData.split('\n')
+        print(dataArray[0].split(','), len(dataArray[0].split(',')))
+        if len(dataArray[0].split(','))==6:
+            clean_lines=['iteration,sls,a,b,start_time,peak_temp']
+        elif len(dataArray[0].split(','))==7:
+            clean_lines=['iteration,sls,a,b,c,start_time,peak_temp']
+        else:
+            if len(dataArray[1])==6:
                 clean_lines=['iteration,sls,a,b,start_time,peak_temp']
-            elif len(dataArray[0].split(','))==7:
+            elif len(dataArray[1])==7:
                 clean_lines=['iteration,sls,a,b,c,start_time,peak_temp']
             else:
-                if len(dataArray[1])==6:
-                    clean_lines=['iteration,sls,a,b,start_time,peak_temp']
-                elif len(dataArray[1])==7:
-                    clean_lines=['iteration,sls,a,b,c,start_time,peak_temp']
-                else:
-                    print('LINES 1 & 2 ARE BLANK')
-            for eachLine in dataArray:
-                line=eachLine.replace('[','').replace(']','')
-                if len(line)>0:
-                    clean_lines.append(line)
-                    print(clean_lines)
-            clean_data_path=self.fp+'/Clean_Opt_Data.csv'       
-            with open(clean_data_path, 'a+') as file_object:
-                for line in clean_lines:
-                    file_object.write(str(line))
-                    file_object.write('\n')        
-            self.hasCleanData=True
-            return clean_lines
-        else:
-            print('DATA ALREADY EXISTS')
+                print('LINES 1 & 2 ARE BLANK')
+        for eachLine in dataArray:
+            line=eachLine.replace('[','').replace(']','')
+            if len(line)>0:
+                clean_lines.append(line)
+                print(clean_lines)
+        clean_data_path=self.fp+'/Clean_Opt_Data.csv'       
+        with open(clean_data_path, 'a+') as file_object:
+            for line in clean_lines:
+                file_object.write(str(line))
+                file_object.write('\n')        
+        self.hasCleanData=True
+        return clean_lines
         
     def get_run_dict(self):
         should_print=False
@@ -993,7 +1109,7 @@ class PostOptOperations: #A class for writing and defining operations to be done
     def get_optimization_plot(self):
         #Script for getting the final optimization plot
         if self.equation==1:
-            fig=Figure(figsize=(15,10))
+            fig=Figure(figsize=(9,6))
             ax_sls=fig.add_subplot(2,3,1)
             ax_a=fig.add_subplot(2,3,2)
             ax_b=fig.add_subplot(2,3,3)
@@ -1031,7 +1147,7 @@ class PostOptOperations: #A class for writing and defining operations to be done
             #plt.subplots_adjust(left=0.1, bottom=0.1, right=0.9, top=0.9, wspace=0.4, hspace=0.75)
             fig.savefig(self.fp+'/Optimization_Results.png')
         else:
-            fig=Figure(figsize=(15,10))
+            fig=Figure(figsize=(9,6))
             ax_sls=fig.add_subplot(2,3,1)
             ax_a=fig.add_subplot(2,3,2)
             ax_b=fig.add_subplot(2,3,3)
@@ -1092,17 +1208,21 @@ class EndOperationsBot:
             self.month='0'+self.month
         if len(self.day) == 1:
             self.day = '0'+self.day
-        self.general_opt_path = "../../winhome/Desktop/optimization_data/silly/../../winhome/Desktop/optimization_data/"
-        self.days_data_path = "../../winhome/Desktop/optimization_data/silly/../../winhome/Desktop/optimization_data/"+str(self.year)+str(self.month)+str(self.day)
-        self.yesterdays_data_path = "../../winhome/Desktop/optimization_data/silly/../../winhome/Desktop/optimization_data/"+str(self.year)+str(self.month)+str(int(self.day)-1)
+        global_vars=load_json('global_variables.json')
+        root_folder_path=global_vars['optimization_data_path'][:-8]
+        self.general_opt_path = root_folder_path
+        self.days_data_path = root_folder_path + str(self.year)+str(self.month)+str(self.day)
+        self.yesterdays_data_path = root_folder_path+str(self.year)+str(self.month)+str(int(self.day)-1)
         
         
     def get_todays_plots(self):
         if os.path.isdir(self.days_data_path):
             print(self.days_data_path)
+            
             for file in os.listdir(self.days_data_path): #iterate through the files in the directory
                 new_path = self.days_data_path+'/'+file
                 if os.path.isdir(new_path):
+                    #print(new_path)
                     has_end_plot=False #Assume this optimization folder does not have a plot at the end
                     has_opt_data=False #Assume there is not optimization data for this run
                     has_metadata = False #Assume no metadata file is present
@@ -1114,10 +1234,13 @@ class EndOperationsBot:
                         if file1 == 'metadata.txt':
                             #print(file1)
                             has_metadata = True
-                    if has_end_plot == False and has_opt_data == True and has_metadata == True:
+                    if has_opt_data == True and has_metadata == True:
                         print(new_path)
                         post_opt_operator = PostOptOperations(new_path)
                         post_opt_operator.run_end_operations()
+                    md_html_operator = SummaryWriter(new_path)
+                    md_html_operator.check_files()
+                    md_html_operator.write_summary()
             #post_opt_operator = PostOptOperations(self.days_data_path)
             #post_opt_operator.run_end_operations()
         
@@ -1128,9 +1251,11 @@ class EndOperationsBot:
             for file in os.listdir(self.yesterdays_data_path): #iterate through the files in the directory
                 new_path = self.yesterdays_data_path+'/'+file
                 if os.path.isdir(new_path):
+                    #print(new_path)
                     has_end_plot=False #Assume this optimization folder does not have a plot at the end
                     has_opt_data=False #Assume there is not optimization data for this run
                     has_metadata = False #Assume no metadata file is present
+                    has_summary = False #Assume there is no summary file
                     for file1 in os.listdir(new_path):
                         if file1 == 'Optimization_Results.png':
                             has_end_plot = True
@@ -1139,10 +1264,15 @@ class EndOperationsBot:
                         if file1 == 'metadata.txt':
                             #print(file1)
                             has_metadata = True
-                    if has_end_plot == False and has_opt_data == True and has_metadata == True:
+                        if file1 == 'Summary.html':
+                            has_summary = True
+                    if has_opt_data == True and has_metadata == True:
                         print(new_path)
                         post_opt_operator = PostOptOperations(new_path)
                         post_opt_operator.run_end_operations()
+                    md_html_operator = SummaryWriter(new_path)
+                    md_html_operator.check_files()
+                    md_html_operator.write_summary()
         
     def update_all_plots(self):
         for file in os.listdir(self.general_opt_path):

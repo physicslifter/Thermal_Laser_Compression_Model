@@ -10,8 +10,8 @@ run_dict = {'s88773': [1,2], #Define which runs & faces to assess
             's88774': [1,2,3]
             }
 
-run_dict = {'s88773': [1,2], #Define which runs & faces to assess
-            }
+#run_dict = {'s88773': [1,2], #Define which runs & faces to assess
+#            }
 
           #(min, max)
 eq1_bounds=((0.01, 0.05), # a
@@ -31,9 +31,16 @@ eq2_bounds=((0.01, 0.05), # a
 my_data=main.Data()
 my_data.get_data()
 opt_output_data=main.OptimizationData('hello')
-my_group=main.OptimizationGroup(60, run_dict, 'Eq1_Running73_smallPop_Test3', my_data, equation=1)
-a=main.optimize(my_group, opt_output_data, eq1_bounds, 1, equation=1)
+my_group=main.OptimizationGroup(60, run_dict, 'Eq1_FittingAll_Popsize10', my_data, equation=1)
 
+#%%
+
+#%%
+a=main.optimize(my_group, opt_output_data, eq1_bounds, 10, equation=1)
+
+#Run end of optimization operations
+q=main.PostOptOperations(my_group.folder_path)
+q.run_end_operations()
 # %%
 from datetime import datetime
 from rewrite_globals import rewrite_globals as r
@@ -43,4 +50,8 @@ new_globals={
 }
 r(new_globals)
 # %%
-group2=
+import main
+opt_path='../../winhome/Desktop/optimization_data/20220414/Eq1_Running73_smallPop_Test5'
+qq=main.PostOptOperations(opt_path)
+qq.run_end_operations()
+# %%

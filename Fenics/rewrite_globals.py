@@ -22,7 +22,9 @@ if len(day)==1:
     day='0'+day
 if len(month)==1:
     month='0'+month
-new_opt_data_path="../../winhome/Desktop/optimization_data/"+str(year)+str(month)+str(day)
+global_vars=load_json('global_variables.json')
+opt_path = global_vars['optimization_data_path'][:-8]
+new_opt_data_path=opt_path+str(year)+str(month)+str(day)
 rewrite_dict={
     "optimization_data_path":new_opt_data_path
 }
