@@ -17,6 +17,9 @@ from rewrite_globals import rewrite_globals
 from datetime import datetime
 import time
 from PIL import ImageTk, Image
+from ttkthemes import ThemedTk
+
+gui_theme = 'default'
 
 def load_json(fname):
     with open(fname) as json_file:
@@ -203,21 +206,27 @@ class NewOptimizationWindow:
         starts_and_stops={}
         for shot in data_dict.keys(): #iterate through the shots
             shot_frame=ttk.Frame(datawin)
-            shot_frame.pack(side=TOP)
-            Label(shot_frame, text='==========================').pack(side=TOP)
-            Label(shot_frame, text='Shot '+shot+': ').pack(side=TOP)
+            shot_frame.pack(pady = 25, side=TOP)
+            #Label(shot_frame, text='==========================').pack(side=TOP)
+            
+            shot_label = Label(shot_frame, text='Shot '+shot+': ')
+            shot_label.config(font = ("Courier", 28))
+            shot_label.pack()
             face_start_stop={}
+            #faces_frame = ttk.Frame(shot_frame).pack(side = RIGHT)
             for face in data_dict[shot]:
                 face_name='face'+str(face)
                 face_frame=ttk.Frame(shot_frame) #Create a frame for the shot within the face frame
-                face_frame.pack(side=LEFT)
+                face_frame.pack(side=TOP)
                 start=self.default_start_stop_dict[shot][face][0]
                 stop=self.default_start_stop_dict[shot][face][1]
-                Label(face_frame, text=face_name+' Bounds:').pack(side=TOP)
+                face_label = Label(face_frame, text=face_name)
+                face_label.config(font = ("Courier", 14))
+                face_label.pack(pady = 5, side = TOP)
                 start_frame=ttk.Frame(face_frame)
                 stop_frame=ttk.Frame(face_frame)
-                start_frame.pack(side=LEFT)
-                stop_frame.pack(side=LEFT)
+                start_frame.pack(padx = 10, side=LEFT)
+                stop_frame.pack(padx = 10, side=LEFT)
                 Label(start_frame, text="Start: ").pack(side=LEFT)
                 start_var=IntVar()
                 start_var.set(int(start))
@@ -229,6 +238,8 @@ class NewOptimizationWindow:
                 
                 start_and_stop=[start_var, stop_var]
                 face_start_stop[face]=start_and_stop
+            #button_frame = ttk.Frame(shot_frame).pack(side = TOP)
+            chop_vis_button = Button(master = shot_frame, text = "Chop Visually", command = self.donothing).pack(pady = 10, side = TOP)
             starts_and_stops[shot]=face_start_stop
         self.starts_and_stops=starts_and_stops
 
@@ -271,12 +282,17 @@ class NewOptimizationWindow:
         self.group=main.OptimizationGroup(self.meshpoints.get(), self.shots_and_faces_run, path_for_optimization, self.real_data, equation = self.equation_to_run)
         global t1, p1
         #t1=Thread(target = self.opt_func)
-        p1=Process(target = self.opt_func)
+        if self.opt_running_flag.get() == True:
+            self.donothing
+        else:
+            self.opt_running_flag.set(True)
+        #self.opt_is_running = True
+        self.p1=Process(target = self.opt_func)
         #t2=Thread(target = self.run_post_opt_operations)
         #time.sleep(10) #Wait for 10 seconds to ensure that we have the metadata file
         #p2 = Process(target = self.run_post_opt_operations)
         #t1.start()
-        p1.start()
+        self.p1.start()
         self.run_post_opt_operations()
         #time.sleep(10)
         #t1.join() #Wait for the optimization to terminate (either by failure or from successful completion)
@@ -775,17 +791,19 @@ class NewOptimizationWindow:
     def open_vis_environ(self):
         self.view_best_fit()
         self.visualize_optimization()
+
+        
     
     def __init__(self, root):
         
         #Make sure all previous runs from today are optimized
-        bot = main.EndOperationsBot()
-        bot.get_todays_plots()
+        #bot = main.EndOperationsBot()
+        #bot.get_todays_plots()
         #bot.get_yesterdays_plots()
-        
+
         #Boolean flag for whether the optimization is running
         self.opt_running_flag=BooleanVar()
-        self.opt_running_flag.set(True)
+        self.opt_running_flag.set(False)
         
         self.global_vars=load_json('global_variables.json')
         
@@ -798,6 +816,13 @@ class NewOptimizationWindow:
         self.root=Toplevel(root)
         self.root.geometry('300x750')
         self.root.title('TLCM Optimizer')
+        
+        def destroy_window():
+            if self.opt_running_flag.get() == True:
+                #If we have an optimization running, terminate the process first
+                self.p1.terminate()
+                self.p1.join()
+            self.root.destroy()
 
         #===========================================
         #Header
@@ -1037,14 +1062,19 @@ class NewOptimizationWindow:
         #===============================================
         Label(self.root, text="===========================").pack(side=TOP)
         #Data_Chopping_Button=Button(self.root, text="Chop Data", command=self.chop_data).pack(side=BOTTOM)
+        Terminate_Button = Button(self.root, text = "Terminate", bg = 'red', fg = 'white', command = destroy_window).pack(side = BOTTOM)
+        Run_Button=Button(self.root, text="Run Optimization", bg = 'green', fg = 'white', command=self.show_run_dict).pack(side=BOTTOM)
         Vis_Button=Button(self.root, text="Visualize Optimization", command=self.visualize_optimization).pack(side=BOTTOM)
         #Vis_Button=Button(self.root, text="Visualize Optimization", command=self.open_vis_environ ).pack(side=BOTTOM)
-        Run_Button=Button(self.root, text="Run Optimization", command=self.show_run_dict).pack(side=BOTTOM)
+        
         Log_Button=Button(self.root, text="Log comments", command=self.log_comments).pack(side=BOTTOM)
         Best_Fit_Button = Button(self.root, text = "View Best Fit", command = self.view_best_fit).pack(side = BOTTOM)
+        
         #===============================================
         
         self.root.mainloop()
+    
+        
     
 class PrimaryWindow:
     
@@ -1081,7 +1111,8 @@ class PrimaryWindow:
         bot.get_todays_plots()
         
     def __init__(self):
-        self.root=Tk()
+        self.root=ThemedTk(theme = gui_theme)
+        #ttk.Style().theme_use('arc')
         self.root.title('Optimization Model - Main Window')
         self.root.geometry('200x200')
         #=============================

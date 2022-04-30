@@ -272,7 +272,11 @@ class Data: # Class for data objects. Should hold all data that we are fitting
         correctedSOP={}
         for shot in self.data.keys():
             if shot=='s88774':
-                corrected_data=self.correct_SOP('s88774', t0a=1.909, a0=481000)
+                corrected_data=self.correct_SOP('s88774', t0a=1.908, a0=307200)
+                #a0 = 395900
+                #t0a = 1.91
+            elif shot == 's88776':
+                corrected_data=self.correct_SOP('s88776', t0a=1.91, a0=395900)
             else:
                 corrected_data=self.correct_SOP(shot)
             correctedSOP[shot]=corrected_data
@@ -355,6 +359,8 @@ class SingleFaceModel:
             self.default_parameters=[0.03, 30, 1.8*10**-8, 30000]
         elif equation==2 or equation==3 or equation==4:
             self.default_parameters=[0.03, 30, 1, 1.8*10**-8, 30000]
+            
+        self.Fe_length = (7900/rho)*self.Fe_length #, (7900/rho)*self.MgO_length
     
     def run(self, parameters): # Function for running the single face model
         if self.equation==1:
@@ -760,6 +766,18 @@ def optimize(group:OptimizationGroup, data_obj:OptimizationData, bounds, popsize
         #Plot & save if this is the best fit of the run
         if has_best_fit: #If this iteration is the current best fit...
             group.plot_optimization_group(fname=group.folder_path+'/Best_Fit.png')
+            
+        '''
+        #=================================================
+        #Printing all groups to test for the doubling problem
+        group.plot_optimization_group(fname = group.folder_path+'/plot'+str(iteration)+'.png')
+        json_model_data = json.dumps(group.model_data)
+        model_data_filename = group.folder_path+'/data'+str(iteration)+'.json'
+        data_file = open(model_data_filename, 'w')
+        data_file.write(json_model_data)
+        data_file.close()
+        '''
+            
         return least_squares    
     
     #=============================
