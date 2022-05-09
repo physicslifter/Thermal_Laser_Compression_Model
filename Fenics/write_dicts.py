@@ -47,7 +47,7 @@ default_values = {
     'b' : 30,
     'k_1' : 100,
     'rho' : 12000,
-    'c' : 450,
+    'c' : 650, #previously 450, changed 5/4/2022
     'MgO_length':2*10**(-6) #window length in microns
     }
 

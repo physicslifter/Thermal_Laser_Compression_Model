@@ -288,7 +288,7 @@ class NewOptimizationWindow:
             self.opt_running_flag.set(True)
         #self.opt_is_running = True
         self.p1=Process(target = self.opt_func)
-        #t2=Thread(target = self.run_post_opt_operations)
+        #t2=Thread(target = self.run_post_opt_operations)30
         #time.sleep(10) #Wait for 10 seconds to ensure that we have the metadata file
         #p2 = Process(target = self.run_post_opt_operations)
         #t1.start()
@@ -896,6 +896,7 @@ class NewOptimizationWindow:
             '(2): k = a*T + b + c/(sqrt(T))',
             '(3): k = a*T + b + c*T^2',
             '(4): k = a*T + b + c*sqrt(T)'
+            #'(4): k = a*T + b + c*LOG(T)'
         ]
         self.testVar = StringVar(self.equation_frm)
         self.testVar.set(self.EQUATIONS[0])

@@ -1,0 +1,13 @@
+/tmp/tmpokl5le3x/dolfin_expression_c038750dd9ce326fa186ba829db582a9.cpp: In member function ‘virtual void dolfin::dolfin_expression_c038750dd9ce326fa186ba829db582a9::eval(Eigen::Ref<Eigen::Matrix<double, -1, 1> >, Eigen::Ref<const Eigen::Matrix<double, -1, 1> >) const’:
+/tmp/tmpokl5le3x/dolfin_expression_c038750dd9ce326fa186ba829db582a9.cpp:70:60: error: could not convert ‘5.0e-1’ from ‘double’ to ‘std::string’ {aka ‘std::__cxx11::basic_string<char>’}
+   70 |           values[0] = x[0] <= 1 + tol ? b+a*u+d*log((u+1), 0.5) : k_1;
+      |                                                            ^~~
+      |                                                            |
+      |                                                            double
+/tmp/tmpokl5le3x/dolfin_expression_c038750dd9ce326fa186ba829db582a9.cpp: In member function ‘virtual double dolfin::dolfin_expression_c038750dd9ce326fa186ba829db582a9::get_property(std::string) const’:
+/tmp/tmpokl5le3x/dolfin_expression_c038750dd9ce326fa186ba829db582a9.cpp:82:11: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+   82 |           if (name == "tol") return tol;          if (name == "k_1") return k_1;          if (name == "a") return a;          if (name == "b") return b;          if (name == "d") return d;          if (name == "l") return l;
+      |           ^~
+/tmp/tmpokl5le3x/dolfin_expression_c038750dd9ce326fa186ba829db582a9.cpp:82:51: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   82 |           if (name == "tol") return tol;          if (name == "k_1") return k_1;          if (name == "a") return a;          if (name == "b") return b;          if (name == "d") return d;          if (name == "l") return l;
+      |                                                   ^~

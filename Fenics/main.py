@@ -353,6 +353,7 @@ class SingleFaceModel:
             self.expression='x[0] <= l + tol ? b+a*u+d*pow((u+1),2) : k_1'
         elif equation==4:
             self.expression='x[0] <= 1 + tol ? b+a*u+d*pow((u+1), 0.5) : k_1'
+            #self.expression='x[0] <= 1 + tol ? b+a*u+d*log((u+1), 0.5) : k_1'
         self.equation=equation
     
         if equation==1:
@@ -367,6 +368,7 @@ class SingleFaceModel:
             a, b, start_time, peak_temp = parameters #get values from parameters
             self.a, self.b, self.start_time, self.peak_temp=a,b,start_time,peak_temp #assign values to self
             self.my_mesh = fenics.IntervalMesh(self.meshpoints, 0, self.Fe_length+self.MgO_length) #Use Fenics to create a mesh for the finite element model
+            print('         '+str(self.meshpoints))
             self.V = fenics.FunctionSpace(self.my_mesh, 'P', 1) #create a function space for the finite element model
             self.u_D = fenics.Expression(str(self.peak_temp),degree=1) #Define the peak temperature of the square wave boundary condition
             self.bc = fenics.DirichletBC(self.V, self.u_D, boundary) #Define the Dirichlet boundary condition as variable bc
@@ -393,6 +395,7 @@ class SingleFaceModel:
             a, b, c, start_time, peak_temp = parameters
             self.a, self.b, self.c, self.start_time, self.peak_temp = a, b, c, start_time, peak_temp
             self.my_mesh=fenics.IntervalMesh(self.meshpoints, 0, self.Fe_length+self.MgO_length)
+            print(self.meshpoints)
             self.V = fenics.FunctionSpace(self.my_mesh, 'P', 1)
             self.u_D = fenics.Expression(str(self.peak_temp),degree=1)
             self.bc = fenics.DirichletBC(self.V, self.u_D, boundary)
@@ -460,6 +463,7 @@ class FiniteElementModel: #Class for the finite element model of a single shot
         results={} # Create empty dictionary for storing the results of the model run
         for face in self.face_models.keys(): # Iterate through the faces
             model=self.face_models[face] # Get the model that is associated with this face
+            print('     '+face)
             model.run(parameters) #run the model
             results[face]=model.times, model.time_line #store the model results
         self.model_results=results
@@ -519,6 +523,7 @@ class OptimizationGroup: # A class for an optimization group. An optimization gr
     def run(self, params): #Write function for running the model for each shot
         model_data={}
         for run in self.models.keys(): # iterate through each shot
+            print(run)
             model=self.models[run] # Get the model for the run
             model.run_model(params) # run the model for the given parameters
             model_data[run]=model.model_results
@@ -726,6 +731,10 @@ def optimize(group:OptimizationGroup, data_obj:OptimizationData, bounds, popsize
     #==========================================
     def optimizable_function(params:list):
         has_best_fit=False
+        checker_path = group.folder_path + '/quit_checker.csv'
+        with open(checker_path, 'a+') as f:
+            f.write(str(params))
+            f.write('\n')
         print(params)
         group.run(params) #Run the model with the given parameters
         least_squares=group.get_chi_sq() #Get least squares from the run with these parameters
@@ -752,10 +761,14 @@ def optimize(group:OptimizationGroup, data_obj:OptimizationData, bounds, popsize
                 
         data_obj.get_current_vals(current_data) #Assign data from this iteration to the data object 
         print(iteration, current_data)
+        
         print(group.optimization_data_path)
+        
+        #===================================================================
         with open(group.optimization_data_path, 'a+') as file_object:
             file_object.write(str(current_data))
             file_object.write('\n')
+        #-------------------------------------------------------------------
         
         #Save the best fit as an obj
         best_fit_filepath=group.folder_path+'/Best_Fit.pickle'
